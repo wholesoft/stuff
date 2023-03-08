@@ -122,13 +122,7 @@ export async function create_user(props) {
     
   }
 
-//const await new_id = createNote("My Title", "My Content");
-//console.log(new_id); 
 
-
-
-//const user_id = await create_user({email: "test3@test.com", password: "pass12345", confirm_password: "pass12345"});
-//console.log(user_id);
 
 /*
 TABLE SCHEMA
