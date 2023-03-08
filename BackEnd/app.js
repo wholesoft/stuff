@@ -22,7 +22,12 @@ app.use((err, req, res, next) => {
 app.post("/register", async (req, res) => {
   const { email, password, confirm_password } = req.body;
   const id = await create_user(req.body)
-  res.send(id)
+  let response = { user_id: id }
+  if (isNaN(id))
+  {
+    response = { error: id }
+  }
+  res.send(response)
 });
 
 app.get('/notes', async (req, res) => {
@@ -49,10 +54,7 @@ app.get('/', (req, res) => {
   //});
 });
 
-//app.get("/register/:email", (req, res) => {
-//   const email = req.params.email;
-//   res.send(email);
-//});
+
 
 app.use(express.static("public"))
 

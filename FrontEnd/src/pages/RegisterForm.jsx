@@ -44,15 +44,16 @@ const RegisterForm = () => {
     
       const handleSubmit = (e) => {
         e.preventDefault();
-        console.log(values);
+        //console.log(values);
 
         fetch("http://127.0.0.1:3000/register", {
           method: 'POST',
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(values)
-      }).then(() => { 
-        console.log('new record added');
-      });
+      }).then(response => response.json())
+      .then(json => {
+        console.log('parsed json', json) // access json.body here
+      })
     }
 
 
