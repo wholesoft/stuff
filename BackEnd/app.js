@@ -1,7 +1,7 @@
 import express from 'express'
 import cors from 'cors'
 import { getNotes, getNote, createNote } from './test/database.js'
-import { create_user } from './user.js'
+import { create_user, confirm_email } from './user.js'
 
 
 const app = express()
@@ -28,6 +28,12 @@ app.post("/register", async (req, res) => {
     response = { error: id }
   }
   res.send(response)
+});
+
+app.get('/confirm', async (req, res) => {
+  const key = req.query.id
+  const result = await confirm_email(key)
+  res.send(result);
 });
 
 app.get('/notes', async (req, res) => {

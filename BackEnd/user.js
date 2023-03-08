@@ -2,6 +2,7 @@ import mysql from 'mysql2';
 import dotenv from 'dotenv'
 import bcrypt from 'bcrypt'
 import joi from 'joi'
+import nodemailer from 'nodemailer'
 
 dotenv.config()
 
@@ -41,6 +42,41 @@ export async function create_user(props) {
     const result = await pool.query(`
     INSERT INTO Users (email, password, salt)
     VALUES (?, ?, ?)`, [props.email, hashed_password, salt]);
+
+    // SEND CONFIRMATION EMAIL
+    var transporter = nodemailer.createTransport({
+        service: process.env.EMAIL_SERVICE,
+        auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASSWORD
+        }
+    });
+
+    const encodedSalt = encodeURIComponent(salt);
+
+
+    // just let them use the salt as the id, should probably change this to some other random text
+	let email_html = `Please click the link below to confirm your email.<br />
+	<br /><a href='${process.env.APP_FULL_DOMAIN}/confirm/?id=${encodedSalt}'>confirm email</a>`;
+    let email_plain = `Please click the link below to confirm your email./n
+	/n<${process.env.APP_FULL_DOMAIN}/confirm/?id=${encodedSalt}`;
+
+    var mailOptions = {
+        from: process.env.EMAIL_FROM,
+        to: props.email,
+        subject: 'Registration: Confirm Email',
+        text: email_plain,
+        html: email_html
+    };
+    
+    transporter.sendMail(mailOptions, function(error, info){
+        if (error) {
+        console.log(error);
+        } else {
+        console.log('Email sent: ' + info.response);
+        }
+    });
+
     return result[0].insertId;
  }
 
@@ -55,6 +91,21 @@ export async function create_user(props) {
         console.log(rows[0].length);
     }
     console.log(result)
+    return result
+  }
+
+  export async function confirm_email(key){
+
+    await pool.query(`UPDATE Users 
+    SET email_confirmed=CURRENT_TIMESTAMP WHERE salt=? AND email_confirmed IS NULL`, [key]);
+
+    const rows = await pool.query("SELECT id FROM Users WHERE salt=?", [key]);
+
+    let result = "Error";
+    if (rows[0].length > 0)
+    {
+        result = "Email confirmed.  Thank you!";
+    }
     return result
   }
 
