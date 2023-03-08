@@ -1,7 +1,7 @@
 import express from 'express'
 import cors from 'cors'
 import { getNotes, getNote, createNote } from './test/database.js'
-import { create_user, confirm_email } from './user.js'
+import { create_user, confirm_email, login_user } from './user.js'
 
 
 const app = express()
@@ -18,6 +18,14 @@ app.use((err, req, res, next) => {
 
 
 //app.set("view engine", "ejs");
+
+app.post("/login", async (req, res) => {
+  const { email, password } = req.body;
+  console.log(req.body)
+  const success = await login_user(req.body)
+  let response = { success: success }
+  res.send(response)
+});
 
 app.post("/register", async (req, res) => {
   const { email, password, confirm_password } = req.body;

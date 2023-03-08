@@ -1,6 +1,7 @@
 import './App.css'
 import { Route, Routes, Link, NavLink } from 'react-router-dom'
 import { RegisterForm } from './pages/RegisterForm'
+import { LoginForm } from './pages/LoginForm'
 import { AddRecordForm } from './test/AddRecordForm'
 import { Home } from './pages/Home'
 import { Stuff } from './pages/Stuff'
@@ -20,6 +21,7 @@ function App() {
 <li><NavLink to="/stuff">Stuff</NavLink></li>
 <li><NavLink to="/addrecord">Add Record Form</NavLink></li>
 <li><NavLink to="/register">Register</NavLink></li>
+<li><NavLink to="/login">Login</NavLink></li>
 </ul>
 
             </nav>
@@ -30,6 +32,7 @@ function App() {
                 <Route path=":category" element={<StuffItems />} />
             </Route>
             <Route path="/register" element={<RegisterForm />} />
+            <Route path="/login" element={<LoginForm />} />
             <Route path="/addrecord" element={<AddRecordForm />} />
             <Route path="*" element={<NotFound />} />
       </Routes>

@@ -109,16 +109,13 @@ export async function create_user(props) {
     return result
   }
 
- export async function login_user(email, password){ 
+ export async function login_user(props){ 
 
-    // get the user based on their email
-    const sql = (`SELECT id, email, password FROM Users WHERE email=?`, [email])
-    const [rows] = await pool.query(sql);
+    const [rows] = await pool.query(`SELECT id, email, password FROM Users WHERE email=?`, [props.email]);
     const record = rows[0];
-
   
     // use bcrypt to hash the password and compared it to our stored hash
-    return await bcrypt.compare(user.password, record.password);
+    return await bcrypt.compare(props.password, record.password);
     
   }
 
