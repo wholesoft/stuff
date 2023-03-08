@@ -6,7 +6,7 @@ const RegisterForm = () => {
     const [values, setValues] = React.useState({
         email: "",
         password: "",
-        confirmPassword: "",
+        confirm_password: "",
       });
     
       const inputs = [
@@ -32,7 +32,7 @@ const RegisterForm = () => {
         },
         {
           id: 3,
-          name: "confirmPassword",
+          name: "confirm_password",
           type: "password",
           placeholder: "Confirm Password",
           errorMessage: "passwords don't match",
@@ -44,17 +44,18 @@ const RegisterForm = () => {
     
       const handleSubmit = (e) => {
         e.preventDefault();
+        console.log(values);
 
-        // client side validation is okay
-        // need to check on the server to see if the email already exists
+        fetch("http://127.0.0.1:3000/register", {
+          method: 'POST',
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(values)
+      }).then(() => { 
+        console.log('new record added');
+      });
+    }
 
-        // other than that need to do the server-side validation
-        // and add the user to the database
-        // send the email confirmation message
-        // display an appropriate message
 
-
-      };
     
       const onChange = (e) => {
         setValues({ ...values, [e.target.name]: e.target.value });
