@@ -2,14 +2,25 @@ import express from 'express'
 import cors from 'cors'
 import { getNotes, getNote, createNote } from './test/database.js'
 import { create_user, confirm_email, login_user } from './user.js'
-
+import { verifyJWT } from './middleware/verifyJWT.js';
+import cookieParser from 'cookie-parser' ;
+import refresh_route from './routes/refresh.js'
+import logout_route from './routes/logout.js'
+import credentials from './middleware/credentials.js'
+import corsOptions from './config/corsOptions.js'
 
 const app = express()
 
-app.use(cors({
- origin: "http://127.0.0.1:5173", 
-}))
+app.use(credentials);
+
+app.use(cors(corsOptions));
+
+
+
 app.use(express.json()) 
+
+// middleware for cookies
+app.use(cookieParser());
 
 app.use((err, req, res, next) => {
   console.error(err.stack)
@@ -19,12 +30,25 @@ app.use((err, req, res, next) => {
 
 //app.set("view engine", "ejs");
 
+app.get("/auth", async (req, res) => {
+  //const { email, password } = req.body;
+  //console.log(req.body)
+  //const result = await login_user(req.body)
+  let response = { success: false }
+  res.send(response)
+});
+
+app.use('/refresh', refresh_route);
+app.use('/logout', logout_route);
+
+
 app.post("/login", async (req, res) => {
   const { email, password } = req.body;
   console.log(req.body)
-  const success = await login_user(req.body)
-  let response = { success: success }
-  res.send(response)
+  const { refresh_token, access_token, success } = await login_user(req.body)
+  //let response = { success: success }
+  res.cookie('jwt', refresh_token, { httpOnly: true, sameSite: 'None', secure: true, maxAge: 24 * 60 * 60 * 1000})
+  res.json({ success: success, access_token: access_token })
 });
 
 app.post("/register", async (req, res) => {
@@ -43,6 +67,8 @@ app.get('/confirm', async (req, res) => {
   const result = await confirm_email(key)
   res.send(result);
 });
+
+app.use(verifyJWT);
 
 app.get('/notes', async (req, res) => {
   const notes = await getNotes()

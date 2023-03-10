@@ -3,6 +3,7 @@ import dotenv from 'dotenv'
 import bcrypt from 'bcrypt'
 import joi from 'joi'
 import nodemailer from 'nodemailer'
+import jwt from 'jsonwebtoken'
 
 dotenv.config()
 
@@ -114,11 +115,45 @@ export async function create_user(props) {
     const [rows] = await pool.query(`SELECT id, email, password FROM Users WHERE email=?`, [props.email]);
     const record = rows[0];
   
+    console.log(rows.length);
     // use bcrypt to hash the password and compared it to our stored hash
-    return await bcrypt.compare(props.password, record.password);
-    
+    let db_password = "";
+    if (rows.length > 0)
+    {
+        db_password = record.password;
+    }
+    let success = false;
+    if (props.password != "" && db_password != "")
+    {
+        success = await bcrypt.compare(props.password, db_password);
+    }
+    let access_token = "";
+    let refresh_token = "";
+    if (success) {
+        // generate token
+        access_token = generate_access_token(record.id);
+        refresh_token = generate_refresh_token(record.id);
+        // add refresh token to the database
+
+    }
+
+    const result = { success: success, access_token: access_token, refresh_token: refresh_token }
+    return result
   }
 
+
+function generate_access_token(user_id) {
+    return jwt.sign({ user_id: user_id, admin: false }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "15m" });
+}
+
+function generate_refresh_token(user_id) {
+    const refresh_token = jwt.sign({ user_id: user_id, admin: false }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: "1d" });
+    console.log(refresh_token);
+    pool.query(`UPDATE Users SET refresh_token=? WHERE id=?`, [refresh_token, user_id]);
+    return refresh_token;
+}
+
+  
 
 
 /*
@@ -130,6 +165,7 @@ CREATE TABLE IF NOT EXISTS Users (
     email VARCHAR(255) NOT NULL,
     password VARCHAR(255) NOT NULL,
     salt VARCHAR(255) NOT NULL,
+    refresh_token VARCHAR(255),
     email_confirmed DATETIME,
     last_login DATETIME,
     n_logins INT,

@@ -1,0 +1,30 @@
+import mysql from 'mysql2';
+import dotenv from 'dotenv'
+
+dotenv.config()
+
+const pool = mysql.createPool({
+    host: process.env.MYSQL_HOST,
+    user: process.env.MYSQL_USER,
+    password: process.env.MYSQL_PASSWORD,
+    database: process.env.MYSQL_DATABASE
+}).promise()
+
+const handleLogout = async (req, res) => { 
+    // On client, also delete the access_token  
+    const cookies = req.cookies
+    if (!cookies?.jwt) return res.sendStatus(204) // success, no content
+    const refresh_token = cookies.jwt;
+
+    const rows = pool.query(`SELECT id FROM Users WHERE refresh_token=?`, [refresh_token]);
+    if (rows[0].length < 1) {
+        res.clearCookie('jwt', { httpOnly: true, sameSite: 'None', secure: true} );
+        return res.sendStatus(204);
+    } 
+    // delete the refresh token in the db
+    await pool.query(`UPDATE Users SET refresh_token='' WHERE refresh_token=?`, [refresh_token]);
+    res.clearCookie('jwt', { httpOnly: true, sameSite: 'None', secure: true} );  // secure:  true only serves https
+    return res.sendStatus(204);
+}
+
+export default  { handleLogout };
