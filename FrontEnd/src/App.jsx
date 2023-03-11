@@ -1,4 +1,5 @@
 import './App.css'
+import { RequireAuth } from './components/RequireAuth'
 import { Route, Routes, Link, NavLink } from 'react-router-dom'
 import { RegisterForm } from './pages/RegisterForm'
 import { LoginForm } from './pages/LoginForm'
@@ -10,7 +11,8 @@ import { StuffItems } from './pages/StuffItems'
 import { NotFound } from './pages/NotFound'
 import { Admin } from './pages/Admin'
 import { Notes } from './pages/Notes'
-
+import { Layout } from './components/Layout'
+ 
 function App() {
 
  
@@ -30,17 +32,26 @@ function App() {
 
             </nav>
         <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/stuff"> 
-                <Route index element={<Stuff />} />
-                <Route path=":category" element={<StuffItems />} />
+            <Route path="/" element={<Layout />}>
+                {/* public routes */}
+                <Route path="/" element={<Home />} />
+                <Route path="/register" element={<RegisterForm />} />
+                <Route path="/login" element={<Login />} />
+
+                {/* we want to protect these routes */}
+                <Route element={<RequireAuth />}>
+                    <Route path="/stuff"> 
+                        <Route index element={<Stuff />} />
+                        <Route path=":category" element={<StuffItems />} />
+                    </Route>
+                    <Route path="/addrecord" element={<AddRecordForm />} />
+                    <Route path="/notes" element={<Notes />} />
+                    <Route path="/admin" element={<Admin />} />
+                </Route>
+
+                {/* catch all */}
+                <Route path="*" element={<NotFound />} />
             </Route>
-            <Route path="/register" element={<RegisterForm />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/addrecord" element={<AddRecordForm />} />
-            <Route path="/notes" element={<Notes />} />
-            <Route path="/admin" element={<Admin />} />
-            <Route path="*" element={<NotFound />} />
       </Routes>
       </div>
     )

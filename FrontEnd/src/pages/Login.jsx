@@ -1,12 +1,13 @@
 import * as React from 'react';
-import AuthContext from "../context/AuthProvider";
+//import AuthContext from "../context/AuthProvider";
+import useAuth from '../hooks/useAuth';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import axios from "../api/axios";
 
 const LOGIN_URL = '/auth';
 
 const Login = () => {
-    const { setAuth } = React.useContext(AuthContext);
+    const { setAuth } = useAuth();// React.useContext(AuthContext);
 
     const navigate = useNavigate();
     const location = useLocation();
@@ -18,7 +19,6 @@ const Login = () => {
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
     const [errMsg, setErrMsg] = React.useState('');
-    //const [success, setSuccess] = React.useState(false);
 
     React.useEffect(() => {
         userRef.current.focus();
@@ -42,9 +42,7 @@ const Login = () => {
             setAuth({ email, password, roles, access_token });
             setEmail('');
             setPassword('');
-            navigate(from, {replace: true });
-            //setSuccess(true);
-    
+            navigate(from, {replace: true });   
         } catch (err) {
             console.log("ERROR FOUND");
             if (!err?.response) {
@@ -60,7 +58,6 @@ const Login = () => {
                 setErrMsg("Login Failed");
                 console.log("LOGIN FAILED");
             }
-            //setSuccess(false);
             //errRef.current.focus();
         }
     }
