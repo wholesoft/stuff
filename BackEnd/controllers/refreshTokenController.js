@@ -11,13 +11,18 @@ const pool = mysql.createPool({
     database: process.env.MYSQL_DATABASE
 }).promise()
 
-const handleRefreshToken = (req, res) => {
+const handleRefreshToken = async (req, res) => {
+    console.log("handleRefreshToken");
     const cookies = req.cookies
-    if (!cookies?.jwt) return res.sendStatus(401)
+    if (!cookies?.jwt) {
+         console.log("No JWT cookie");
+         return res.sendStatus(401);
+    }
     console.log(cookies.jwt);
     const refresh_token = cookies.jwt;
-
-    const rows = pool.query(`SELECT id FROM Users WHERE refresh_token=?`, [refresh_token]);
+    console.log(`SELECT id FROM Users WHERE refresh_token='${refresh_token}'`);
+    const [rows] = await pool.query(`SELECT id FROM Users WHERE refresh_token=?`, [refresh_token]);
+    console.log(rows[0]);
     if (rows[0].length < 1) {
         return res.sendStatus(403);
     } 
@@ -25,16 +30,23 @@ const handleRefreshToken = (req, res) => {
     jwt.verify(
         refresh_token, process.env.REFRESH_TOKEN_SECRET,
         (err, decoded) => {
-            if (err || rows[0].id !== decoded.user_id) return res.sendStatus(403);
+            if (err || rows[0].id !== decoded.user_id) {
+                //console.log(decoded);
+                //console.log(rows[0].id);
+                //console.log(decoded.user_id);
+                //console.log(rows[0].id !== decoded.user_id);
+                return res.sendStatus(403);
+            }
             const access_token = generate_access_token(decoded.user_id);
-            res.json({ accessToken });
+            console.log(`New access token: ${access_token}`);
+            res.json({ access_token });
         }
     )
   }
 
 
 function generate_access_token(user_id) {
-    return jwt.sign({ user_id: user_id, admin: false }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "15m" });
+    return jwt.sign({ user_id: user_id, admin: false }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "15s" });
 }
 
 export default { handleRefreshToken };

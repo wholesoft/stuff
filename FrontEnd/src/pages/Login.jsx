@@ -1,0 +1,98 @@
+import * as React from 'react';
+import AuthContext from "../context/AuthProvider";
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+import axios from "../api/axios";
+
+const LOGIN_URL = '/auth';
+
+const Login = () => {
+    const { setAuth } = React.useContext(AuthContext);
+
+    const navigate = useNavigate();
+    const location = useLocation();
+    const from = location.state?.from?.pathname || "/";
+
+    const userRef = React.useRef();
+    const errRef = React.useRef();
+
+    const [email, setEmail] = React.useState('');
+    const [password, setPassword] = React.useState('');
+    const [errMsg, setErrMsg] = React.useState('');
+    //const [success, setSuccess] = React.useState(false);
+
+    React.useEffect(() => {
+        userRef.current.focus();
+    }, [])
+
+//    React.useEffect(() => {
+ //       setErrMsg('');
+ //   }, [email][password]);
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        try {
+            const response = await axios.post(LOGIN_URL, JSON.stringify({email, password}), {
+             headers: { 'Content-Type': 'application/json' },
+             withCredentials: true   
+            });
+            console.log(JSON.stringify(response?.data));
+            const access_token = response?.data?.access_token;
+            const roles = 1; // response?.data?.roles;
+            setAuth({ email, password, roles, access_token });
+            setEmail('');
+            setPassword('');
+            navigate(from, {replace: true });
+            //setSuccess(true);
+    
+        } catch (err) {
+            console.log("ERROR FOUND");
+            if (!err?.response) {
+                setErrMsg("No Server Response");
+                console.log("NO RESPONSE");
+            } else if (err.response?.status === 400) {
+                setErrMsg("Missing Email or Password");
+                console.log("MISSING EMAIL OR PASSWORD");
+            } else if (err.response?.staus === 401) {
+                setErrMsg("Unauthorized");
+                console.log("UNAUTHORIZED");
+            } else {
+                setErrMsg("Login Failed");
+                console.log("LOGIN FAILED");
+            }
+            //setSuccess(false);
+            //errRef.current.focus();
+        }
+    }
+
+    return (
+        <section>
+                    <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
+
+<h1>Sign In</h1>
+<form onSubmit={handleSubmit}>
+    <label htmlFor="email">Email:</label>
+    <input type="text" id="username" ref={userRef} autoComplete="off" 
+    onChange={(e) => setEmail(e.target.value) }
+    value={email} required
+    /><br/>
+    <label htmlFor="password">Password:</label>
+    <input type="password" id="password" 
+    onChange={(e) => setPassword(e.target.value) }
+    value={password} required
+    /><br />
+    <p>{errMsg}</p><br />
+    <button>Sign In</button>
+    <p>
+        Need an Account?<br />
+        <span className='line'>
+            {/* put router link here */}
+            <a href='#'>Sign Up</a>
+        </span>
+    </p>
+</form>
+        </section>
+    )
+}
+
+export { Login }

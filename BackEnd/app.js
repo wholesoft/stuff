@@ -1,7 +1,7 @@
 import express from 'express'
 import cors from 'cors'
 import { getNotes, getNote, createNote } from './test/database.js'
-import { create_user, confirm_email, login_user } from './user.js'
+import { create_user, confirm_email, login_user, getUsers } from './user.js'
 import { verifyJWT } from './middleware/verifyJWT.js';
 import cookieParser from 'cookie-parser' ;
 import refresh_route from './routes/refresh.js'
@@ -39,16 +39,28 @@ app.get("/auth", async (req, res) => {
 });
 
 app.use('/refresh', refresh_route);
+//app.get('/refresh', async (req, res) => {
+//
+//})
+
 app.use('/logout', logout_route);
 
 
-app.post("/login", async (req, res) => {
+app.post("/auth", async (req, res) => {
   const { email, password } = req.body;
   console.log(req.body)
   const { refresh_token, access_token, success } = await login_user(req.body)
   //let response = { success: success }
-  res.cookie('jwt', refresh_token, { httpOnly: true, sameSite: 'None', secure: true, maxAge: 24 * 60 * 60 * 1000})
-  res.json({ success: success, access_token: access_token })
+  if (success == true)
+  {
+    res.cookie('jwt', refresh_token, { httpOnly: true, sameSite: 'None', secure: true, maxAge: 24 * 60 * 60 * 1000})
+    res.json({ success: success, access_token: access_token })
+  }
+  else
+  {
+     console.log("Sending 401 Error");
+     res.sendStatus(401);
+  }
 });
 
 app.post("/register", async (req, res) => {
@@ -68,7 +80,15 @@ app.get('/confirm', async (req, res) => {
   res.send(result);
 });
 
+
+
 app.use(verifyJWT);
+
+app.get('/users', async (req, res) => {
+  const users = await getUsers()
+  res.send(users);
+}); 
+
 
 app.get('/notes', async (req, res) => {
   const notes = await getNotes()
