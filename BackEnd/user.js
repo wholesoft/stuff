@@ -149,7 +149,7 @@ function generate_access_token(user_id, roles) {
 }
 
 function generate_refresh_token(user_id, roles) {
-    const refresh_token = jwt.sign({ user_id: user_id, roles: roles }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: "1m" });
+    const refresh_token = jwt.sign({ user_id: user_id, roles: roles }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: "1d" });
     //console.log(refresh_token);
     pool.query(`UPDATE Users SET refresh_token=? WHERE id=?`, [refresh_token, user_id]);
     return refresh_token;

@@ -14,6 +14,75 @@
   -webkit-text-size-adjust: 100%;
 }
 
+html {
+	/* PALLETE */
+	--bg-color: #fffdce;
+	--side-color: #fffdce;
+	--header-color: #4A4511;
+	--footer-color: #4a3d11;
+}
+
+
+/* CSS GRID */
+/* CSS GRID START */
+
+.logo {
+	grid-area: logo;
+	background-color: var(--header-color);
+  }
+
+  .logo a {
+    color: var(--bg-color);
+}
+
+  .login {
+	grid-area: login;
+	background-color: var(--header-color);
+	color: var(--bg-color);
+  }
+
+  .login a {
+	color: var(--bg-color);
+  }
+
+  .content {
+  grid-area: content;
+
+
+  }
+  .side {
+  grid-area: sidebar;
+  background-color: var(--side-color);
+  }
+  .side2 {
+  grid-area: sidebar2;
+  background-color: var(--side-color);
+  }
+  .main-footer {
+  grid-area: footer;
+  background-color: var(--footer-color);
+  color: var(--bg-color);
+  text-align: center;
+  }
+
+  .main-footer a {
+	color: var(--bg-color);
+  }
+
+  .wrapper {
+display: grid;
+gap: 0px;
+grid-template-areas:
+  "logo"
+  "login"
+  "content"
+  "sidebar"
+  "sidebar2"
+  "footer";
+}
+
+/* END CSS GRID */
+
 a {
   font-weight: 500;
   color: #646cff;
@@ -68,3 +137,35 @@ button:focus-visible {
     color: #747bff;
   }
 }
+
+@media (min-width: 550px) {
+  .wrapper {
+    grid-template-columns: 1fr 4fr;
+    grid-template-areas:
+    "logo  login"
+    "sidebar content"
+    "sidebar2 content"
+    "footer footer";
+    min-height:100vh; 
+  }
+  
+  .login {
+    text-align: right;
+    }
+  }
+
+  @media (min-width: 700px) {
+    .wrapper {
+      grid-template-columns: 1fr 4fr 1fr;
+      grid-template-areas:
+      "logo login login"
+      "sidebar content sidebar2"
+      "footer footer footer";
+      grid-template-rows: auto 1fr auto; 
+      min-height:100vh; 
+    }
+    
+    
+    }
+    
+    /* CSS GRID END */
