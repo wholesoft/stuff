@@ -54,7 +54,7 @@ app.post("/auth", async (req, res) => {
   if (success == true)
   {
     res.cookie('jwt', refresh_token, { httpOnly: true, sameSite: 'None', secure: true, maxAge: 24 * 60 * 60 * 1000})
-    res.json({ success: success, access_token: access_token })
+    res.json({ success: success, access_token: access_token, roles: [1001] })
   }
   else
   {
