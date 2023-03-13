@@ -46,7 +46,7 @@ const handleRefreshToken = async (req, res) => {
 
 
 function generate_access_token(user_id) {
-    return jwt.sign({ user_id: user_id }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "15s" });
+    return jwt.sign({ user_id: user_id }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "1d" });
 }
 
 export default { handleRefreshToken };

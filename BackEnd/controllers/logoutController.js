@@ -16,7 +16,9 @@ const handleLogout = async (req, res) => {
     if (!cookies?.jwt) return res.sendStatus(204) // success, no content
     const refresh_token = cookies.jwt;
 
-    const rows = pool.query(`SELECT id FROM Users WHERE refresh_token=?`, [refresh_token]);
+    const rows = await pool.query(`SELECT id FROM Users WHERE refresh_token=?`, [refresh_token]);
+    console.log("Looking for matching refresh token");
+    //console.log(rows);
     if (rows[0].length < 1) {
         res.clearCookie('jwt', { httpOnly: true, sameSite: 'None', secure: true} );
         return res.sendStatus(204);

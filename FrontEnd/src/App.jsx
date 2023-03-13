@@ -6,6 +6,7 @@ import { RegisterForm } from './pages/RegisterForm'
 import { Login } from './pages/Login'
 import { AddRecordForm } from './test/AddRecordForm'
 import { Home } from './pages/Home'
+import { LinkPage } from './pages/LinkPage'
 import { Stuff } from './pages/Stuff'
 import { StuffItems } from './pages/StuffItems'
 import { NotFound } from './pages/NotFound'
@@ -31,6 +32,7 @@ function App() {
                 {/* public routes */}
                 <Route path="/register" element={<RegisterForm />} />
                 <Route path="/login" element={<Login />} />
+                <Route path="/linkpage" element={<LinkPage />} />
                 <Route path="/unauthorized" element={<Unauthorized />} />
 
                 {/* we want to protect these routes */}

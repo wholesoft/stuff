@@ -13,8 +13,8 @@ const useLogout = () => {
         } catch (err) {
             console.error(err);
         }
-        return logout
     }
+    return logout
 }
 
 export default useLogout; 
