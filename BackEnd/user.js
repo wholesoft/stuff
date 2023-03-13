@@ -143,11 +143,11 @@ export async function create_user(props) {
 
 
 function generate_access_token(user_id) {
-    return jwt.sign({ user_id: user_id, admin: false }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "15s" });
+    return jwt.sign({ user_id: user_id, roles: [1001] }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "15s" });
 }
 
 function generate_refresh_token(user_id) {
-    const refresh_token = jwt.sign({ user_id: user_id, admin: false }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: "1m" });
+    const refresh_token = jwt.sign({ user_id: user_id, roles: [1001] }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: "1m" });
     console.log(refresh_token);
     pool.query(`UPDATE Users SET refresh_token=? WHERE id=?`, [refresh_token, user_id]);
     return refresh_token;

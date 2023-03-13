@@ -39,14 +39,14 @@ const handleRefreshToken = async (req, res) => {
             }
             const access_token = generate_access_token(decoded.user_id);
             console.log(`New access token: ${access_token}`);
-            res.json({ access_token });
+            res.json({ access_token: access_token, roles: [1001] });
         }
     )
   }
 
 
 function generate_access_token(user_id) {
-    return jwt.sign({ user_id: user_id, admin: false }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "15s" });
+    return jwt.sign({ user_id: user_id }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "15s" });
 }
 
 export default { handleRefreshToken };

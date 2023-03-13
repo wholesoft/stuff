@@ -7,7 +7,7 @@ import axios from "../api/axios";
 const LOGIN_URL = '/auth';
 
 const Login = () => {
-    const { setAuth } = useAuth();// React.useContext(AuthContext);
+    const { setAuth, persist, setPersist  } = useAuth();// React.useContext(AuthContext);
 
     const navigate = useNavigate();
     const location = useLocation();
@@ -62,6 +62,14 @@ const Login = () => {
         }
     }
 
+    const togglePersist = () => {
+        setPersist(prev => !prev);
+    }
+
+    React.useEffect(() => {
+        localStorage.setItem("persist", persist);
+    },[persist])
+
     return (
         <section>
                     <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
@@ -80,6 +88,14 @@ const Login = () => {
     /><br />
     <p>{errMsg}</p><br />
     <button>Sign In</button>
+    <div>
+        <input type="checkbox"
+        id="persist"
+        onChange={togglePersist}
+        checked={persist}
+        />
+        <label htmlFor="persist">Trust this device</label>
+    </div>
     <p>
         Need an Account?<br />
         <span className='line'>
