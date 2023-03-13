@@ -38,8 +38,8 @@ const Login = () => {
             });
             console.log(JSON.stringify(response?.data));
             const access_token = response?.data?.access_token;
-            const roles = [1001]; // response?.data?.roles;
-            setAuth({ email, password, roles: roles, access_token });
+            const roles = response?.data?.roles;
+            setAuth({ email, password, roles, access_token });
             setEmail('');
             setPassword('');
             navigate(from, {replace: true });   

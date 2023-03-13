@@ -20,8 +20,8 @@ const handleRefreshToken = async (req, res) => {
     }
     console.log(cookies.jwt);
     const refresh_token = cookies.jwt;
-    console.log(`SELECT id FROM Users WHERE refresh_token='${refresh_token}'`);
-    const [rows] = await pool.query(`SELECT id FROM Users WHERE refresh_token=?`, [refresh_token]);
+    console.log(`SELECT id, roles FROM Users WHERE refresh_token='${refresh_token}'`);
+    const [rows] = await pool.query(`SELECT id, roles FROM Users WHERE refresh_token=?`, [refresh_token]);
     console.log(rows[0]);
     if (rows[0].length < 1) {
         return res.sendStatus(403);
@@ -36,17 +36,17 @@ const handleRefreshToken = async (req, res) => {
                 //console.log(decoded.user_id);
                 //console.log(rows[0].id !== decoded.user_id);
                 return res.sendStatus(403);
-            }
-            const access_token = generate_access_token(decoded.user_id);
+            }            
+            const access_token = generate_access_token(decoded.user_id, decoded.roles);
             console.log(`New access token: ${access_token}`);
-            res.json({ access_token: access_token, roles: [1001] });
+            res.json({ access_token: access_token, roles: decoded.roles });
         }
     )
   }
 
 
-function generate_access_token(user_id) {
-    return jwt.sign({ user_id: user_id }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "1d" });
+function generate_access_token(user_id, roles) {
+    return jwt.sign({ user_id: user_id, roles: roles }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "15s" });
 }
 
 export default { handleRefreshToken };

@@ -14,7 +14,9 @@ export const verifyJWT = (req, res, next) =>
         process.env.ACCESS_TOKEN_SECRET,
         (err, decoded) => {
             if (err) return res.sendStatus(403); // invalid token
-            req.user = decoded.username;
+            req.user = decoded.user_id;
+            req.roles = decoded.roles;
+            console.log(`verified: ${decoded.user_id}, ${decoded.roles}`); 
             next();
         }
     );

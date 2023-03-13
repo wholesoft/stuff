@@ -20,20 +20,15 @@ const PersistLogin = () => {
             console.log("call verifyRefreshToken");
             const verifyRefreshToken = async () => {
                 try {
-                    console.log("trying!")
                     await refresh();
-                    console.log("finished refresh");
                 }
                 catch (err) {
-                    console.log("error");
                     console.error(err)
                 }
                 finally {
-                    console.log("setIsLoading to false");
                     setIsLoading(false);
                 }
             }
-            console.log("Auth: " + auth);
             !auth?.accessToken && persist ? verifyRefreshToken() : setIsLoading(false);
             
         }

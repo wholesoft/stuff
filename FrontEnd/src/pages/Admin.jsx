@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import  { Users } from '../components/Users';
 
 const Admin = () => {
@@ -8,7 +8,7 @@ const Admin = () => {
             <br />
             <Users />
             <div className="flexGrow">
-                <Link to="/Home">Home</Link>
+                <NavLink to="/">Home</NavLink>
             </div>
         </section>
     )
