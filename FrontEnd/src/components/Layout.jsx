@@ -1,10 +1,16 @@
 import { Outlet } from "react-router-dom"
+import useAuth from '../hooks/useAuth'
 
 const Layout = () => {
+    const { auth } = useAuth();
+
     return (
         <div className='wrapper'>
         <div className='logo'><a href='/'>Stuff</a></div>
-        <div className='login'><span><a href='/login/'>login</a></span></div>
+        <div className='login'>{ auth?.email 
+        ? <a href='/account'>{auth.email}</a>
+        : <a href='/login/'>login</a>
+        }</div>
         <article className='content'>
             <Outlet />
         </article>

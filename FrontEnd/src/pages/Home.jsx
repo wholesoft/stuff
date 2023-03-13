@@ -1,8 +1,11 @@
 import { useNavigate, Link, NavLink } from "react-router-dom";
 import useLogout from "../hooks/useLogout";
+import useAuth from '../hooks/useAuth'
+
 const Home = () => {
     const navigate = useNavigate();
     const logout = useLogout();    
+    const { auth } = useAuth();
     
     const signOut = async () => {
       await logout();

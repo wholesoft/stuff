@@ -4,6 +4,7 @@ import { PersistLogin } from './components/PersistLogin'
 import { Route, Routes, Link, NavLink } from 'react-router-dom'
 import { RegisterForm } from './pages/RegisterForm'
 import { Login } from './pages/Login'
+import { Account } from './pages/Account'
 import { AddRecordForm } from './test/AddRecordForm'
 import { Home } from './pages/Home'
 import { LinkPage } from './pages/LinkPage'
@@ -39,6 +40,7 @@ function App() {
                 <Route element={<PersistLogin />}> 
                     <Route element={<RequireAuth allowedRoles={[ROLES.User]} />}>
                         <Route path="/" element={<Home />} />
+                        <Route path="/account" element={<Account />} />
                         <Route path="/stuff"> 
                             <Route index element={<Stuff />} />
                             <Route path=":category" element={<StuffItems />} />

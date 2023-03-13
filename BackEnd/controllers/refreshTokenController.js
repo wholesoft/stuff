@@ -18,10 +18,10 @@ const handleRefreshToken = async (req, res) => {
          console.log("No JWT cookie");
          return res.sendStatus(401);
     }
-    console.log(cookies.jwt);
+    //console.log(cookies.jwt);
     const refresh_token = cookies.jwt;
-    console.log(`SELECT id, roles FROM Users WHERE refresh_token='${refresh_token}'`);
-    const [rows] = await pool.query(`SELECT id, roles FROM Users WHERE refresh_token=?`, [refresh_token]);
+    //console.log(`SELECT id, email, roles FROM Users WHERE refresh_token='${refresh_token}'`);
+    const [rows] = await pool.query(`SELECT id, email, roles FROM Users WHERE refresh_token=?`, [refresh_token]);
     console.log(rows[0]);
     if (rows[0].length < 1) {
         return res.sendStatus(403);
@@ -31,15 +31,11 @@ const handleRefreshToken = async (req, res) => {
         refresh_token, process.env.REFRESH_TOKEN_SECRET,
         (err, decoded) => {
             if (err || rows[0].id !== decoded.user_id) {
-                //console.log(decoded);
-                //console.log(rows[0].id);
-                //console.log(decoded.user_id);
-                //console.log(rows[0].id !== decoded.user_id);
                 return res.sendStatus(403);
-            }            
+            }                
             const access_token = generate_access_token(decoded.user_id, decoded.roles);
             console.log(`New access token: ${access_token}`);
-            res.json({ access_token: access_token, roles: decoded.roles });
+            res.json({ access_token: access_token, email: rows[0].email, roles: decoded.roles });
         }
     )
   }
