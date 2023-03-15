@@ -232,12 +232,12 @@ export async function getUsers() {
 }  
 
 async function test() {
-    let user_email = "erikthompson@yandex.com";
+    let user_email = "";
     console.log(await send_request_email_confirmation(user_email));
     process.exit();
 }
 
-test();
+//test();
 
 
 /*
