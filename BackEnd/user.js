@@ -71,7 +71,7 @@ export async function send_request_email_confirmation(email)
     let salt = "";
     let email_confirmed = "";
 
-    console.log(rows);
+    //console.log(rows);
     if (rows.length > 0)
     {
         let record = rows[0];
@@ -95,7 +95,7 @@ export async function send_request_email_confirmation(email)
         service: process.env.EMAIL_SERVICE,
         auth: {
         user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASSWORD
+        pass: process.env.EMAIL_PASSWORD 
         }
     });
 
@@ -117,18 +117,25 @@ export async function send_request_email_confirmation(email)
     };
 
     console.log("Attempt to send email.");
-    let mail_response = await transporter.sendMail(mailOptions);
-    console.log(mail_response.messageId);
-    if (mail_response.messageId != undefined)
-    {
-        console.log('Email sent: ' + mail_response.response);
-        success = true;
-        message = "Request confirmation email sent.";
+    try {
+        let mail_response = await transporter.sendMail(mailOptions);
+        console.log(mail_response.messageId);
+        if (mail_response.messageId != undefined)
+        {
+            console.log('Email sent: ' + mail_response.response);
+            success = true;
+            message = "Request confirmation email sent.";
+        }
+        else
+        {
+            message = "Error.  Problem sending email.";
+        }        
     }
-    else
+    catch (error)
     {
-        message = "Error.  Problem sending email.";
+            message = "Error.  Problem sending email.";
     }
+
 
     return { "success": success, "messsage": message };
 }
@@ -225,12 +232,12 @@ export async function getUsers() {
 }  
 
 async function test() {
-    let user_email = "";
+    let user_email = "erikthompson@yandex.com";
     console.log(await send_request_email_confirmation(user_email));
     process.exit();
 }
 
-//test();
+test();
 
 
 /*
