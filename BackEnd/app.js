@@ -1,7 +1,7 @@
 import express from 'express'
 import cors from 'cors'
 import { getNotes, getNote, createNote } from './test/database.js'
-import { create_user, confirm_email, login_user, getUsers } from './user.js'
+import { create_user, confirm_email, login_user, getUsers, send_email_confirmation_request } from './user.js'
 import { verifyJWT } from './middleware/verifyJWT.js';
 import cookieParser from 'cookie-parser' ;
 import refresh_route from './routes/refresh.js'
@@ -82,7 +82,6 @@ app.get('/confirm', async (req, res) => {
 });
 
 
-
 app.use(verifyJWT);
 
 app.get('/users', async (req, res) => {
@@ -90,6 +89,12 @@ app.get('/users', async (req, res) => {
   res.send(users);
 }); 
 
+
+app.post('/resend_email_confirmation_request', async (req, res) => {
+  const {email} = req.body;
+  const result = await send_email_confirmation_request(email);
+  res.send(result);
+});
 
 app.get('/notes', async (req, res) => {
   const notes = await getNotes()

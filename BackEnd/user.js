@@ -44,12 +44,12 @@ export async function create_user(props) {
     INSERT INTO Users (email, password, salt, roles)
     VALUES (?, ?, ?, '1001')`, [props.email, hashed_password, salt]);
 
-    send_request_email_confirmation(props.email);
+    send_email_confirmation_request(props.email);
 
     return result[0].insertId;
  }
 
-export async function send_request_email_confirmation(email)
+export async function send_email_confirmation_request(email)
 {
     // THIS GETS CALLED AFTER THE USER REGISTERS
     // AND IF THE USER REQUESTS IT TO BE SENT AGAIN 
@@ -233,7 +233,7 @@ export async function getUsers() {
 
 async function test() {
     let user_email = "";
-    console.log(await send_request_email_confirmation(user_email));
+    console.log(await send_email_confirmation_request(user_email));
     process.exit();
 }
 
