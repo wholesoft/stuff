@@ -1,13 +1,16 @@
 import * as React from 'react';
 import FormInput from "../components/FormInput001";
+import { NavLink, useNavigate } from 'react-router-dom';
 
 const RegisterForm = () => {
 
+    const navigate = useNavigate();
     const [values, setValues] = React.useState({
         email: "",
         password: "",
         confirm_password: "",
       });
+      const [errorMessage, setErrorMessage] = React.useState("");
     
       const inputs = [
         {
@@ -53,6 +56,9 @@ const RegisterForm = () => {
       }).then(response => response.json())
       .then(json => {
         console.log('parsed json', json) // access json.body here
+        json?.error ? setErrorMessage(json.error)
+        : json?.user_id ? navigate('/registration_confirmed')
+          : setErrorMessage("Error.  Something went wrong.");
       })
     }
 
@@ -63,6 +69,8 @@ const RegisterForm = () => {
       };
     
       return (
+        <>
+        <p>{errorMessage}</p>
           <form onSubmit={handleSubmit}>
             <h1>Register</h1>
             {inputs.map((input) => (
@@ -75,6 +83,7 @@ const RegisterForm = () => {
             ))}
             <button>Submit</button>
           </form>
+          </>
       );
 
 

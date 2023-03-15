@@ -4,8 +4,9 @@ import { PersistLogin } from './components/PersistLogin'
 import { Route, Routes, Link, NavLink } from 'react-router-dom'
 import { RegisterForm } from './pages/RegisterForm'
 import { Login } from './pages/Login'
+import { PleaseConfirmEmail } from './pages/PleaseConfirmEmail'
+import { RegistrationConfirmed } from './pages/RegistrationConfirmed'
 import { Account } from './pages/Account'
-import { AddRecordForm } from './test/AddRecordForm'
 import { Home } from './pages/Home'
 import { LinkPage } from './pages/LinkPage'
 import { Stuff } from './pages/Stuff'
@@ -15,7 +16,8 @@ import { Admin } from './pages/Admin'
 import { Notes } from './pages/Notes'
 import { Layout } from './components/Layout'
 import { Unauthorized } from './pages/Unauthorized'
- 
+
+
 const ROLES = {
     'User': 1001,
     'Admin': 2001
@@ -32,9 +34,13 @@ function App() {
             <Route path="/" element={<Layout />}>
                 {/* public routes */}
                 <Route path="/register" element={<RegisterForm />} />
+                <Route path="/registration_confirmed" element={<RegistrationConfirmed />} />
                 <Route path="/login" element={<Login />} />
+                <Route path="/unconfirmed" element={<PleaseConfirmEmail />} />
                 <Route path="/linkpage" element={<LinkPage />} />
                 <Route path="/unauthorized" element={<Unauthorized />} />
+
+
 
                 {/* we want to protect these routes */}
                 <Route element={<PersistLogin />}> 
@@ -45,8 +51,6 @@ function App() {
                             <Route index element={<Stuff />} />
                             <Route path=":category" element={<StuffItems />} />
                         </Route>
-                        <Route path="/addrecord" element={<AddRecordForm />} />
-                        <Route path="/notes" element={<Notes />} />
                     </Route>
 
                     <Route element={<RequireAuth allowedRoles={[ROLES.Admin]} />}>

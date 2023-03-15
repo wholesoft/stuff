@@ -49,13 +49,13 @@ app.use('/logout', logout_route);
 app.post("/auth", async (req, res) => {
   const { email, password } = req.body;
   console.log(req.body)
-  const { refresh_token, access_token, success, roles } = await login_user(req.body)
+  const { refresh_token, access_token, success, roles, email_confirmed } = await login_user(req.body)
   console.log("Roles: " + roles);
   //let response = { success: success }
   if (success == true)
   {
     res.cookie('jwt', refresh_token, { httpOnly: true, sameSite: 'None', secure: true, maxAge: 24 * 60 * 60 * 1000})
-    res.json({ success: success, access_token: access_token, roles: roles })
+    res.json({ success: success, access_token: access_token, roles: roles, email_confirmed: email_confirmed })
   }
   else
   {

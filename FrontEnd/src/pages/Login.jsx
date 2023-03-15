@@ -1,7 +1,6 @@
 import * as React from 'react';
-//import AuthContext from "../context/AuthProvider";
 import useAuth from '../hooks/useAuth';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { NavLink, useNavigate, useLocation } from 'react-router-dom';
 import axios from "../api/axios";
 
 const LOGIN_URL = '/auth';
@@ -39,10 +38,23 @@ const Login = () => {
             console.log(JSON.stringify(response?.data));
             const access_token = response?.data?.access_token;
             const roles = response?.data?.roles;
-            setAuth({ email: email, roles, access_token });
-            setEmail('');
-            setPassword('');
-            navigate(from, {replace: true });   
+            const email_confirmed = response?.data?.email_confirmed;
+            console.log("email_confirmed: " + email_confirmed);
+            if (!email_confirmed)
+            {
+                setAuth({  });
+                localStorage.setItem("unconfirmed_email", email);
+                setEmail('');
+                setPassword('');
+                navigate('/unconfirmed'); 
+            }
+            else
+            {
+                setAuth({ email: email, roles, access_token });
+                setEmail('');
+                setPassword('');
+                navigate(from, {replace: true });   
+            }
         } catch (err) {
             console.log("ERROR FOUND");
             if (!err?.response) {
@@ -72,7 +84,7 @@ const Login = () => {
 
     return (
         <section>
-                    <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
+    <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
 
 <h1>Sign In</h1>
 <form onSubmit={handleSubmit}>
@@ -97,7 +109,7 @@ const Login = () => {
         <label htmlFor="persist">Trust this device</label>
     </div>
     <p>
-        Need an Account?<br />
+        <NavLink to='/register'>Need an Account?</NavLink><br />
         <span className='line'>
             {/* put router link here */}
             <a href='#'>Sign Up</a>
