@@ -1,15 +1,19 @@
 import { useResource } from '../hooks/useResource'
+import { useParams } from 'react-router-dom'
 
 const UserInfo = ( props ) => {
-    const userId = props.userId;
-    console.log("User ID: " + userId);
-    const user = useResource(`/users/${userId}`);
+    const {id} = useParams();
+    console.log("User ID: " + id);
+    const user = useResource(`/users/${id}`);
     console.log (JSON.stringify(user));
-    const { email, email_confirmed, created } = user || {};
+    const { email, email_confirmed, created, last_login, n_logins, roles } = user || {};
     return user ? (
         <>
-        <h3>{email}</h3>
-        <p>ID: { userId }</p>
+        <p>User ID: { id }</p>
+        <p>{email}</p>
+        <p>Roles: { roles }</p>
+        <p>Last Login: { last_login }</p>
+        <p>Total Logins: { n_logins }</p>
         <p>Email Confirmed: {email_confirmed}</p>
         <p>Creaetd: { created }</p>
         </>
