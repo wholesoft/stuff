@@ -1,6 +1,7 @@
 import * as React from 'react';
 import useAxiosPrivate from '../hooks/useAxiosPrivate';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { UserInfo } from './UserInfo';
 
 const Users = () => {
 
@@ -54,10 +55,10 @@ const Users = () => {
         <h2>Users Lists</h2>
         { users?.length
          ? (
-            <ul>
-                {users.map((user, i) => <li key={user.id}>{user?.email}</li>)}
-            </ul>
-         ) : <p>No users to display</p>
+            <p>
+                {users.map((user, i) => <UserInfo userId={user.id} key={user.id} />)}
+            </p>
+          ) : <p>No users to display</p>
         }
         
         <br />

@@ -1,7 +1,7 @@
 import express from 'express'
 import cors from 'cors'
 import { getNotes, getNote, createNote } from './test/database.js'
-import { create_user, confirm_email, login_user, getUsers, send_email_confirmation_request } from './user.js'
+import { create_user, confirm_email, login_user, getUsers, getUser, send_email_confirmation_request } from './user.js'
 import { verifyJWT } from './middleware/verifyJWT.js';
 import cookieParser from 'cookie-parser' ;
 import refresh_route from './routes/refresh.js'
@@ -81,8 +81,23 @@ app.get('/confirm', async (req, res) => {
   res.send(result);
 });
 
+app.post('/resend_email_confirmation_request', async (req, res) => {
+  const {email} = req.body;
+  const result = await send_email_confirmation_request(email);
+  res.send(result);
+});
+
+app.get('/users/:id', async (req, res) => {  
+  const id = req.params.id
+  const user = await getUser(id)
+  res.send(user);
+}); 
 
 app.use(verifyJWT);
+
+// TODO: LIMIT PERMISSIONS ONLY TO THINGS THE USER HAS ACCESS TO
+// REGULAR USERS SHOULD ONLY BE ABLE TO ACCESS THEIR OWN INFO
+// ADMIN USERS CAN ACCESS ANYTHING
 
 app.get('/users', async (req, res) => {
   const users = await getUsers()
@@ -90,11 +105,6 @@ app.get('/users', async (req, res) => {
 }); 
 
 
-app.post('/resend_email_confirmation_request', async (req, res) => {
-  const {email} = req.body;
-  const result = await send_email_confirmation_request(email);
-  res.send(result);
-});
 
 app.get('/notes', async (req, res) => {
   const notes = await getNotes()

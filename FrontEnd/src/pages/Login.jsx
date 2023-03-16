@@ -42,7 +42,7 @@ const Login = () => {
             console.log("email_confirmed: " + email_confirmed);
             if (!email_confirmed)
             {
-                setAuth({  });
+                setAuth({  }); 
                 localStorage.setItem("unconfirmed_email", email);
                 setEmail('');
                 setPassword('');

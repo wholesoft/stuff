@@ -81,13 +81,13 @@ export async function send_email_confirmation_request(email)
         {
             success = true; // it was already confirmed.
             message = "Email address confirmed.";
-            return { "success": success, "messsage": message };
+            return { "success": success, "message": message };
         }
     }
     else
     {
         message = "No user registration found for this email address.";
-        return { "success": success, "messsage": message };
+        return { "success": success, "message": message };
     }
 
     // SEND CONFIRMATION EMAIL
@@ -137,7 +137,7 @@ export async function send_email_confirmation_request(email)
     }
 
 
-    return { "success": success, "messsage": message };
+    return { "success": success, "message": message };
 }
 
  export async function email_exists(email){ 
@@ -229,6 +229,13 @@ export async function getUsers() {
     const [rows] = await pool.query("SELECT id, email, last_login, n_logins, created, email_confirmed, roles FROM Users");
     //console.log(rows);//
     return rows; 
+}  
+
+export async function getUser(user_id) {
+    const [rows] = await pool.query(`SELECT id, email, last_login, n_logins, created, email_confirmed, roles 
+    FROM Users WHERE id=?`, [user_id]);
+    console.log(user_id + " : " + rows);
+    return rows[0]; 
 }  
 
 async function test() {

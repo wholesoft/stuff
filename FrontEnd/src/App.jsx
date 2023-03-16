@@ -7,6 +7,7 @@ import { Login } from './pages/Login'
 import { PleaseConfirmEmail } from './pages/PleaseConfirmEmail'
 import { RegistrationConfirmed } from './pages/RegistrationConfirmed'
 import { Account } from './pages/Account'
+import { ShowUser } from './pages/ShowUser'
 import { Home } from './pages/Home'
 import { LinkPage } from './pages/LinkPage'
 import { Stuff } from './pages/Stuff'
@@ -55,6 +56,7 @@ function App() {
 
                     <Route element={<RequireAuth allowedRoles={[ROLES.Admin]} />}>
                         <Route path="/admin" element={<Admin />} />
+                        <Route path="/user" element={<ShowUser />} />
                     </Route>
                 </Route>
 
