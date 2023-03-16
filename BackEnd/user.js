@@ -172,21 +172,30 @@ export async function send_email_confirmation_request(email)
  export async function login_user(props){ 
 
     const [rows] = await pool.query(`
-    SELECT id, email, password, roles, email_confirmed 
+    SELECT id, email, password, roles, email_confirmed, n_logins 
     FROM Users WHERE email=?`, [props.email]);
     const record = rows[0];
   
     console.log(rows.length);
     // use bcrypt to hash the password and compared it to our stored hash
     let db_password = "";
+    let user_id = 0;
+    let n_logins = 0;
     if (rows.length > 0)
     {
         db_password = record.password;
+        user_id = record.id;
+        n_logins = record.n_logins;
     }
     let success = false;
     if (props.password != "" && db_password != "")
     {
         success = await bcrypt.compare(props.password, db_password);
+        if (success)
+        {
+            // UPDATE n_logins and last_login
+            await pool.query(`UPDATE Users SET n_logins=?, last_login=CURRENT_TIMESTAMP WHERE id=?`, [n_logins+1, user_id]);
+        }
     }
     let access_token = "";
     let refresh_token = "";
