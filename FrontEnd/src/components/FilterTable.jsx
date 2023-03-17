@@ -1,7 +1,17 @@
 import React, { useMemo } from 'react'
-import { useTable } from 'react-table'
+import { useTable, useGlobalFilter } from 'react-table'
 
-const BasicTable = (props) => {
+const GlobalFilter = ({ filter, setFilter }) => {
+    return (
+        <>
+            Search:{' '}
+            <input value={filter || ''} onChange={(e) => setFilter(e.target.value)} />
+        </>
+    )
+}
+
+
+const FilterTable = (props) => {
 
 
     //const { COLUMNS, DATA } = props;
@@ -11,14 +21,18 @@ const BasicTable = (props) => {
     const tableInstance = useTable({
         columns,
         data
-    })
+    }, useGlobalFilter)
 
-    const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = tableInstance
+    const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow, state, setGlobalFilter } = tableInstance
 
-
+    const { globalFilter } = state
 
 
    return (
+    <>
+    <br />
+    <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} />
+    <br />
       <table className='data_table' {...getTableProps()}>
         <thead>
             { headerGroups.map((headerGroup) => (
@@ -43,9 +57,10 @@ const BasicTable = (props) => {
             })}
         </tbody>
       </table>
+      </>
     )
   }
 
 
-export {BasicTable}
+export {FilterTable}
 

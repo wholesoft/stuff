@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react'
-import { useTable } from 'react-table'
+import { useTable, useSortBy } from 'react-table'
 
-const BasicTable = (props) => {
+const SortTable = (props) => {
 
 
     //const { COLUMNS, DATA } = props;
@@ -11,7 +11,8 @@ const BasicTable = (props) => {
     const tableInstance = useTable({
         columns,
         data
-    })
+    }
+    ,useSortBy)
 
     const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = tableInstance
 
@@ -25,7 +26,12 @@ const BasicTable = (props) => {
             <tr {...headerGroup.getHeaderGroupProps()}>
                 {
                     headerGroup.headers.map( column => (
-                        <th {...column.getHeaderProps()}>{column.render('Header')}</th>                    
+                        <th {...column.getHeaderProps(column.getSortByToggleProps())}>
+                            {column.render('Header')}
+                            <span>
+                                {column.isSorted ? (column.isSortedDesc ?  ' 🔽' : ' 🔼') : 'xxx' /* BUG: SORT ICONS NOT APPEARING */}
+                            </span>
+                        </th>                    
                 ))}
         </tr>
             ))}
@@ -47,5 +53,5 @@ const BasicTable = (props) => {
   }
 
 
-export {BasicTable}
+export {SortTable}
 

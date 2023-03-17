@@ -169,3 +169,28 @@ button:focus-visible {
     }
     
     /* CSS GRID END */
+
+/* DATA TABLE */
+  .data_table{
+    /* width:100%; */
+    border-collapse:collapse;
+    /* background-color: #ffffff; */
+  }
+  .data_table td, .data_table th
+  {
+    font-size:12px;
+    border:1px solid #000;
+    padding:4px 7px 4px 7px;
+    background-color: #ffffff; 
+  }
+  .data_table th
+  {
+    text-align:left;
+    background-color:#585858;
+    color:#fff;
+    /* width: 80px; */
+    padding:2px 7px 1px 7px;		
+    /* white-space:nowrap; */
+  }
+   
+/* DATA TABLES END */

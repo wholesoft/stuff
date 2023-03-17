@@ -1,6 +1,18 @@
 import React, { useMemo } from 'react'
 import { useResourcePrivate } from '../hooks/useResourcePrivate'
 import { BasicTable } from '../components/BasicTable'
+import { SortTable } from '../components/SortTable'
+import { FilterTable } from '../components/FilterTable'
+
+function formatDate(date_string)
+{
+    let result = ""
+    if (date_string != null)
+    {
+        result = new Date(date_string).toLocaleDateString() 
+    }
+    return result;
+}
 
 const COLUMNS  = [
     {
@@ -17,7 +29,8 @@ const COLUMNS  = [
     },
     {
         Header: 'Last Login',
-        accessor: 'last_login'
+        accessor: 'last_login',
+        Cell:  ({ value }) => { return formatDate(value) }
     },
     {
         Header: 'Total Logins',
@@ -25,11 +38,13 @@ const COLUMNS  = [
     },
     {
         Header: 'Email Confirmed',
-        accessor: 'email_confirmed'
+        accessor: 'email_confirmed',
+        Cell:  ({ value }) => { return formatDate(value) }
     },
     {
         Header: 'Created',
-        accessor: 'created'
+        accessor: 'created',
+        Cell:  ({ value }) => { return formatDate(value) }
     }
 
 ]
@@ -42,7 +57,7 @@ const UsersTable = () => {
 
    return userData ? (
         <>
-        <BasicTable data={userData} columns={COLUMNS} />
+        <FilterTable data={userData} columns={COLUMNS} />
         </>
     ) : <p>LOADING...</p>
   }
