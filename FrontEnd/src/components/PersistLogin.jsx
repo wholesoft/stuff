@@ -15,9 +15,9 @@ const PersistLogin = () => {
         //let isMounted = true;
         if (effectRan.current === false)
         {
-            console.log("Persist Login -> useEffect");
+            //console.log("Persist Login -> useEffect");
 
-            console.log("call verifyRefreshToken");
+            //console.log("call verifyRefreshToken");
             const verifyRefreshToken = async () => {
                 try {
                     await refresh();
@@ -40,8 +40,8 @@ const PersistLogin = () => {
     }, [])
 
     React.useEffect(() => {
-        console.log(`isLoading: ${isLoading}`)
-        console.log(`auth-token: ${JSON.stringify(auth)}`)
+        //console.log(`isLoading: ${isLoading}`)
+        //console.log(`auth-token: ${JSON.stringify(auth)}`)
     }, [isLoading])
 
     return (
