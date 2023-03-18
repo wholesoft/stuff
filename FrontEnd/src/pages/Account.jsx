@@ -20,18 +20,19 @@ const Account = () => {
             });
             console.log(JSON.stringify(response?.data));
             const message = response?.data?.message;
+            setResponseMessage(message);
             //navigate(from, {replace: true });   
             } catch (err) {
             console.log("ERROR FOUND");
             console.log(err.message);
             if (!err?.response) {
-                setErrMsg("No Server Response");
+                setResponseMessage("No Server Response");
                 console.log("NO RESPONSE");
             } else if (err.response?.status === 400) {
-                setErrMsg("Missing Email");
+                setResponseMessage("Missing Email");
                 console.log("MISSING EMAIL");
             } else  {
-                setErrMsg("Unauthorized");
+                setResponseMessage("Unauthorized");
                 console.log("UNAUTHORIZED");
             }
         }
