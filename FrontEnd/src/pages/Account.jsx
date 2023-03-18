@@ -10,15 +10,16 @@ const Account = () => {
         e.preventDefault();
 
         try {
-            const response = await axios.post('/update_user_email', JSON.stringify({email}), {
+            const response = await axios.post('/update_email_address', JSON.stringify({email}), {
             headers: { 'Content-Type': 'application/json' },
             withCredentials: true   
             });
             console.log(JSON.stringify(response?.data));
             const message = response?.data?.message;
-            navigate(from, {replace: true });   
+            //navigate(from, {replace: true });   
             } catch (err) {
             console.log("ERROR FOUND");
+            console.log(err.message);
             if (!err?.response) {
                 setErrMsg("No Server Response");
                 console.log("NO RESPONSE");

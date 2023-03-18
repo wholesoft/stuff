@@ -49,6 +49,46 @@ export async function create_user(props) {
     return result[0].insertId;
  }
 
+ export async function update_email_address(props)
+ {
+    // THIS GETS CALLED WHEN A USER REQUESTS TO 
+    // UPDATE THEIR EMAIL ADDRESS
+    // Returns { 'success': true/false , 'message': '' }
+    let success = false;
+    let message = "";
+    let validation_okay = true;
+
+    // VALIDATE INPUT
+    const schema = joi.object({
+        user_id: joi.number().integer().required(),
+        email: joi.string().email().required(),
+      });
+
+    const { error, value } = schema.validate(props); 
+    if (error) {
+      console.log(error);
+      console.log("Validation Error.");
+      message = "Vaidation Error (" + error.details[0].message + ")";
+      validation_okay = false;
+    }
+
+    // ENSURE EMAIL ISN'T ALREADY IN THE DATABASE
+    if (await email_exists(props.email) == true && validation_okay) {
+        message = "Vaidation Error (EMAIL ALREADY EXISTS)";
+        validation_okay = false;
+    }
+
+    // UPDATE THE USER'S EMAIL
+    if (validation_okay) {
+        const result = await pool.query(`
+        UPDATE Users SET email=? WHERE id=?`, [props.email, props.user_id]); 
+        console.log(result);
+        success = true;
+    }
+
+    return { "success": success, "message": message };
+ }
+
 export async function send_email_confirmation_request(email)
 {
     // THIS GETS CALLED AFTER THE USER REGISTERS

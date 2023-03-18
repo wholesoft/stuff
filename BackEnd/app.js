@@ -1,7 +1,8 @@
 import express from 'express'
 import cors from 'cors'
 import { getNotes, getNote, createNote } from './test/database.js'
-import { create_user, confirm_email, login_user, getUsers, getUser, send_email_confirmation_request } from './user.js'
+import { create_user, confirm_email, login_user, getUsers, getUser, 
+  send_email_confirmation_request, update_email_address } from './user.js'
 import { verifyJWT } from './middleware/verifyJWT.js';
 import cookieParser from 'cookie-parser' ;
 import refresh_route from './routes/refresh.js'
@@ -92,6 +93,14 @@ app.get('/users/:id', async (req, res) => {
   const user = await getUser(id)
   res.send(user);
 }); 
+
+app.post('/update_email_address', async (req, res) => {
+  console.log("POST: update_email_address");
+  console.log(JSON.stringify(req.body));
+  const {user_id, email} = req.body;
+  const result = await update_email_address(req.body);
+  res.send(result);
+});
 
 app.use(verifyJWT);
 

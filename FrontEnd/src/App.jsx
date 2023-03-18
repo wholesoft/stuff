@@ -32,41 +32,39 @@ function App() {
     return (
         <div className='app'>
 
-        <Routes>
-            <Route path="/" element={<Layout />}>
-                {/* public routes */}
-                <Route path="/register" element={<RegisterForm />} />
-                <Route path="/registration_confirmed" element={<RegistrationConfirmed />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/unconfirmed" element={<PleaseConfirmEmail />} />
-                <Route path="/linkpage" element={<LinkPage />} />
-                <Route path="/unauthorized" element={<Unauthorized />} />
+<Routes>
+    <Route path="/" element={<Layout />}>
+        {/* public routes */}
+        <Route path="/register" element={<RegisterForm />} />
+        <Route path="/registration_confirmed" element={<RegistrationConfirmed />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/unconfirmed" element={<PleaseConfirmEmail />} />
+        <Route path="/linkpage" element={<LinkPage />} />
+        <Route path="/unauthorized" element={<Unauthorized />} />
 
-
-
-                {/* we want to protect these routes */}
-                <Route element={<PersistLogin />}> 
-                    <Route element={<RequireAuth allowedRoles={[ROLES.User]} />}>
-                        <Route path="/" element={<Home />} />
-                        <Route path="/account" element={<Account />} />
-                        <Route path="/stuff"> 
-                            <Route index element={<Stuff />} />
-                            <Route path=":category" element={<StuffItems />} />
-                        </Route>
-                    </Route>
-
-                    <Route element={<RequireAuth allowedRoles={[ROLES.Admin]} />}>
-                        <Route path="/admin" element={<Admin />} />
-                        <Route path="/users" element={<UsersTable />} />
-                        <Route path="/user/:id" element={<ShowUser />} />
-                    </Route>
+        {/* we want to protect these routes */}
+        <Route element={<PersistLogin />}> 
+            <Route element={<RequireAuth allowedRoles={[ROLES.User]} />}>
+                <Route path="/" element={<Home />} />
+                <Route path="/account" element={<Account />} />
+                <Route path="/stuff"> 
+                    <Route index element={<Stuff />} />
+                    <Route path=":category" element={<StuffItems />} />
                 </Route>
-
-
-                {/* catch all */}
-                <Route path="*" element={<NotFound />} />
             </Route>
-      </Routes>
+
+            <Route element={<RequireAuth allowedRoles={[ROLES.Admin]} />}>
+                <Route path="/admin" element={<Admin />} />
+                <Route path="/users" element={<UsersTable />} />
+                <Route path="/user/:id" element={<ShowUser />} />
+            </Route>
+        </Route>
+
+
+        {/* catch all */}
+        <Route path="*" element={<NotFound />} />
+    </Route>
+</Routes>
       </div>
     )
   }
