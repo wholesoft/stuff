@@ -7,11 +7,9 @@ import useAuth from "./useAuth";
 const useAxiosPrivate = () => {
     const refresh = useRefreshToken();
     const { auth } = useAuth();
-    const effectRan = useRef(false);
+   // const effectRan = useRef(false);
 
     useEffect(() => {
-       if (effectRan.current === false)
-        {
             const requestIntercept = axiosPrivate.interceptors.request.use(
                 config => {
                     if (!config.headers['Authorization']) {
@@ -29,8 +27,8 @@ const useAxiosPrivate = () => {
                 async (error) => {  
                     console.log("Response Auth Error.");
                     const prevRequest = error?.config;
-                    if (error?.response?.status === 403 && !prevRequest?.sent) {
-                        //console.log("need new token I think.");
+                    if ((error?.response?.status === 403 || error?.response?.status === 401) && !prevRequest?.sent) {
+                        console.log("GETTING NEW TOKEN.");
                         prevRequest.sent = true; 
                         const newAccessToken = await refresh();
                         prevRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
@@ -45,9 +43,8 @@ const useAxiosPrivate = () => {
                 axiosPrivate.interceptors.request.eject(requestIntercept);
                 axiosPrivate.interceptors.response.eject(responseIntercept);
                 //console.log("Clean up use axios private.");
-                effectRan.current = true;
+                //effectRan.current = false;
             }
-        }
     }, [auth, refresh])
     return axiosPrivate;
 }

@@ -84,6 +84,7 @@ export async function create_user(props) {
         UPDATE Users SET email=? WHERE id=?`, [props.email, props.user_id]); 
         console.log(result);
         success = true;
+        message = `Email Updated (${props.email}).`;
     }
 
     return { "success": success, "message": message };

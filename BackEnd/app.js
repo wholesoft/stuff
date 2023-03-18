@@ -94,25 +94,32 @@ app.get('/users/:id', async (req, res) => {
   res.send(user);
 }); 
 
-app.post('/update_email_address', async (req, res) => {
-  console.log("POST: update_email_address");
-  console.log(JSON.stringify(req.body));
-  const {user_id, email} = req.body;
-  const result = await update_email_address(req.body);
-  res.send(result);
-});
-
 app.use(verifyJWT);
+/*
+   Middleware verifies/decodes auth token and inserts values into the request handler:
+   jwt_user_id
+   jwt_roles 
+*/
+
 
 // TODO: LIMIT PERMISSIONS ONLY TO THINGS THE USER HAS ACCESS TO
 // REGULAR USERS SHOULD ONLY BE ABLE TO ACCESS THEIR OWN INFO
 // ADMIN USERS CAN ACCESS ANYTHING
 
 app.get('/users', async (req, res) => {
+  console.log(`Verified ${req.jwt_user_id} : ${req.jwt_roles}`);
   const users = await getUsers()
   res.send(users);
 }); 
 
+app.post('/update_email_address', async (req, res) => {
+  console.log("POST: update_email_address");
+  console.log(JSON.stringify(req.body));
+  const { email} = req.body;
+  const user_id = req.jwt_user_id;
+  const result = await update_email_address({ 'user_id': req.jwt_user_id, 'email': email });
+  res.send(result);
+});
 
 
 app.get('/notes', async (req, res) => {

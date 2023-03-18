@@ -1,4 +1,3 @@
-import './App.css'
 import { RequireAuth } from './components/RequireAuth'
 import { PersistLogin } from './components/PersistLogin'
 import { Route, Routes, Link, NavLink } from 'react-router-dom'
