@@ -106,6 +106,38 @@ app.use(verifyJWT);
 // REGULAR USERS SHOULD ONLY BE ABLE TO ACCESS THEIR OWN INFO
 // ADMIN USERS CAN ACCESS ANYTHING
 
+app.get('/stuff', async (req, res) => {
+    console.log("GET: /stuff");
+    const { email} = req.body;
+    const stuff = await getStuff({ 'user_id': req.jwt_user_id, 'group_id': group_id })
+    res.send(stuff.data);
+});
+
+app.get('/stuff_groups', async (req, res) => {
+  console.log("GET: /stuff_groups");
+  const { email} = req.body;
+  const groups = await getStuffGroups({ 'user_id': req.jwt_user_id })
+  res.send(groups.data);
+});
+
+app.post('/add_stuff_group', async (req, res) => {
+  console.log("POST: /add_stuff_group");
+  console.log(JSON.stringify(req.body));
+  const { group, notes } = req.body;
+  const result = await addStuffGroup({ 'user_id': req.jwt_user_id, 'group': group, 'notes': notes });
+  res.send(result);
+});
+
+app.post('/add_stuff_item', async (req, res) => {
+  console.log("POST: /add_stuff_item");
+  const { group_id , item_name, purchase_location, purchase_date, amount_paid, notes } = req.body;
+  console.log(JSON.stringify(req.body));
+  const result = await addStuffItem({ 'user_id': req.jwt_user_id, 'group_id': group_id,
+  'item_name': item_name, 'purchase_location': purchase_location, 'purchase_date': purchase_date, 
+  'amount_paid': amount_paid, 'notes': notes });
+  res.send(result);
+});
+
 app.get('/users', async (req, res) => {
   console.log(`Verified ${req.jwt_user_id} : ${req.jwt_roles}`);
   const users = await getUsers()
