@@ -1,7 +1,7 @@
 import express from 'express'
 import cors from 'cors'
 import { getNotes, getNote, createNote } from './test/database.js'
-import { create_user, confirm_email, login_user, getUsers, getUser, 
+import { create_user, confirm_email, login_user, getUsers, getUser, reset_password,  
   send_email_confirmation_request, update_email_address, update_password } from './user.js'
 import { addStuffGroup, getStuffGroups, addStuffItem, getStuff } from './stuff.js'
 import { verifyJWT } from './middleware/verifyJWT.js';
@@ -86,6 +86,12 @@ app.get('/confirm', async (req, res) => {
 app.post('/resend_email_confirmation_request', async (req, res) => {
   const {email} = req.body;
   const result = await send_email_confirmation_request(email);
+  res.send(result);
+});
+
+app.post('/reset_password_email_request', async (req, res) => {
+  const {email} = req.body;
+  const result = await reset_password(email);
   res.send(result);
 });
 

@@ -152,55 +152,64 @@ export async function reset_password(email) {
 
     // SAVE TOKEN TO THE DB
     const [rows] = await pool.query(`
-        UPDATE USERS SET password_reset_token=?, password_token_created=CURRENT_TIMESTAMP
-        WHERE email=?`, [email]);
-    
-    // SEND PASSWORD RESET EMAIL
-    var transporter = nodemailer.createTransport({
-        service: process.env.EMAIL_SERVICE,
-        auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASSWORD 
-        }
-    });
+        UPDATE Users SET password_reset_token=?, password_token_created=CURRENT_TIMESTAMP
+        WHERE email=?`, [password_reset_token, email]);
 
-    const encodedToken = encodeURIComponent(password_reset_token); // not really needed
+    let changed_rows = rows['changedRows'];
+    console.log(changed_rows);
 
-
-    // just let them use the salt as the id, should probably change this to some other random text
-    let email_html = `Please click the link below to reset your password.<br />
-    <br /><a href='${process.env.APP_FULL_DOMAIN}/reset/?id=${encodedToken}'>confirm email</a>`;
-    let email_plain = `Please click the link below to confirm your email./n
-    /n<${process.env.APP_FULL_DOMAIN}/reset/?id=${encodedToken}`;
-
-    var mailOptions = {
-        from: process.env.EMAIL_FROM,
-        to: email,
-        subject: 'Reset Password Request',
-        text: email_plain,
-        html: email_html
-    };
-
-    console.log("Attempt to send email.");
-    try {
-        let mail_response = await transporter.sendMail(mailOptions);
-        console.log(mail_response.messageId);
-        if (mail_response.messageId != undefined)
-        {
-            console.log('Email sent: ' + mail_response.response);
-            success = true;
-            message = "Reset password email sent.";
-        }
-        else
-        {
-            message = "Error.  Problem sending email.";
-        }        
+    if (changed_rows == 0) {
+        success = false;
+        message = `Error.  No user with this email found. (${email}).`;
     }
-    catch (error)
-    {
-            message = "Error.  Problem sending email.";
-    }
+    else {
+        // SEND PASSWORD RESET EMAIL
+        var transporter = nodemailer.createTransport({
+            service: process.env.EMAIL_SERVICE,
+            auth: {
+            user: process.env.EMAIL_USER,
+            pass: process.env.EMAIL_PASSWORD 
+            }
+        });
 
+        const encodedToken = encodeURIComponent(password_reset_token); // not really needed
+
+
+        // just let them use the salt as the id, should probably change this to some other random text
+        let email_html = `Please click the link below to reset your password.<br />
+        <br /><a href='${process.env.FRONT_END_FULL_DOMAIN}/reset/?id=${encodedToken}'>reset password</a>
+        `;
+        let email_plain = `Please click the link below to confirm your email./n
+        /n<${process.env.FRONT_END_FULL_DOMAIN}/reset/?id=${encodedToken}`;
+
+        var mailOptions = {
+            from: process.env.EMAIL_FROM,
+            to: email,
+            subject: 'Reset Password Request',
+            text: email_plain,
+            html: email_html
+        };
+
+        console.log("Attempt to send email.");
+        try {
+            let mail_response = await transporter.sendMail(mailOptions);
+            console.log(mail_response.messageId);
+            if (mail_response.messageId != undefined)
+            {
+                console.log('Email sent: ' + mail_response.response);
+                success = true;
+                message = "Reset password email sent.";
+            }
+            else
+            {
+                message = "Error.  Problem sending email.";
+            }        
+        }
+        catch (error)
+        {
+                message = "Error.  Problem sending email.";
+        }
+    }
     return { "success": success, "message": message };
 }
 
@@ -257,9 +266,9 @@ export async function send_email_confirmation_request(email)
 
     // just let them use the salt as the id, should probably change this to some other random text
     let email_html = `Please click the link below to confirm your email.<br />
-    <br /><a href='${process.env.APP_FULL_DOMAIN}/confirm/?id=${encodedToken}'>confirm email</a>`;
+    <br /><a href='${process.env.FRONT_END_FULL_DOMAIN}/confirm/?id=${encodedToken}'>confirm email</a>`;
     let email_plain = `Please click the link below to confirm your email./n
-    /n<${process.env.APP_FULL_DOMAIN}/confirm/?id=${encodedToken}`;
+    /n<${process.env.FRONT_END_FULL_DOMAIN}/confirm/?id=${encodedToken}`;
 
     var mailOptions = {
         from: process.env.EMAIL_FROM,

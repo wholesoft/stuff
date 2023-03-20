@@ -1,6 +1,6 @@
 import * as React from 'react';
 import useAuth from '../hooks/useAuth';
-import { NavLink, useNavigate, useLocation } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import axios from "../api/axios";
 
 const LOGIN_URL = '/auth';
@@ -109,11 +109,10 @@ const Login = () => {
         <label htmlFor="persist">Trust this device</label>
     </div>
     <p>
-        <NavLink to='/register'>Need an Account?</NavLink><br />
-        <span className='line'>
-            {/* put router link here */}
-            <a href='#'>Sign Up</a>
-        </span>
+        <Link to='/forgot'>Forgot Password?</Link><br />
+    </p>
+    <p>
+        <Link to='/register'>Need an Account?</Link><br />
     </p>
 </form>
         </section>
