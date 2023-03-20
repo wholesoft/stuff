@@ -119,17 +119,90 @@ export async function create_user(props) {
         validation_okay = false;
     }
 
+    const email_confirm_token = cryptoRandomString({length: 30, type: 'alphanumeric'});
+
     // UPDATE THE USER'S EMAIL
     if (validation_okay) {
         const result = await pool.query(`
-        UPDATE Users SET email=? WHERE id=?`, [props.email, props.user_id]); 
+        UPDATE Users SET email=?, email_confirmed=NULL, email_confirm_token=?, email_token_created=CURRENT_TIMESTAMP
+        WHERE id=?`, [props.email, email_confirm_token, props.user_id]); 
         console.log(result);
         success = true;
         message = `Email Updated (${props.email}).`;
+        send_email_confirmation_request(props.email);
+    }
+    
+    return { "success": success, "message": message };
+ }
+
+export async function reset_password(email) {
+    // CALLED IF A USER REQUESTS TO RESET THEIR PASSWORD
+    // Returns { 'success': true/false , 'message': '' }
+    // TODO:
+    // VALIDATE THAT WE'RE GETTING AN EMAIL ADDRESS
+    // LOG THAT THE EMAIL WAS SENT.
+    // LIMIT THE NUMBER OF TIMES IT CAN BE SENT.
+
+    let success = false;
+    let message = "";
+
+
+    // CREATE A RESET TOKEN
+    let password_reset_token = cryptoRandomString({length: 30, type: 'alphanumeric'});
+
+    // SAVE TOKEN TO THE DB
+    const [rows] = await pool.query(`
+        UPDATE USERS SET password_reset_token=?, password_token_created=CURRENT_TIMESTAMP
+        WHERE email=?`, [email]);
+    
+    // SEND PASSWORD RESET EMAIL
+    var transporter = nodemailer.createTransport({
+        service: process.env.EMAIL_SERVICE,
+        auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASSWORD 
+        }
+    });
+
+    const encodedToken = encodeURIComponent(password_reset_token); // not really needed
+
+
+    // just let them use the salt as the id, should probably change this to some other random text
+    let email_html = `Please click the link below to reset your password.<br />
+    <br /><a href='${process.env.APP_FULL_DOMAIN}/reset/?id=${encodedToken}'>confirm email</a>`;
+    let email_plain = `Please click the link below to confirm your email./n
+    /n<${process.env.APP_FULL_DOMAIN}/reset/?id=${encodedToken}`;
+
+    var mailOptions = {
+        from: process.env.EMAIL_FROM,
+        to: email,
+        subject: 'Reset Password Request',
+        text: email_plain,
+        html: email_html
+    };
+
+    console.log("Attempt to send email.");
+    try {
+        let mail_response = await transporter.sendMail(mailOptions);
+        console.log(mail_response.messageId);
+        if (mail_response.messageId != undefined)
+        {
+            console.log('Email sent: ' + mail_response.response);
+            success = true;
+            message = "Reset password email sent.";
+        }
+        else
+        {
+            message = "Error.  Problem sending email.";
+        }        
+    }
+    catch (error)
+    {
+            message = "Error.  Problem sending email.";
     }
 
     return { "success": success, "message": message };
- }
+}
 
 export async function send_email_confirmation_request(email)
 {
@@ -139,8 +212,6 @@ export async function send_email_confirmation_request(email)
     // TODO: 
     // LOG THAT THE EMAIL WAS SENT.
     // LIMIT THE NUMBER OF TIMES IT CAN BE SENT.
-    // STOP USING THE SALT AS A TOKEN FOR THIS AND ADD A NEW FIELD FOR THIS PURPOSE.
-
 
     let success = false;
     let message = "";
