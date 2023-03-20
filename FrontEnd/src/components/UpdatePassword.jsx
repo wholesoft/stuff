@@ -1,9 +1,9 @@
 import * as React from 'react';
 import useAxiosPrivate from '../hooks/useAxiosPrivate';
-import { UpdatePassword } from '../components/UpdatePassword'
 
-const Account = () => {
-    const [email, setEmail] = React.useState('');
+const UpdatePassword = () => {
+    const [password, setPassword] = React.useState('');
+    const [confirm_password, setConfirmPassword] = React.useState('');
     const [responseMessage, setResponseMessage] = React.useState('');
     const axiosPrivate = useAxiosPrivate();
 
@@ -13,7 +13,7 @@ const Account = () => {
         e.preventDefault();
         setResponseMessage("");
         try {
-            const response = await axiosPrivate.post('/update_email_address', JSON.stringify({email}), {
+            const response = await axiosPrivate.post('/update_password', JSON.stringify({password, confirm_password}), {
             headers: { 'Content-Type': 'application/json' },
             withCredentials: true   
             });
@@ -27,9 +27,6 @@ const Account = () => {
             if (!err?.response) {
                 setResponseMessage("No Server Response");
                 console.log("NO RESPONSE");
-            } else if (err.response?.status === 400) {
-                setResponseMessage("Missing Email");
-                console.log("MISSING EMAIL");
             } else  {
                 setResponseMessage("Unauthorized");
                 console.log("UNAUTHORIZED");
@@ -38,23 +35,25 @@ const Account = () => {
     }
 
     return (
-        <section>
-            <h1>Account Page</h1>
-            <br />
+             <>
             <form onSubmit={handleSubmit}>
-                <label htmlFor="email">Email:</label>
-                <input type="text" id="email" autoComplete="off" className='text-input'
-                onChange={(e) => setEmail(e.target.value) }
-                value={email} required
-                
+                <label htmlFor="password">Password:</label><br />
+                <input type="password" id="password" autoComplete="off" className='text-input'
+                onChange={(e) => setPassword(e.target.value) }
+                value={password} required
                 /><br/>
+
+                <label htmlFor="confirm_password">Confirm Password:</label><br />
+                <input type="password" id="confirm_password" autoComplete="off" className='text-input'
+                onChange={(e) => setConfirmPassword(e.target.value) }
+                value={confirm_password} required
+                /><br/>
+
                     <button>Update</button>
                 </form>
                 <p>{responseMessage}</p>
-                <hr />
-                <UpdatePassword />
-        </section>
+                </>
     )
 }
 
-export { Account };
+export { UpdatePassword };

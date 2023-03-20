@@ -1,16 +1,16 @@
-import { Link } from 'react-router-dom'
-
+import { AddStuffGroupForm } from '../components/AddStuffGroup'
+import {StuffGroups } from '../components/StuffGroups'
 
 const Stuff = () => {
    
     return (
       <div>
         <h1>Stuff</h1>
-        <ul>
-            <li><Link to='/stuff/Camping'>Camping</Link></li>  
-            <li><Link to='/stuff/Motorcycle'>Motorcycle</Link></li>          
-        </ul>
+        <StuffGroups />
+
+        <AddStuffGroupForm />
       </div>
+
     )
   }
 

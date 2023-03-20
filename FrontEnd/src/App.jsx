@@ -11,7 +11,7 @@ import { ShowUser } from './pages/ShowUser'
 import { Home } from './pages/Home'
 import { LinkPage } from './pages/LinkPage'
 import { Stuff } from './pages/Stuff'
-import { StuffItems } from './pages/StuffItems'
+import { StuffItems } from './pages/StuffGroupItems'
 import { NotFound } from './pages/NotFound'
 import { Admin } from './pages/Admin'
 import { Notes } from './pages/Notes'
@@ -46,10 +46,8 @@ function App() {
             <Route element={<RequireAuth allowedRoles={[ROLES.User]} />}>
                 <Route path="/" element={<Home />} />
                 <Route path="/account" element={<Account />} />
-                <Route path="/stuff"> 
-                    <Route index element={<Stuff />} />
-                    <Route path=":category" element={<StuffItems />} />
-                </Route>
+                <Route path="/stuff" element={<Stuff />} />
+                <Route path="/stuff-items" element={<StuffItems />} />
             </Route>
 
             <Route element={<RequireAuth allowedRoles={[ROLES.Admin]} />}>

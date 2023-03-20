@@ -23,7 +23,7 @@ export async function addStuffGroup(props)
    const schema = joi.object({
        user_id: joi.number().integer().required(),
        group: joi.string().required(),
-       notes: joi.string()
+       notes: joi.string().allow('')
      });
 
    const { error, value } = schema.validate(props); 
@@ -38,11 +38,11 @@ export async function addStuffGroup(props)
    // Add the Group
    if (validation_okay) {
        const result = await pool.query(`
-       INSERT INTO Stuff_Group (user_id, group_name, notes, created, updated) VALUES (?,?,?,CURRENT_TIMESTAMP,CURRENT_TIMESTAMP)
+       INSERT INTO Stuff_Groups (user_id, group_name, notes, created, updated) VALUES (?,?,?,CURRENT_TIMESTAMP,CURRENT_TIMESTAMP)
        `, [props.user_id, props.group, props.notes]); 
        console.log(result);
        success = true;
-       message = `Group Added (${props.email}).`;
+       message = `Group Added (${props.group}).`;
    }
 
    return { "success": success, "message": message };
@@ -68,7 +68,7 @@ export async function getStuffGroups(props) {
      return { 'success': false, 'message': message, 'data': [] }
    }
     const [rows] = await pool.query(`
-    SELECT id, group_name, notes, created, updated FROM StuffGroups WHERE user_id=?
+    SELECT id, group_name, notes, created, updated FROM Stuff_Groups WHERE user_id=?
     `, [props.user_id]);
 
     return { 'success': true, 'message': 'OK', 'data': rows }
@@ -86,13 +86,20 @@ export async function addStuffItem(props)
        user_id: joi.number().integer().required(),
        group_id: joi.number().integer().required(),
        item_name: joi.string().required(),
-       purchase_location: joi.string(),
-       purchase_date: joi.date(),
-       amount_paid: joi.number(),
-       notes: joi.string()
+       purchase_location: joi.string().allow(''),
+       purchase_date: joi.date().allow(null).empty('').default(null),
+       amount_paid: joi.number().empty('').default(null),
+       notes: joi.string().allow('')
      });
 
+
    const { error, value } = schema.validate(props); 
+
+   let amount_paid  = props.amount_paid;
+   if (amount_paid == "") { amount_paid = null }
+   let purchase_date = props.purchase_date;
+   if (purchase_date != null) { purchase_date = purchase_date.substring(0, 10) }
+
    if (error) {
      console.log(error);
      console.log("Validation Error.");
@@ -104,12 +111,12 @@ export async function addStuffItem(props)
    // Add the Stuff Item
    if (validation_okay) {
        const result = await pool.query(`
-       INSERT INTO Stuff (user_id, group_id, item_name, notes, purcahsed_location, date_purchased, amount_paid, created, updated) 
+       INSERT INTO Stuff (user_id, group_id, item_name, notes, purchased_location, date_purchased, amount_paid, created, updated) 
        VALUES (?,?,?,?,?,?,?,CURRENT_TIMESTAMP,CURRENT_TIMESTAMP)
-       `, [props.user_id, props.group_id, props.item_name, props.purchase_location, props.purchase_date, amount_paid, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP]); 
+       `, [props.user_id, props.group_id, props.item_name, props.notes, props.purchase_location, purchase_date, amount_paid]); 
        console.log(result);
        success = true;
-       message = `Item Added (${props.email}).`;
+       message = `Item Added (${props.item_name}).`;
    }
 
    return { "success": success, "message": message };
@@ -136,7 +143,7 @@ export async function getStuff(props) {
      return { 'success': false, 'message': message, 'data': [] }
    }
     const [rows] = await pool.query(`
-    SELECT user_id, group_id, item_name, notes, purcahsed_location, date_purchased, amount_paid, created, updated
+    SELECT id, user_id, group_id, item_name, notes, purchased_location, date_purchased, amount_paid, created, updated
      FROM Stuff WHERE user_id=? AND group_id=?
     `, [props.user_id, props.group_id]);
 

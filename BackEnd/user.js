@@ -49,6 +49,46 @@ export async function create_user(props) {
     return result[0].insertId;
  }
 
+ export async function update_password(props)
+ {
+    // THIS GETS CALLED WHEN A USER REQUESTS TO 
+    // UPDATE THEIR EMAIL ADDRESS
+    // Returns { 'success': true/false , 'message': '' }
+    let success = false;
+    let message = "";
+    let validation_okay = true;
+
+    // VALIDATE INPUT
+    const schema = joi.object({
+        user_id: joi.number().integer().required(),
+        password: joi.string().min(8).max(128).required(),
+        confirm_password: joi.ref('password')
+      });
+
+    const { error, value } = schema.validate(props); 
+    if (error) {
+      console.log(error);
+      console.log("Validation Error.");
+      message = "Vaidation Error (" + error.details[0].message + ")";
+      validation_okay = false;
+    }
+
+    const salt = await bcrypt.genSalt(12);
+    const hashed_password = await bcrypt.hash(props.password, salt);
+
+    // UPDATE THE USER'S PASSWORD
+    if (validation_okay) {
+        const result = await pool.query(`
+        UPDATE Users SET password=?, salt=? WHERE id=?`, [hashed_password, salt, props.user_id]); 
+        console.log(result);
+        success = true;
+        message = `Password Updated.`;
+    }
+
+    return { "success": success, "message": message };
+ }
+
+
  export async function update_email_address(props)
  {
     // THIS GETS CALLED WHEN A USER REQUESTS TO 

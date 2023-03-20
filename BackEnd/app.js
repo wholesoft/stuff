@@ -2,7 +2,8 @@ import express from 'express'
 import cors from 'cors'
 import { getNotes, getNote, createNote } from './test/database.js'
 import { create_user, confirm_email, login_user, getUsers, getUser, 
-  send_email_confirmation_request, update_email_address } from './user.js'
+  send_email_confirmation_request, update_email_address, update_password } from './user.js'
+import { addStuffGroup, getStuffGroups, addStuffItem, getStuff } from './stuff.js'
 import { verifyJWT } from './middleware/verifyJWT.js';
 import cookieParser from 'cookie-parser' ;
 import refresh_route from './routes/refresh.js'
@@ -106,16 +107,17 @@ app.use(verifyJWT);
 // REGULAR USERS SHOULD ONLY BE ABLE TO ACCESS THEIR OWN INFO
 // ADMIN USERS CAN ACCESS ANYTHING
 
-app.get('/stuff', async (req, res) => {
+app.get('/stuff/:group_id', async (req, res) => {
     console.log("GET: /stuff");
-    const { email} = req.body;
+    const group_id = req.params.group_id
+    //console.log(JSON.stringify(req.body));
+    //const { group_id } = req.body;
     const stuff = await getStuff({ 'user_id': req.jwt_user_id, 'group_id': group_id })
     res.send(stuff.data);
 });
 
 app.get('/stuff_groups', async (req, res) => {
   console.log("GET: /stuff_groups");
-  const { email} = req.body;
   const groups = await getStuffGroups({ 'user_id': req.jwt_user_id })
   res.send(groups.data);
 });
@@ -153,6 +155,14 @@ app.post('/update_email_address', async (req, res) => {
   res.send(result);
 });
 
+app.post('/update_password', async (req, res) => {
+  console.log("POST: update_password");
+  console.log(JSON.stringify(req.body));
+  const { password, confirm_password } = req.body;
+  const user_id = req.jwt_user_id;
+  const result = await update_password({ user_id, password, confirm_password });
+  res.send(result);
+});
 
 app.get('/notes', async (req, res) => {
   const notes = await getNotes()
