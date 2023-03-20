@@ -4,6 +4,7 @@ import bcrypt from 'bcrypt'
 import joi from 'joi'
 import nodemailer from 'nodemailer'
 import jwt from 'jsonwebtoken'
+import cryptoRandomString from 'crypto-random-string'
 
 dotenv.config()
 
@@ -37,12 +38,12 @@ export async function create_user(props) {
 
     const salt = await bcrypt.genSalt(12);
     const hashed_password = await bcrypt.hash(props.password, salt);
+    const email_confirm_token = cryptoRandomString({length: 30, type: 'alphanumeric'});
 
-    // salt is already in the hashed password so don't really need to
-    // save it, but I like to anyway.  Will use it as a token to confirm the email for now.
+    // salt is already in the hashed password so don't really need to save it, but I like to anyway.  
     const result = await pool.query(`
-    INSERT INTO Users (email, password, salt, roles)
-    VALUES (?, ?, ?, '1001')`, [props.email, hashed_password, salt]);
+    INSERT INTO Users (email, password, salt, roles, email_confirm_token, email_token_created, created)
+    VALUES (?, ?, ?, '1001', ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)`, [props.email, hashed_password, salt, email_confirm_token]);
 
     send_email_confirmation_request(props.email);
 
@@ -146,17 +147,17 @@ export async function send_email_confirmation_request(email)
 
     // GET THE SALT WHICH WE'LL USE AS A TOKEN
     const [rows] = await pool.query(`
-        SELECT salt, email_confirmed FROM Users
+        SELECT email_confirm_token, email_confirmed FROM Users
         WHERE email=?`, [email]);
     
-    let salt = "";
+    let email_confirm_token = "";
     let email_confirmed = "";
 
     //console.log(rows);
     if (rows.length > 0)
     {
         let record = rows[0];
-        salt = record.salt;
+        email_confirm_token = record.email_confirm_token;
         email_confirmed = record.email_confirmed;
         if (email_confirmed !== null)
         {
@@ -180,14 +181,14 @@ export async function send_email_confirmation_request(email)
         }
     });
 
-    const encodedSalt = encodeURIComponent(salt);
+    const encodedToken = encodeURIComponent(email_confirm_token); // not really needed
 
 
     // just let them use the salt as the id, should probably change this to some other random text
     let email_html = `Please click the link below to confirm your email.<br />
-    <br /><a href='${process.env.APP_FULL_DOMAIN}/confirm/?id=${encodedSalt}'>confirm email</a>`;
+    <br /><a href='${process.env.APP_FULL_DOMAIN}/confirm/?id=${encodedToken}'>confirm email</a>`;
     let email_plain = `Please click the link below to confirm your email./n
-    /n<${process.env.APP_FULL_DOMAIN}/confirm/?id=${encodedSalt}`;
+    /n<${process.env.APP_FULL_DOMAIN}/confirm/?id=${encodedToken}`;
 
     var mailOptions = {
         from: process.env.EMAIL_FROM,
@@ -238,9 +239,9 @@ export async function send_email_confirmation_request(email)
   export async function confirm_email(key){
 
     await pool.query(`UPDATE Users 
-    SET email_confirmed=CURRENT_TIMESTAMP WHERE salt=? AND email_confirmed IS NULL`, [key]);
+    SET email_confirmed=CURRENT_TIMESTAMP WHERE email_confirm_token=? AND email_confirmed IS NULL`, [key]);
 
-    const rows = await pool.query("SELECT id FROM Users WHERE salt=?", [key]);
+    const rows = await pool.query("SELECT id FROM Users WHERE email_confirm_token=?", [key]);
 
     let result = "Error";
     if (rows[0].length > 0)
@@ -354,7 +355,11 @@ IF NOT EXISTS Users (
     last_login DATETIME,
     n_logins INT,
     created DATETIME DEFAULT CURRENT_TIMESTAMP,
-    roles VARCHAR(30)
+    roles VARCHAR(30),
+    password_reset_token VARCHAR(30),
+    password_token_created DATETIME,
+    email_token_created DATETIME,
+    email_confirm_token VARCHAR(30)
 )  
 
 
