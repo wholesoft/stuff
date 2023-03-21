@@ -48,6 +48,90 @@ export async function addStuffGroup(props)
    return { "success": success, "message": message };
 }
 
+export async function editStuffGroup(props)
+{
+   // Returns { 'success': true/false , 'message': '' }
+   let success = false;
+   let message = "";
+   let validation_okay = true;
+
+   // VALIDATE INPUT
+   const schema = joi.object({
+       user_id: joi.number().integer().required(),
+       group_id: joi.number().integer().required(),
+       group: joi.string().required(),
+       notes: joi.string().allow('')
+     });
+
+   const { error, value } = schema.validate(props); 
+   if (error) {
+     console.log(error);
+     console.log("Validation Error.");
+     message = "Vaidation Error (" + error.details[0].message + ")";
+     validation_okay = false;
+     return { 'success': false, 'message': message }
+   }
+
+   // Update the Group
+   if (validation_okay) {
+       const result = await pool.query(`
+       UPDATE Stuff_Groups SET group_name=?, notes=?, updated=CURRENT_TIMESTAMP
+       WHERE id=? AND user_id=?
+       `, [props.group, props.notes, props.group_id,  props.user_id]); 
+       console.log(result);
+       success = true;
+       message = `Group Updated (${props.group}).`;
+   }
+
+   return { "success": success, "message": message };
+}
+
+export async function deleteStuffGroup(props)
+{
+   // Returns { 'success': true/false , 'message': '' }
+   // Only allow if the group has no items in it.
+   let success = false;
+   let message = "";
+   let validation_okay = true;
+
+   // VALIDATE INPUT
+   const schema = joi.object({
+       user_id: joi.number().integer().required(),
+       group_id: joi.number().integer().required(),
+     });
+
+   const { error, value } = schema.validate(props); 
+   if (error) {
+     console.log(error);
+     console.log("Validation Error.");
+     message = "Vaidation Error (" + error.details[0].message + ")";
+     validation_okay = false;
+     return { 'success': false, 'message': message }
+   }
+
+   // Make sure the group is empty
+   let stuff = await getStuff(props);
+   console.log(stuff.data)
+   if (stuff.data !== [])
+   {
+      message = "Error.  Group items must be deleted before the group can be deleted."
+      validation_okay = false;
+      return { 'success': false, 'message': message }
+   }
+
+   // Delete the group
+   if (validation_okay) {
+       const result = await pool.query(`
+       DELETE FROM Stuff_Groups WHERE id=? AND user_id=?
+       `, [props.group_id,  props.user_id]); 
+       console.log(result);
+       success = true;
+       message = `Group Deleted (${props.group_id}).`;
+   }
+
+   return { "success": success, "message": message };
+}
+
 export async function getStuffGroups(props) {
     // Returns { 'success': true/false , 'message': '', 'data': [] }
    let success = false;
@@ -117,6 +201,91 @@ export async function addStuffItem(props)
        console.log(result);
        success = true;
        message = `Item Added (${props.item_name}).`;
+   }
+
+   return { "success": success, "message": message };
+}
+
+export async function editStuffItem(props)
+{
+   // Returns { 'success': true/false , 'message': '' }
+   let success = false;
+   let message = "";
+   let validation_okay = true;
+
+   // VALIDATE INPUT
+   const schema = joi.object({
+       user_id: joi.number().integer().required(),
+       item_id: joi.number().integer().required(),
+       item_name: joi.string().required(),
+       purchase_location: joi.string().allow(''),
+       purchase_date: joi.date().allow(null).empty('').default(null),
+       amount_paid: joi.number().empty('').default(null),
+       notes: joi.string().allow('')
+     });
+
+
+   const { error, value } = schema.validate(props); 
+
+   let amount_paid  = props.amount_paid;
+   if (amount_paid == "") { amount_paid = null }
+   let purchase_date = props.purchase_date;
+   if (purchase_date != null) { purchase_date = purchase_date.substring(0, 10) }
+
+   if (error) {
+     console.log(error);
+     console.log("Validation Error.");
+     message = "Vaidation Error (" + error.details[0].message + ")";
+     validation_okay = false;
+     return { 'success': false, 'message': message }
+   }
+
+   // Add the Stuff Item
+   if (validation_okay) {
+       const result = await pool.query(`
+       UPDATE Stuff SET item_name=?, notes=?, purchased_location=?, date_purchased=?, amount_paid=>, updated=CURRENT_TIMESTAMP 
+       WHERE id=? AND user_id=?
+       `, [props.item_name, props.notes, props.purchase_location, purchase_date, amount_paid, props.item_id, props.user_id]); 
+       console.log(result);
+       success = true;
+       message = `Item Added (${props.item_name}).`;
+   }
+
+   return { "success": success, "message": message };
+}
+
+export async function deleteStuffItem(props)
+{
+   // Returns { 'success': true/false , 'message': '' }
+   let success = false;
+   let message = "";
+   let validation_okay = true;
+
+   // VALIDATE INPUT
+   const schema = joi.object({
+       user_id: joi.number().integer().required(),
+       item_id: joi.number().integer().required(),
+     });
+
+
+    const { error, value } = schema.validate(props); 
+
+   if (error) {
+     console.log(error);
+     console.log("Validation Error.");
+     message = "Vaidation Error (" + error.details[0].message + ")";
+     validation_okay = false;
+     return { 'success': false, 'message': message }
+   }
+
+   // Add the Stuff Item
+   if (validation_okay) {
+       const result = await pool.query(`
+       DELETE FROM Stuff WHERE id=? AND user_id=?
+       `, [props.item_id, props.user_id]); 
+       console.log(result);
+       success = true;
+       message = `Item Deleted (${props.item_id}).`;
    }
 
    return { "success": success, "message": message };

@@ -3,7 +3,8 @@ import cors from 'cors'
 import { getNotes, getNote, createNote } from './test/database.js'
 import { create_user, confirm_email, login_user, getUsers, getUser, reset_password,  get_user_id_from_password_token,
   send_email_confirmation_request, update_email_address, update_password } from './user.js'
-import { addStuffGroup, getStuffGroups, addStuffItem, getStuff } from './stuff.js'
+import { addStuffGroup, getStuffGroups, addStuffItem, getStuff,
+  editStuffGroup, deleteStuffGroup, editStuffItem, deleteStuffItem } from './stuff.js'
 import { verifyJWT } from './middleware/verifyJWT.js';
 import cookieParser from 'cookie-parser' ;
 import refresh_route from './routes/refresh.js'
@@ -152,6 +153,22 @@ app.post('/add_stuff_group', async (req, res) => {
   res.send(result);
 });
 
+app.post('/edit_stuff_group', async (req, res) => {
+  console.log("POST: /edit_stuff_group");
+  console.log(JSON.stringify(req.body));
+  const { group_id, group, notes } = req.body;
+  const result = await editStuffGroup({ 'user_id': req.jwt_user_id, group, notes, group_id });
+  res.send(result);
+});
+
+app.post('/delete_stuff_group', async (req, res) => {
+  console.log("POST: /delete_stuff_group");
+  console.log(JSON.stringify(req.body));
+  const { group_id } = req.body;
+  const result = await editStuffGroup({ 'user_id': req.jwt_user_id, group_id });
+  res.send(result);
+});
+
 app.post('/add_stuff_item', async (req, res) => {
   console.log("POST: /add_stuff_item");
   const { group_id , item_name, purchase_location, purchase_date, amount_paid, notes } = req.body;
@@ -159,6 +176,24 @@ app.post('/add_stuff_item', async (req, res) => {
   const result = await addStuffItem({ 'user_id': req.jwt_user_id, 'group_id': group_id,
   'item_name': item_name, 'purchase_location': purchase_location, 'purchase_date': purchase_date, 
   'amount_paid': amount_paid, 'notes': notes });
+  res.send(result);
+});
+
+app.post('/edit_stuff_item', async (req, res) => {
+  console.log("POST: /edit_stuff_item");
+  const { item_id , item_name, purchase_location, purchase_date, amount_paid, notes } = req.body;
+  console.log(JSON.stringify(req.body));
+  const result = await addStuffItem({ 'user_id': req.jwt_user_id, 'item_id': item_id,
+  'item_name': item_name, 'purchase_location': purchase_location, 'purchase_date': purchase_date, 
+  'amount_paid': amount_paid, 'notes': notes });
+  res.send(result);
+});
+
+app.post('/delete_stuff_item', async (req, res) => {
+  console.log("POST: /delete_stuff_item");
+  const { item_id } = req.body;
+  console.log(JSON.stringify(req.body));
+  const result = await deleteStuffItem({ 'user_id': req.jwt_user_id, 'item_id': item_id)
   res.send(result);
 });
 

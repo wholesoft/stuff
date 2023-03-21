@@ -48,8 +48,9 @@ function App() {
         {/* we want to protect these routes */}
         <Route element={<PersistLogin />}> 
             <Route element={<RequireAuth allowedRoles={[ROLES.User]} />}>
-                <Route path="/" element={<Home />} />
+                <Route path="/links" element={<Home />} />
                 <Route path="/account" element={<Account />} />
+                <Route path="/" element={<Stuff />} />
                 <Route path="/stuff" element={<Stuff />} />
                 <Route path="/stuff-items" element={<StuffItems />} />
             </Route>
