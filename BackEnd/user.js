@@ -80,7 +80,7 @@ export async function create_user(props) {
     // UPDATE THE USER'S PASSWORD
     if (validation_okay) {
         const result = await pool.query(`
-        UPDATE Users SET password=?, salt=? WHERE id=?`, [hashed_password, salt, props.user_id]); 
+        UPDATE Users SET password=?, salt=?, password_reset_token=NULL, password_token_created=NULL WHERE id=?`, [hashed_password, salt, props.user_id]); 
         console.log(result);
         success = true;
         message = `Password Updated.`;
@@ -409,9 +409,20 @@ export async function getUser(user_id) {
     return rows[0]; 
 }  
 
+export async function get_user_id_from_password_token(password_token) {
+    let user_id = 0;
+    const [rows] = await pool.query(`SELECT id
+    FROM Users WHERE password_reset_token=?`, [password_token]);
+    if (rows[0] !== undefined) {
+        user_id = rows[0].id;
+    }
+    console.log(user_id);
+    return user_id; 
+}
+
 async function test() {
-    let user_email = "";
-    console.log(await send_email_confirmation_request(user_email));
+    let token = "RTRoERLtObWBhNEkwmlE05rUxIaXiK";
+    await get_user_id_from_password_token(token);
     process.exit();
 }
 

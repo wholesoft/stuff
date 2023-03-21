@@ -1,22 +1,45 @@
 import * as React from 'react';
 import useAxiosPrivate from '../hooks/useAxiosPrivate';
+import axios from '../api/axios';
 
-const UpdatePassword = () => {
+/*
+
+This form used by both the User Account page and the Password Reset page.
+The Account page requires that the user is logged in and passes the JWT token to the backend.
+The Password reset page doesn't require that they are logged in (they forgot the password and 
+so are unable to do so) but they need a password_reset_token that was emailed to them.
+*/
+
+const UpdatePassword = (props) => {
     const [password, setPassword] = React.useState('');
     const [confirm_password, setConfirmPassword] = React.useState('');
     const [responseMessage, setResponseMessage] = React.useState('');
     const axiosPrivate = useAxiosPrivate();
-
-
+    let password_reset_token = "";
+    if (props.token !== undefined) {
+        password_reset_token = props.token;
+    }
+    console.log(password_reset_token);
+ 
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setResponseMessage("");
         try {
-            const response = await axiosPrivate.post('/update_password', JSON.stringify({password, confirm_password}), {
-            headers: { 'Content-Type': 'application/json' },
-            withCredentials: true   
-            });
+            let response = ""
+            if (password_reset_token == "") {
+                response = await axiosPrivate.post('/update_password', 
+                JSON.stringify({password, confirm_password}), {
+                headers: { 'Content-Type': 'application/json' },
+                withCredentials: true   
+                })
+            } else {
+                response = await axiosPrivate.post('/update_password_with_token', 
+                JSON.stringify({password_reset_token, password, confirm_password}), {
+                    headers: { 'Content-Type': 'application/json' },
+                    withCredentials: true     
+                })  
+            }
             console.log(JSON.stringify(response?.data));
             const message = response?.data?.message;
             setResponseMessage(message);

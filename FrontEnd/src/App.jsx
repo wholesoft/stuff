@@ -4,6 +4,7 @@ import { Route, Routes, Link, NavLink } from 'react-router-dom'
 import { RegisterForm } from './pages/RegisterForm'
 import { Login } from './pages/Login'
 import { ForgotPassword } from './pages/ForgotPassword'
+import { ResetPassword } from './pages/ResetPassword'
 import { PleaseConfirmEmail } from './pages/PleaseConfirmEmail'
 import { RegistrationConfirmed } from './pages/RegistrationConfirmed'
 import { Account } from './pages/Account'
@@ -39,6 +40,7 @@ function App() {
         <Route path="/registration_confirmed" element={<RegistrationConfirmed />} />
         <Route path="/login" element={<Login />} />
         <Route path="/forgot" element={<ForgotPassword />} />
+        <Route path="/reset" element={<ResetPassword />} />
         <Route path="/unconfirmed" element={<PleaseConfirmEmail />} />
         <Route path="/linkpage" element={<LinkPage />} />
         <Route path="/unauthorized" element={<Unauthorized />} />

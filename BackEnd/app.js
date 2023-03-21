@@ -1,7 +1,7 @@
 import express from 'express'
 import cors from 'cors'
 import { getNotes, getNote, createNote } from './test/database.js'
-import { create_user, confirm_email, login_user, getUsers, getUser, reset_password,  
+import { create_user, confirm_email, login_user, getUsers, getUser, reset_password,  get_user_id_from_password_token,
   send_email_confirmation_request, update_email_address, update_password } from './user.js'
 import { addStuffGroup, getStuffGroups, addStuffItem, getStuff } from './stuff.js'
 import { verifyJWT } from './middleware/verifyJWT.js';
@@ -92,6 +92,22 @@ app.post('/resend_email_confirmation_request', async (req, res) => {
 app.post('/reset_password_email_request', async (req, res) => {
   const {email} = req.body;
   const result = await reset_password(email);
+  res.send(result);
+});
+
+app.post('/update_password_with_token', async (req, res) => {
+  console.log("POST: update_password_with_token");
+  console.log(JSON.stringify(req.body));
+  const { password, confirm_password, password_reset_token } = req.body;
+  // GET THE USER_ID WITH THE TOKEN
+  let result = "";
+  const user_id = await get_user_id_from_password_token(password_reset_token);
+  if (user_id > 0) {
+    result = await update_password({ user_id, password, confirm_password });
+  }
+  else {
+    result = res.send({"success": false, "message": "invalid token" })
+  }
   res.send(result);
 });
 

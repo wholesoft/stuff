@@ -55,7 +55,7 @@ const ForgotPasswordForm = () => {
           style ={{'width': '300px'}}
           id="email"
           type="email"
-          value={form.group}
+          value={form.email}
           onChange={handleChange}
           required
         />
