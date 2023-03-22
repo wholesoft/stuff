@@ -16,6 +16,16 @@ function formatDate(date_string)
 }
 
 const StuffGroupTable = (props) => {
+
+    function handleDelete(e, value) {
+        console.log (value);
+        e.preventDefault();
+        // Invalid hook call. Hooks can only be called inside of the body of a function component.
+        // TODO.  Figure out the best way to do this sort of thing.
+        deleteData = useResourcePrivate(`/delete-item/${value}`)
+    };
+
+
     //const { mounted, setMounted } =  React.useState(false);
     const group_id = props.groupId
 
@@ -74,6 +84,12 @@ const StuffGroupTable = (props) => {
             Header: 'Created',
             accessor: 'created',
             Cell:  ({ value }) => { return formatDate(value) }
+        },
+        {
+            Header: 'Delete',
+            accessor: 'id',
+            id: 'delete',
+            Cell:  ({ value }) => { return <Link to={`/delete-item/${value}`}>delete</Link> } 
         }
     
     ]

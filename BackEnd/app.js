@@ -198,9 +198,9 @@ app.post('/edit_stuff_item', async (req, res) => {
   res.send(result);
 });
 
-app.post('/delete_stuff_item', async (req, res) => {
-  console.log("POST: /delete_stuff_item");
-  const { item_id } = req.body;
+app.get('/delete_item/:item_id', async (req, res) => {
+  console.log("GET: /delete_item");
+  const  item_id  = req.params.item_id
   console.log(JSON.stringify(req.body));
   const result = await deleteStuffItem({ 'user_id': req.jwt_user_id, 'item_id': item_id })
   res.send(result);

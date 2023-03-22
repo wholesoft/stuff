@@ -14,6 +14,7 @@ import { Home } from './pages/Home'
 import { LinkPage } from './pages/LinkPage'
 import { Stuff } from './pages/Stuff'
 import { EditItem } from './pages/EditItem'
+import { DeleteItem } from './pages/DeleteItem'
 import { StuffGroup } from './pages/StuffGroup'
 import { StuffItems } from './pages/StuffGroupItems'
 import { NotFound } from './pages/NotFound'
@@ -57,6 +58,7 @@ function App() {
                 <Route path="/stuff/:group_id" element={<StuffGroup />} />
                 <Route path="/stuff-items" element={<StuffItems />} />
                 <Route path="/edit-stuff/:item_id" element={<EditItem />} />
+                <Route path="/delete-item/:item_id" element={<DeleteItem />} />
             </Route>
 
             <Route element={<RequireAuth allowedRoles={[ROLES.Admin]} />}>

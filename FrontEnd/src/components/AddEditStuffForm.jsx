@@ -11,6 +11,9 @@ const AddEditStuffForm = (props) => {
   let { id, item_name, group_id, purchased_location, date_purchased, notes, amount_paid } = data;
   let item_id = id;
 
+  if (group_id == undefined) { group_id = props.groupId }
+  console.log(group_id);
+
    if (amount_paid == null) { amount_paid = "" }
 
   let init_state = {
