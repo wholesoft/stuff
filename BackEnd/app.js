@@ -170,11 +170,10 @@ app.post('/edit_stuff_group', async (req, res) => {
   res.send(result);
 });
 
-app.post('/delete_stuff_group', async (req, res) => {
-  console.log("POST: /delete_stuff_group");
-  console.log(JSON.stringify(req.body));
-  const { group_id } = req.body;
-  const result = await editStuffGroup({ 'user_id': req.jwt_user_id, group_id });
+app.get('/delete_group/:group_id', async (req, res) => {
+  console.log("GET: /delete_stuff_group");
+  const  group_id  = req.params.group_id
+  const result = await deleteStuffGroup({ 'user_id': req.jwt_user_id, group_id });
   res.send(result);
 });
 

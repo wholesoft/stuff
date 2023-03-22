@@ -40,6 +40,13 @@ const COLUMNS = [
         accessor: 'created',
         Cell:  ({ value }) => { return formatDate(value) }
     }
+    ,
+    {
+        Header: 'Delete',
+        id: 'delete',
+        accessor: 'id',
+        Cell:  ({ value }) => { return <Link to={`/delete-group/${value}`}>{value}</Link> }
+    }
 
 ]
 

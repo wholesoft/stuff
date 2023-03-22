@@ -112,7 +112,7 @@ export async function deleteStuffGroup(props)
    // Make sure the group is empty
    let stuff = await getStuff(props);
    console.log(stuff.data)
-   if (stuff.data !== [])
+   if (stuff.data.length > 0)
    {
       message = "Error.  Group items must be deleted before the group can be deleted."
       validation_okay = false;
