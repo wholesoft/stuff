@@ -8,11 +8,13 @@ import { ResetPassword } from './pages/ResetPassword'
 import { PleaseConfirmEmail } from './pages/PleaseConfirmEmail'
 import { RegistrationConfirmed } from './pages/RegistrationConfirmed'
 import { Account } from './pages/Account'
-import { UsersTable } from './pages/UsersTable'
+import { UsersTable } from './components/UsersTable'
 import { ShowUser } from './pages/ShowUser'
 import { Home } from './pages/Home'
 import { LinkPage } from './pages/LinkPage'
 import { Stuff } from './pages/Stuff'
+import { EditItem } from './pages/EditItem'
+import { StuffGroup } from './pages/StuffGroup'
 import { StuffItems } from './pages/StuffGroupItems'
 import { NotFound } from './pages/NotFound'
 import { Admin } from './pages/Admin'
@@ -52,7 +54,9 @@ function App() {
                 <Route path="/account" element={<Account />} />
                 <Route path="/" element={<Stuff />} />
                 <Route path="/stuff" element={<Stuff />} />
+                <Route path="/stuff/:group_id" element={<StuffGroup />} />
                 <Route path="/stuff-items" element={<StuffItems />} />
+                <Route path="/edit-stuff/:item_id" element={<EditItem />} />
             </Route>
 
             <Route element={<RequireAuth allowedRoles={[ROLES.Admin]} />}>

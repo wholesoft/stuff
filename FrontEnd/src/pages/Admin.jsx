@@ -1,15 +1,12 @@
 import { Link, NavLink } from "react-router-dom";
-import  { Users } from '../components/Users';
+import  { UsersTable } from '../components/UsersTable';
 
 const Admin = () => {
     return (
         <section>
             <h1>Admin Page</h1>
             <br />
-            <Users />
-            <div className="flexGrow">
-                <NavLink to="/">Home</NavLink>
-            </div>
+            <UsersTable />
         </section>
     )
 }

@@ -3,8 +3,8 @@ import  { UserInfo } from '../components/UserInfo';
 
 const ShowUser = () => {
     return (
-        <>        
-            <UserInfo userId={ 30 } />
+        <>       
+            <UserInfo userId={ -1 } />
         </>
     )
 }

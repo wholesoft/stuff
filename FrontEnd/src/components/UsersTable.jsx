@@ -1,8 +1,9 @@
 import React, { useMemo } from 'react'
 import { useResourcePrivate } from '../hooks/useResourcePrivate'
-import { BasicTable } from '../components/BasicTable'
-import { SortTable } from '../components/SortTable'
-import { FilterTable } from '../components/FilterTable'
+import { BasicTable } from './BasicTable'
+import { SortTable } from './SortTable'
+import { FilterTable } from './FilterTable'
+import { Link } from 'react-router-dom';
 
 function formatDate(date_string)
 {
@@ -17,7 +18,8 @@ function formatDate(date_string)
 const COLUMNS  = [
     {
         Header: 'ID',
-        accessor: 'id'
+        accessor: 'id',
+        Cell: ({ value }) => { return <Link to={"/user/" + value}>{value}</Link> }
     },
     {
         Header: 'Email',

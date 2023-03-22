@@ -243,12 +243,12 @@ export async function editStuffItem(props)
    // Add the Stuff Item
    if (validation_okay) {
        const result = await pool.query(`
-       UPDATE Stuff SET item_name=?, notes=?, purchased_location=?, date_purchased=?, amount_paid=>, updated=CURRENT_TIMESTAMP 
+       UPDATE Stuff SET item_name=?, notes=?, purchased_location=?, date_purchased=?, amount_paid=?, updated=CURRENT_TIMESTAMP 
        WHERE id=? AND user_id=?
        `, [props.item_name, props.notes, props.purchase_location, purchase_date, amount_paid, props.item_id, props.user_id]); 
        console.log(result);
        success = true;
-       message = `Item Added (${props.item_name}).`;
+       message = `Item Updated (${props.item_name}).`;
    }
 
    return { "success": success, "message": message };
@@ -317,6 +317,35 @@ export async function getStuff(props) {
     `, [props.user_id, props.group_id]);
 
     return { 'success': true, 'message': 'OK', 'data': rows }
+}  
+
+export async function getStuffItem(props) {
+  // Returns { 'success': true/false , 'message': '', 'data': [] }
+ let success = false;
+ let message = "";
+ let validation_okay = true;
+
+ // VALIDATE INPUT
+ const schema = joi.object({
+     user_id: joi.number().integer().required(),
+     item_id: joi.number().integer().required()
+   });
+
+ const { error, value } = schema.validate(props); 
+ if (error) {
+   console.log(error);
+   console.log("Validation Error.");
+   message = "Vaidation Error (" + error.details[0].message + ")";
+   validation_okay = false;
+   return { 'success': false, 'message': message, 'data': [] }
+ }
+  const [rows] = await pool.query(`
+  SELECT id, user_id, group_id, item_name, notes, purchased_location, date_purchased, amount_paid, created, updated
+   FROM Stuff WHERE user_id=? AND id=?
+  `, [props.user_id, props.item_id]);
+
+  console.log(rows)
+  return { 'success': true, 'message': 'OK', 'data': rows }
 }  
 
 /*
