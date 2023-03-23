@@ -14,6 +14,7 @@ import { Home } from './pages/Home'
 import { LinkPage } from './pages/LinkPage'
 import { Stuff } from './pages/Stuff'
 import { EditItem } from './pages/EditItem'
+import { EditGroup } from './pages/EditGroup'
 import { DeleteItem } from './pages/DeleteItem'
 import { DeleteGroup } from './pages/DeleteGroup'
 import { StuffGroup } from './pages/StuffGroup'
@@ -59,6 +60,7 @@ function App() {
                 <Route path="/stuff/:group_id" element={<StuffGroup />} />
                 <Route path="/stuff-items" element={<StuffItems />} />
                 <Route path="/edit-stuff/:item_id" element={<EditItem />} />
+                <Route path="/edit-group/:group_id" element={<EditGroup />} />
                 <Route path="/delete-item/:item_id" element={<DeleteItem />} />
                 <Route path="/delete-group/:group_id" element={<DeleteGroup />} />
             </Route>

@@ -1,4 +1,5 @@
 import { AddStuffGroupForm } from '../components/AddStuffGroup'
+import {AddEditGroupForm } from '../components/AddEditGroupForm'
 import {StuffGroupsTable } from '../components/StuffGroupsTable'
 
 const Stuff = () => {
@@ -8,7 +9,7 @@ const Stuff = () => {
         <h1>Stuff</h1>
         <StuffGroupsTable />
 
-        <AddStuffGroupForm />
+        <AddEditGroupForm data={{}} />
       </div>
 
     )

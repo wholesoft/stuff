@@ -15,46 +15,52 @@ function formatDate(date_string)
     return result;
 }
 
-const COLUMNS = [
-    {
-        Header: 'ID',
-        accessor: 'id',
-        Cell: ({ value }) => { return <Link to={`/stuff/${value}`}>{value}</Link> }
-    },
-    {
-        Header: 'Group',
-        accessor: 'group_name'
-    },
-    {
-        Header: 'Notes',
-        accessor: 'notes'
-    }
-    ,
-    {
-        Header: 'Updated',
-        accessor: 'updated',
-        Cell:  ({ value }) => { return formatDate(value) }
-    },
-    {
-        Header: 'Created',
-        accessor: 'created',
-        Cell:  ({ value }) => { return formatDate(value) }
-    }
-    ,
-    {
-        Header: 'Delete',
-        id: 'delete',
-        accessor: 'id',
-        Cell:  ({ value }) => { return <Link to={`/delete-group/${value}`}>{value}</Link> }
-    }
-
-]
-
-
-
 const StuffGroupsTable = () => {
     let tableData = useResourcePrivate(`/stuff_groups`);
     console.log(tableData);
+
+    const COLUMNS = [
+        {
+            Header: 'Group',
+            accessor: 'group_name'
+        },
+        {
+            Header: 'Notes',
+            accessor: 'notes'
+        }
+        ,
+        {
+            Header: 'Updated',
+            accessor: 'updated',
+            Cell:  ({ value }) => { return formatDate(value) }
+        },
+        {
+            Header: 'Created',
+            accessor: 'created',
+            Cell:  ({ value }) => { return formatDate(value) }
+        }
+        ,
+        {
+            Header: 'Items',
+            accessor: 'id',
+            Cell: ({ value }) => { return <Link to={`/stuff/${value}`}>view</Link> }
+        },
+        {
+            Header: 'Edit',
+            id: 'edit',
+            accessor: 'id',
+            Cell:  ({ value }) => { return <Link to={`/edit-group/${value}`} state={{ data: tableData.filter(group => group.id == value) }}>edit</Link> }
+        },
+        {
+            Header: 'Delete',
+            id: 'delete',
+            accessor: 'id',
+            Cell:  ({ value }) => { return <Link to={`/delete-group/${value}`}>delete</Link> }
+        }
+    
+    ]
+    
+
 
    return tableData ? (
         <>
