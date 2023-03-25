@@ -2,7 +2,7 @@ import express from 'express'
 import cors from 'cors'
 import { getNotes, getNote, createNote } from './test/database.js'
 import { create_user, confirm_email, login_user, getUsers, getUser, reset_password,  get_user_id_from_password_token,
-  send_email_confirmation_request, update_email_address, update_password } from './user.js'
+  send_email_confirmation_request, update_email_address, update_password, delete_user,update_user_roles } from './user.js'
 import { addStuffGroup, getStuffGroups, addStuffItem, getStuff, getStuffItem,
   editStuffGroup, deleteStuffGroup, editStuffItem, deleteStuffItem } from './stuff.js'
 import { verifyJWT } from './middleware/verifyJWT.js';
@@ -210,6 +210,22 @@ app.get('/users', async (req, res) => {
   const users = await getUsers()
   res.send(users);
 }); 
+
+app.get('/delete_user/:user_id', async (req, res) => {
+  console.log("GET: /delete_user");
+  const  user_id  = req.params.user_id
+  console.log(JSON.stringify(req.body));
+  // MUST BE AN ADMIN (role=2001) TO DO THIS
+  const roles = req.jwt_roles;
+  console.log(roles);
+  let is_admin = false;
+  if (roles == 2001) {
+    is_admin = true;
+  }
+
+  //const result = await delete_user({ 'user_id': user_id, 'item_id': item_id })
+  res.send({"admin": is_admin});
+});
 
 app.post('/update_email_address', async (req, res) => {
   console.log("POST: update_email_address");

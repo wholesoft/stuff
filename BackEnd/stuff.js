@@ -278,7 +278,7 @@ export async function deleteStuffItem(props)
      return { 'success': false, 'message': message }
    }
 
-   // Add the Stuff Item
+   // Delete the Stuff Item
    if (validation_okay) {
        const result = await pool.query(`
        DELETE FROM Stuff WHERE id=? AND user_id=?

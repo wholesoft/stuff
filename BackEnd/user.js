@@ -420,11 +420,79 @@ export async function get_user_id_from_password_token(password_token) {
     return user_id; 
 }
 
+    export async function delete_user(user_id) {
+        // This deletes the user from the User Database
+        // and doesn't check for orphaned records elsewhere.
+        let success = false;
+        let message = "";
+        let validation_okay = true;
+
+        // VALIDATE INPUT
+        const schema = joi.object({
+            user_id: joi.number().integer().required()
+          });
+    
+        const { error, value } = schema.validate(props); 
+        if (error) {
+          console.log(error);
+          validation_okay = false;
+          success = false;
+        }
+        
+        // Delete the User
+        if (validation_okay) {
+            const result = await pool.query(`DELETE FROM Users WHERE id=?`, [props.user_id]);
+            console.log(result);
+            success = true;
+            message = `User Deleted (${props.user_id}).`;
+        }       
+        return {"success": success, "message": message}; 
+    }
+
+    export async function update_user_roles(props)
+    {
+       // CALLED FROM THE ADMIN PAGE
+       let success = false;
+       let message = "";
+       let validation_okay = true;
+   
+       // VALIDATE INPUT
+       const schema = joi.object({
+           user_id: joi.number().integer().required(),
+           roles:  joi.string().email().required()
+         });
+   
+       const { error, value } = schema.validate(props); 
+       if (error) {
+         console.log(error);
+         console.log("Validation Error.");
+         message = "Vaidation Error (" + error.details[0].message + ")";
+         validation_okay = false;
+       }
+   
+       const salt = await bcrypt.genSalt(12);
+       const hashed_password = await bcrypt.hash(props.password, salt);
+   
+       // UPDATE THE USER'S ROLES
+       if (validation_okay) {
+           const result = await pool.query(`
+           UPDATE Users SET roles=? WHERE id=?`, [props.roles, props.user_id]); 
+           console.log(result);
+           success = true;
+           message = `Roles Updated.`;
+       }
+   
+       return { "success": success, "message": message };
+    }
+
+
 async function test() {
     let token = "RTRoERLtObWBhNEkwmlE05rUxIaXiK";
     await get_user_id_from_password_token(token);
     process.exit();
 }
+
+
 
 //test();
 
