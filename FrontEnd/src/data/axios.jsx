@@ -1,29 +1,26 @@
 import axios from 'axios';
-import AuthContext from "../context/AuthProvider";
-import { useContext } from "react";
-import useAuth from "../hooks/useAuth";
 
 const BASE_URL = 'http://localhost:3000';
 
-//const { auth } = useContext(AuthContext);
 
 export default axios.create({
     baseURL: BASE_URL
 });
 
-export const axiosPrivate = axios.create({
+const authApi = axios.create({
     baseURL: BASE_URL,
     headers: { 'Content-Type': 'application/json' },
     withCredentials: true
 });
 
-export const authApi = axios.create({
-    baseURL: BASE_URL,
-    headers: { 'Content-Type': 'application/json' },
-    withCredentials: true
-});
+const axiosGet = async (url) => { 
+    console.log("axiosGet");
+    const request = authApi.get(url)
+    return request
+}
 
-export const refreshAccessTokenFn = async () => {
+
+const refreshAccessTokenFn = async () => {
     //const response = await authApi.get(); // <ILoginResponse>('auth/refresh');
     const response = await authApi.get('/refresh', { withCredentials: true });
     console.log("REFRESH AUTH TOKEN: " + JSON.stringify(response.data));
@@ -83,28 +80,6 @@ export const refreshAccessTokenFn = async () => {
       return Promise.reject(error);
     }
   );
+
+  export { axiosGet }
   
-  export const signUpUserFn = async (props) => {  // (user: RegisterInput)
-    const response = await authApi.post(); // <GenericResponse>('auth/register', user);
-    return response.data;
-  };
-  
-  export const loginUserFn = async (props) => {  // user: RegisterInput
-    const response = await authApi.post(); // <ILoginResponse>('auth/login', user);
-    return response.data;
-  };
-  
-  export const verifyEmailFn = async (props) => { // verificationCode: string
-    const response = await authApi.get() // <GenericResponse>(`auth/verifyemail/${verificationCode}`);
-    return response.data;
-  };
-  
-  export const logoutUserFn = async () => {
-    const response = await authApi.get(); // <GenericResponse>('auth/logout');
-    return response.data;
-  };
-  
-  export const getMeFn = async () => {
-    const response = await authApi.get(); // <IUserResponse>('users/me');
-    return response.data;
-  };

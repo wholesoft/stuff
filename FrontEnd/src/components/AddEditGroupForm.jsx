@@ -1,5 +1,5 @@
 import * as React from 'react';
-import useAxiosPrivate from '../hooks/useAxiosPrivate';
+import { useAxiosPrivate } from '../hooks/useAxiosPrivate';
 
 const AddEditGroupForm = (props) => {
     const axiosPrivate = useAxiosPrivate();

@@ -1,4 +1,4 @@
-import { axiosGet } from './axiosQuery'
+import { axiosGet } from '../axios'
 
 const getItemGroups = async () => { 
 

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import useAxiosPrivate from '../hooks/useAxiosPrivate';
+import { useAxiosPrivate } from '../hooks/useAxiosPrivate';
 import { UpdatePassword } from '../components/UpdatePassword'
 
 const Account = () => {

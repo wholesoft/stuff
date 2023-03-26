@@ -1,11 +1,6 @@
-import React, { useMemo } from 'react'
-import { useResourcePrivate } from '../hooks/useResourcePrivate'
-import { BasicTable } from './BasicTable'
-import { SortTable } from './SortTable'
 import { FilterTable } from './FilterTable'
 import { Link } from 'react-router-dom';
-import { useQuery, useMutation, useQueryClient } from 'react-query'
-import { getItemGroups } from '../api/stuff'
+import { useItemGroups } from '../data/stuff/useStuff'
 
 function formatDate(date_string)
 {
@@ -17,46 +12,10 @@ function formatDate(date_string)
     return result;
 }
 
-const GROUP_DATA = [{
-    id: 1,
-    group_name: 'test_group'
-}]
-
 const StuffGroupsTable2 = () => {
-    //let tableData = useResourcePrivate(`/stuff_groups`);
-    //console.log(tableData);
-    const queryClient = useQueryClient()
+    const groupQuery = useItemGroups();
+    const groupData = groupQuery.data;
 
-    const groupQuery = useQuery({
-        queryKey: ["item_groups"],
-        queryFn: () => getItemGroups() 
-        /* [...GROUP_DATA] */
-    })
-
-    const newGroupMutation = useMutation({
-        mutationFn: group_name => {
-            GROUP_DATA.push({id: crypto.randomUUID(), group_name})
-        },
-        onSuccess: () => {
-            queryClient.invalidateQueries(["item_groups"])
-        },
-    })
-
-    if (groupQuery.isLoading) return <h1>Loading...</h1>
-    if (groupQuery.isError) {
-        return <pre>{JSON.stringify(groupQuery.error)}</pre>
-    }
-
-    return <div>
-        <h1>Stuff Query</h1>
-        { JSON.stringify(groupQuery.data) }
-        <br />
-        <button 
-        disabled={newGroupMutation.isLoading}
-        onClick={() => newGroupMutation.mutate("NEW GROUP") }>Add New</button>
-        </div>
-}
-/*
     const COLUMNS = [
         {
             Header: 'Group',
@@ -87,7 +46,7 @@ const StuffGroupsTable2 = () => {
             Header: 'Edit',
             id: 'edit',
             accessor: 'id',
-            Cell:  ({ value }) => { return <Link to={`/edit-group/${value}`} state={{ data: tableData.filter(group => group.id == value) }}>edit</Link> }
+            Cell:  ({ value }) => { return <Link to={`/edit-group/${value}`} state={{ data: groupData.filter(group => group.id == value) }}>edit</Link> }
         },
         {
             Header: 'Delete',
@@ -98,13 +57,25 @@ const StuffGroupsTable2 = () => {
     
     ]
 
-   return tableData ? (
-        <>
-        <FilterTable data={tableData} columns={COLUMNS} />
+    if (groupQuery.isLoading) return <h1>Loading...</h1>
+
+    return  <>
+    <div>
+        <h1>Stuff Query</h1>
+        {/* JSON.stringify(groupData) */}
+        <br />
+        {/*
+        <button 
+        disabled={newGroupMutation.isLoading}
+        onClick={() => newGroupMutation.mutate("NEW GROUP") }>Add New</button>
+        
+        */}
+        </div>
+        <FilterTable data={groupData} columns={COLUMNS} />
+        
         </>
-    ) : <p>LOADING...</p>
   }
-*/
+
 
 export {StuffGroupsTable2}
 

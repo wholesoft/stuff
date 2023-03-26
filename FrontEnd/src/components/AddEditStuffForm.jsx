@@ -1,5 +1,5 @@
 import * as React from 'react';
-import useAxiosPrivate from '../hooks/useAxiosPrivate';
+import { useAxiosPrivate } from '../hooks/useAxiosPrivate';
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import { useResourcePrivate } from '../hooks/useResourcePrivate'
