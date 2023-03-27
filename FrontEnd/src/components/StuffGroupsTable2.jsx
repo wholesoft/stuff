@@ -13,7 +13,10 @@ function formatDate(date_string)
 }
 
 const StuffGroupsTable2 = () => {
-    const groupQuery = useItemGroups();
+    const useGroups = useItemGroups();
+    const groupQuery = useGroups[0];
+    const deleteGroupMutation = useGroups[1];
+
     const groupData = groupQuery.data;
 
     const COLUMNS = [
@@ -52,24 +55,23 @@ const StuffGroupsTable2 = () => {
             Header: 'Delete',
             id: 'delete',
             accessor: 'id',
-            Cell:  ({ value }) => { return <Link to={`/delete-group/${value}`}>delete</Link> }
+            Cell:  ({ value }) => { return <button
+            disabled={ deleteGroupMutation.isLoading }
+            onClick={() => deleteGroupMutation.mutate(value) }>Delete
+            </button> }
         }
     
     ]
 
     if (groupQuery.isLoading) return <h1>Loading...</h1>
-
+    if (groupQuery.isError) {
+        return <pre>{JSON.stringify(groupQuery.error)}</pre>
+    }
     return  <>
-    <div>
+        <div>
         <h1>Stuff Query</h1>
         {/* JSON.stringify(groupData) */}
         <br />
-        {/*
-        <button 
-        disabled={newGroupMutation.isLoading}
-        onClick={() => newGroupMutation.mutate("NEW GROUP") }>Add New</button>
-        
-        */}
         </div>
         <FilterTable data={groupData} columns={COLUMNS} />
         

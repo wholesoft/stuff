@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { getItemGroups } from './apiStuff'
+import { getItemGroups, deleteItemGroup } from './apiStuff'
 
 
 const useItemGroups = () => {
@@ -10,16 +10,16 @@ const useItemGroups = () => {
         queryFn: () => getItemGroups() 
     })
 
-    /*
-    if (groupQuery.isLoading) return <h1>Loading...</h1>
+    const deleteGroupMutation = useMutation({
+        mutationFn: (group_id) => deleteItemGroup(group_id),
+        onSuccess: () => {
+            queryClient.invalidateQueries(["item_groups"])
+        }
+    })
 
-    if (groupQuery.isError) {
-        return <pre>{JSON.stringify(groupQuery.error)}</pre>
-    }
-    */
-    //const { data, isLoading, error, invalidate } = useBooks(authorId);
-
-    return groupQuery
+    return [groupQuery, deleteGroupMutation]
   }
+
+
 
   export { useItemGroups }

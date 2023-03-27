@@ -1,11 +1,15 @@
 import { axiosGet } from '../axios'
 
 const getItemGroups = async () => { 
-
-    let url = `/stuff_groups`;
+    const url = `/stuff_groups`;
     const response = await axiosGet(url);
     return response.data;
-
 }
 
-export { getItemGroups }
+const deleteItemGroup = async (group_id) => {
+    const url = `/delete_group/${group_id}`
+    const response = await axiosGet(url);
+    return response.data;
+}
+
+export { getItemGroups, deleteItemGroup }
