@@ -7,22 +7,18 @@ export default axios.create({
     baseURL: BASE_URL
 });
 
-const authApi = axios.create({
+const axiosAuth = axios.create({
     baseURL: BASE_URL,
     headers: { 'Content-Type': 'application/json' },
     withCredentials: true
 });
 
-const axiosGet = async (url) => { 
-    console.log("axiosGet");
-    const request = authApi.get(url)
-    return request
-}
+
 
 
 const refreshAccessTokenFn = async () => {
     //const response = await authApi.get(); // <ILoginResponse>('auth/refresh');
-    const response = await authApi.get('/refresh', { withCredentials: true });
+    const response = await axiosAuth.get('/refresh', { withCredentials: true });
     console.log("REFRESH AUTH TOKEN: " + JSON.stringify(response.data));
     /*
     {"access_token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozMCwicm9sZXMiOlsxMDAxLDIwMDFdLCJpYXQiOjE2Nzk3NzQyMjQsImV4cCI6MTY3OTc3NDIzOX0.Z_DNbERLbC-YVbbIyhKH0x9WNL3hW8WwpMY_z-H3tBM",
@@ -54,7 +50,7 @@ const refreshAccessTokenFn = async () => {
 */
 
 
-  authApi.interceptors.response.use(
+    axiosAuth.interceptors.response.use(
     (response) => {
         console.log("interceptor fired");
       return response;
@@ -75,11 +71,11 @@ const refreshAccessTokenFn = async () => {
         const newAccessToken = await refreshAccessTokenFn()
         //const newAccessToken = await refresh();
         originalRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
-        return authApi(originalRequest);
+        return axiosAuth(originalRequest);
       }
       return Promise.reject(error);
     }
   );
 
-  export { axiosGet }
+  export { axiosAuth }
   

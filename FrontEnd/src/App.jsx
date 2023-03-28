@@ -41,7 +41,7 @@ function App() {
 
 <Routes>
 
-   {/* <Route path="/" element={<Layout />}> */}
+    <Route path="/" element={<Layout />}> 
         {/* public routes */}
         <Route path="/register" element={<RegisterForm />} />
         <Route path="/registration_confirmed" element={<RegistrationConfirmed />} />
@@ -55,7 +55,7 @@ function App() {
         {/* we want to protect these routes */}
         <Route element={<PersistLogin />}> 
             <Route element={<RequireAuth allowedRoles={[ROLES.User]} />}>
-                <Route path="/" element={<StuffGroupsTable4 />} />
+                <Route path="/" element={<Stuff />} />
                 <Route path="/links" element={<Home />} />
                 <Route path="/account" element={<Account />} />
                 <Route path="/stuff" element={<Stuff />} />
@@ -77,7 +77,7 @@ function App() {
 
         {/* catch all */}
         <Route path="*" element={<NotFound />} />
-  {/*  </Route>*/}
+  </Route>
 </Routes>
       </div>
     )
