@@ -22,4 +22,22 @@ const addItemGroup = async (props) => {
     return response
 }
 
-export { getItemGroups, deleteItemGroup, addItemGroup }
+const editGroupName = async ( props) => {
+    const { id, group_name } = props
+    const url = '/edit_stuff_group_name'
+    const data = JSON.stringify({id, group_name })
+    const response = await axiosAuth.post(url, data)
+    console.log(response)
+    return response
+}
+
+const editGroupNote = async ( props) => {
+    const { id, note } = props
+    const url = '/edit_stuff_group_note'
+    const data = JSON.stringify({id, note })
+    const response = await axiosAuth.post(url, data)
+    console.log(response)
+    return response
+}
+
+export { getItemGroups, deleteItemGroup, addItemGroup, editGroupName, editGroupNote }

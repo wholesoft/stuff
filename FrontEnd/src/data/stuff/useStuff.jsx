@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { getItemGroups, deleteItemGroup, addItemGroup } from './apiStuff'
+import { getItemGroups, deleteItemGroup, addItemGroup, editGroupName, editGroupNote } from './apiStuff'
 
 
 const useItemGroups = () => {
@@ -33,7 +33,7 @@ const useDeleteItemGroup = () => {
 const useAddItemGroup = (data) => {
     const queryClient = useQueryClient()
     const addGroupMutation = useMutation({
-        mutationFn: (group_id) => addItemGroup(group_id, data),
+        mutationFn: (data) => addItemGroup(data),
         onMutate: async (props) => {
             console.log("on mutate")
             console.log(props)
@@ -50,4 +50,44 @@ const useAddItemGroup = (data) => {
     return addGroupMutation
 }
 
-  export { useItemGroups, useDeleteItemGroup, useAddItemGroup }
+const useEditItemGroupName = (data) => {
+    const queryClient = useQueryClient()
+    const editMutation = useMutation({
+        mutationFn: (data) => editGroupName(data),
+        onMutate: async (props) => {
+            console.log("on mutate")
+            console.log(props)
+        },
+        onSuccess: (props) => {
+            console.log('mutate success')
+            console.log(props)
+            return queryClient.invalidateQueries(['itemGroups'])
+        },
+        onError: (props) => {
+            console.log('mutate error')
+        }
+       })
+    return editMutation
+}
+
+const useEditItemGroupNote = (data) => {
+    const queryClient = useQueryClient()
+    const editMutation = useMutation({
+        mutationFn: (data) => editGroupNote(data),
+        onMutate: async (props) => {
+            console.log("on mutate")
+            console.log(props)
+        },
+        onSuccess: (props) => {
+            console.log('mutate success')
+            console.log(props)
+            return queryClient.invalidateQueries(['itemGroups'])
+        },
+        onError: (props) => {
+            console.log('mutate error')
+        }
+       })
+    return editMutation
+}
+
+  export { useItemGroups, useDeleteItemGroup, useAddItemGroup, useEditItemGroupName, useEditItemGroupNote }
