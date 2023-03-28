@@ -59,6 +59,7 @@ const StuffGroupsTable4 = () => {
                 aria-hidden="true"
                 onClick={(e) => {
                     console.log(`DELETE ACTION ${rowData.id}`);
+                    deleteGroupMutation.mutate(rowData.id)
                 }}
               />
             </span>
@@ -74,15 +75,6 @@ const StuffGroupsTable4 = () => {
         return <pre>{JSON.stringify(groupQuery.error)}</pre>
     }
     return  <>
-{/*
-<DataTable value={rowData} tableStyle={{ minWidth: '50rem' }}>
-    <Column field="id" header="ID"></Column>
-    <Column field="group_name" header="GROUP"></Column>
-    <Column field="notes" header="Notes"></Column>
-    <Column field="updated" header="Updated"></Column>
-    <Column field="created" header="Created"></Column>
-</DataTable> 
-*/}
 
 <InputText
     onInput={(e) => 
