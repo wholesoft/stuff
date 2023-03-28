@@ -7,7 +7,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 
-import './styles.css'
+import './basic.css'
 
 const queryClient = new QueryClient();
 
@@ -22,7 +22,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     </AuthProvider>
 
     </BrowserRouter>
-    <ReactQueryDevtools />
+    {/*<ReactQueryDevtools />*/}
     </QueryClientProvider>
 
   //</React.StrictMode>,

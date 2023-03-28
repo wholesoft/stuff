@@ -3,23 +3,31 @@ import { getItemGroups, deleteItemGroup } from './apiStuff'
 
 
 const useItemGroups = () => {
-    const queryClient = useQueryClient()
-
     const groupQuery = useQuery({
-        queryKey: ["item_groups"],
+        queryKey: ['itemGroups'],
         queryFn: () => getItemGroups() 
     })
-
+    return groupQuery
+}
+  
+const useDeleteItemGroup = () => {
+    const queryClient = useQueryClient()
     const deleteGroupMutation = useMutation({
         mutationFn: (group_id) => deleteItemGroup(group_id),
-        onSuccess: () => {
-            queryClient.invalidateQueries(["item_groups"])
+        onMutate: async (props) => {
+            console.log("on mutate")
+            console.log(props)
+        },
+        onSuccess: (props) => {
+            console.log('mutate success')
+            console.log(props)
+            return queryClient.invalidateQueries(['itemGroups'])
+        },
+        onError: (props) => {
+            console.log('mutate error')
         }
-    })
+       })
+    return deleteGroupMutation
+}
 
-    return [groupQuery, deleteGroupMutation]
-  }
-
-
-
-  export { useItemGroups }
+  export { useItemGroups, useDeleteItemGroup }

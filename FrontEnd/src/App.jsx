@@ -24,6 +24,7 @@ import { Admin } from './pages/Admin'
 import { Notes } from './pages/Notes'
 import { Layout } from './components/Layout'
 import { Unauthorized } from './pages/Unauthorized'
+import {StuffGroupsTable4 } from './components/StuffGroupsTable4'
 
 
 const ROLES = {
@@ -36,10 +37,11 @@ function App() {
  
     
     return (
-        <div className='app'>
+        <div className='appx'>
 
 <Routes>
-    <Route path="/" element={<Layout />}>
+
+   {/* <Route path="/" element={<Layout />}> */}
         {/* public routes */}
         <Route path="/register" element={<RegisterForm />} />
         <Route path="/registration_confirmed" element={<RegistrationConfirmed />} />
@@ -53,9 +55,9 @@ function App() {
         {/* we want to protect these routes */}
         <Route element={<PersistLogin />}> 
             <Route element={<RequireAuth allowedRoles={[ROLES.User]} />}>
+                <Route path="/" element={<StuffGroupsTable4 />} />
                 <Route path="/links" element={<Home />} />
                 <Route path="/account" element={<Account />} />
-                <Route path="/" element={<Stuff />} />
                 <Route path="/stuff" element={<Stuff />} />
                 <Route path="/stuff/:group_id" element={<StuffGroup />} />
                 <Route path="/stuff-items" element={<StuffItems />} />
@@ -75,7 +77,7 @@ function App() {
 
         {/* catch all */}
         <Route path="*" element={<NotFound />} />
-    </Route>
+  {/*  </Route>*/}
 </Routes>
       </div>
     )

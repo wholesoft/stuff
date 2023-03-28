@@ -9,6 +9,7 @@ const getItemGroups = async () => {
 const deleteItemGroup = async (group_id) => {
     const url = `/delete_group/${group_id}`
     const response = await axiosGet(url);
+    console.log(response.data);
     return response.data;
 }
 

@@ -3,10 +3,10 @@
   line-height: 1.5;
   font-weight: 400;
 
-  color-scheme: light dark;
+  /* color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
   background-color: #242424;
-
+ */
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -199,3 +199,17 @@ button:focus-visible {
   }
    
 /* DATA TABLES END */
+
+
+/* ag-grid 
+
+.ag-theme-alpine {
+    --ag-header-color: black;
+    --ag-header-height: 30px;
+    --ag-header-foreground-color: white;
+    --ag-header-background-color: white;
+    --ag-header-cell-hover-background-color: rgb(80, 40, 140);
+    --ag-header-cell-moving-background-color: rgb(80, 40, 140);
+}
+*/ 
+

@@ -1,7 +1,12 @@
-import { FilterTable } from './FilterTable'
+import React, { useMemo } from 'react'
 import { Test } from './Test'
 import { Link } from 'react-router-dom';
 import { useItemGroups, useDeleteItemGroup } from '../data/stuff/useStuff'
+import { AgGridReact } from 'ag-grid-react'
+
+//import 'ag-grid-community/dist/styles/ag-grid.css'
+import 'ag-grid-community/styles/ag-grid.css';
+//import 'ag-grid-community/styles/ag-theme-alpine.css';
 
 function formatDate(date_string)
 {
@@ -13,7 +18,7 @@ function formatDate(date_string)
     return result;
 }
 
-const StuffGroupsTable2 = () => {
+const StuffGroupsTable3 = () => {
     const groupQuery = useItemGroups();
     const deleteGroupMutation = useDeleteItemGroup();
     //const groupQuery = useGroups[0];
@@ -21,64 +26,48 @@ const StuffGroupsTable2 = () => {
 
     const groupData = groupQuery.data;
 
-    const COLUMNS = [
-        {
-            Header: 'Group',
+    const rowData = groupData;
+    const colDefs = [
+        {headerName: "ID", field: 'id', resizable: true,},
+        {field: 'group_name'},
+        {field: 'notes'},
+    ]
+
+    const defaultColDef = useMemo( () => ({
+        sortable: true, 
+        resizable: true
+    }), []);
+
+   /*
             accessor: 'group_name'
-        },
-        {
-            Header: 'Notes',
             accessor: 'notes'
-        }
-        ,
-        {
-            Header: 'Updated',
             accessor: 'updated',
-            Cell:  ({ value }) => { return formatDate(value) }
-        },
-        {
-            Header: 'Created',
             accessor: 'created',
-            Cell:  ({ value }) => { return formatDate(value) }
-        }
-        ,
-        {
-            Header: 'Items',
-            accessor: 'id',
             Cell: ({ value }) => { return <Link to={`/stuff/${value}`}>view</Link> }
-        },
-        {
-            Header: 'Edit',
-            id: 'edit',
-            accessor: 'id',
             Cell:  ({ value }) => { return <Link to={`/edit-group/${value}`} state={{ data: groupData.filter(group => group.id == value) }}>edit</Link> }
-        },
-        {
-            Header: 'Delete',
-            id: 'delete',
-            accessor: 'id',
             Cell:  ({ value }) => { return <button
             disabled={ deleteGroupMutation.isLoading }
             onClick={() => deleteGroupMutation.mutate(value) }>Delete
-            </button> }
-        }
-    
-    ]
-
+    */
+     
     if (groupQuery.isLoading) return <h1>Loading...</h1>
     if (groupQuery.isError) {
         return <pre>{JSON.stringify(groupQuery.error)}</pre>
     }
     return  <>
         <h1>Stuff Query</h1>
-        { JSON.stringify(groupData) }
+        {/* JSON.stringify(groupData) */ }
         <br />
+        <div className='ag-theme-alpine' style={{height: 300}}>
+        <AgGridReact
+            rowData={rowData}
+            columnDefs={colDefs} 
+            />       
+        </div>
 
-        <Test data={groupData} columns={COLUMNS} />
-        
         </>
   }
 
 
-export {StuffGroupsTable2}
+export {StuffGroupsTable3}
 
