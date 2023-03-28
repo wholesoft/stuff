@@ -66,6 +66,27 @@ const StuffGroupsTable4 = () => {
           </div>
         );
       };
+
+      const onCellEditChange = (options) => (event) => {
+        options.editorCallback(event.target.value);
+      };
+      const cellEditor = (options) => {
+        return (
+          <InputText
+            value={options.value}
+            onChange={onCellEditChange(options)}
+          />
+        );
+      };
+      const onCellEditComplete = (e) => {
+        let { rowData, newValue, field, originalEvent: event } = e;
+        let id = rowData['id'];
+        if (newValue.trim().length > 0) 
+          //rowData[field] = newValue;
+          console.log(`EDIT CELL (${field}) COMPLETE: ${newValue}, ID: ${id}`)
+         else 
+          event.preventDefault();
+      };      
     
 
 
@@ -86,7 +107,10 @@ const StuffGroupsTable4 = () => {
 
 <DataTable value={rowData} showGridlines stripedRows size={size} filters={filters} tableStyle={{ minWidth: '50rem' }}>
     {colData.map((col, i) => (
-            <Column key={col.field} field={col.field} header={col.header} sortable />
+            <Column key={col.field} field={col.field} header={col.header} sortable
+            editor={(options) => cellEditor(options)}
+            onCellEditComplete={onCellEditComplete}
+            />
     ))}
         <Column body={actionTemplate} exportable={false} style={{ minWidth: '12rem' }}></Column>
 
