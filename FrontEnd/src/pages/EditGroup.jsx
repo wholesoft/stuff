@@ -1,5 +1,5 @@
 import { useParams, useLocation } from "react-router-dom";
-import {AddEditGroupForm } from '../components/AddEditGroupForm'
+import {AddEditGroupForm } from '../test/AddEditGroupForm'
 
 const EditGroup = () => {
 

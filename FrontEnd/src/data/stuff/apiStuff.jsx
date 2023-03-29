@@ -61,7 +61,16 @@ const deleteItem = async (item_id) => {
     return response.data;
 }
 
+const addItem = async (props) => {
+    const { group, notes } = props
+    const url = '/add_stuff_item'
+    //const data = JSON.stringify({group, notes })
+    const response = await axiosAuth.post(url, props)
+    console.log(response)
+    return response
+}
+
 
 export { getItemGroups, deleteItemGroup, addItemGroup, editGroupName, editGroupNote,
-getItems, deleteItem
+getItems, deleteItem, addItem
 }

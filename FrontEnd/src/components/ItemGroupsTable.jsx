@@ -43,7 +43,6 @@ const ItemGroupsTable = () => {
 
     const rowData = groupData;
     const colData = [
-        {field: 'id', key: 'id', header: "ID"},
         {field: 'group_name', key: 'id', header: "Group"},
         {field: 'notes', key: 'id', header: "Notes"},
     ]

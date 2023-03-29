@@ -1,18 +1,17 @@
 import * as React from 'react';
-import { useAxiosPrivate } from '../hooks/useAxiosPrivate';
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
-import { useResourcePrivate } from '../hooks/useResourcePrivate'
+import { useAddItem } from '../data/stuff/useStuff'
 
-const AddEditStuffForm = (props) => {
-  const axiosPrivate = useAxiosPrivate();
+const AddItemForm = (props) => {
   const { data } = props
+  const addMutation = useAddItem();
 
   let { id, item_name, group_id, purchased_location, date_purchased, notes, amount_paid } = data;
   let item_id = id;
 
   if (group_id == undefined) { group_id = props.groupId }
-  console.log(group_id);
+  //console.log(group_id);
 
    if (amount_paid == null) { amount_paid = "" }
 
@@ -21,7 +20,6 @@ const AddEditStuffForm = (props) => {
         group_id: group_id,
         item_name: item_name,
         purchase_location: purchased_location,
-        purchase_date: date_purchased, 
         amount_paid: amount_paid,
         notes: notes
       }
@@ -30,13 +28,13 @@ const AddEditStuffForm = (props) => {
       const [responseMessage, setResponseMessage] = React.useState('');
       const [form, setForm] = React.useState(init_state);
 
-   
+
       const handleChange = (event) => {
         setForm({
           ...form,
           [event.target.id]: event.target.value,
         });
-      };
+      }
 
       const handleDateChange = (value) => {
         setPurchaseDate(value)
@@ -45,51 +43,15 @@ const AddEditStuffForm = (props) => {
       const handleSubmit = async (e) => {
         e.preventDefault();
         setResponseMessage("");
-        try {
-            const { item_name, purchase_location, amount_paid, notes } = form;
-            let response = "";
-            if (item_id > 0)
-            {
-              response = await axiosPrivate.post('/edit_stuff_item', 
-              JSON.stringify({item_id, item_name, purchase_location, purchase_date: purchaseDate, amount_paid, notes}), {
-              headers: { 'Content-Type': 'application/json' },
-              withCredentials: true   
-              });
-            }
-            else
-            {
-              response = await axiosPrivate.post('/add_stuff_item', 
-              JSON.stringify({group_id, item_name, purchase_location, purchase_date: purchaseDate, amount_paid, notes}), {
-              headers: { 'Content-Type': 'application/json' },
-              withCredentials: true   
-              });
-            }
-            console.log(JSON.stringify(response?.data));
-            const message = response?.data?.message;
-            setResponseMessage(message);
-            setForm(init_state);
-
-            //navigate(from, {replace: true });   
-            } catch (err) {
-            console.log("ERROR FOUND");
-            console.log(err.message);
-            if (!err?.response) {
-                setResponseMessage("No Server Response");
-                console.log("NO RESPONSE");
-            } else  {
-                setResponseMessage("Unauthorized");
-                console.log("UNAUTHORIZED");
-            }
-        }
-
-
-          
+        let response = "";
+        const { item_name, purchase_location, amount_paid, notes, group_id } = form;
+        addMutation.mutate({item_id, group_id, item_name, purchase_location, purchase_date: purchaseDate, amount_paid, notes})
+        setForm(init_state);
+        console.log("reset form");
       };
 
   return (
     <div>
-      <p>Group ID:  { group_id }</p>
-      <p>Item ID:  { item_id }</p>
     <form onSubmit={handleSubmit}>
       <div>
         <label htmlFor="item_name">Item Name</label><br />
@@ -118,8 +80,8 @@ const AddEditStuffForm = (props) => {
         <DatePicker
           selected={purchaseDate}
           id="purchase_date"
-          onChange={handleDateChange}
           dateFormat="yyyy-MM-dd"
+          onChange={(date) => setPurchaseDate(date)}
         />
       </div>
 
@@ -150,4 +112,4 @@ const AddEditStuffForm = (props) => {
   );
 };
 
-export { AddEditStuffForm };
+export { AddItemForm };

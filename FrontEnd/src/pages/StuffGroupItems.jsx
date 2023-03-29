@@ -1,5 +1,5 @@
 import { useLocation } from 'react-router-dom'
-import { AddStuffForm } from '../components/AddStuffForm'
+import { AddStuffForm } from '../test/AddStuffForm'
 import { StuffGroupItems } from '../components/StuffGroupItems'
 
 

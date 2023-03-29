@@ -122,7 +122,7 @@ const ItemsTable = (props) => {
 
 
 <DataTable value={rowData} showGridlines stripedRows size={size} filters={filters} tableStyle={{ minWidth: '50rem' }}>
-        <Column key='id' field='id' header='ID' sortable/>
+       {/* <Column key='id' field='id' header='ID' sortable/> */}
         <Column field='item_name' header='Item' sortable/>
         <Column field='notes' header='Note' sortable/>
         <Column field='purchased_location' header='Purchase Location' sortable/>

@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { getItemGroups, deleteItemGroup, addItemGroup, editGroupName, editGroupNote,
-getItems, deleteItem
+getItems, deleteItem, addItem
 } from './apiStuff'
 
 
@@ -125,6 +125,27 @@ const useDeleteItem = () => {
     return deleteGroupMutation
 }
 
+const useAddItem = (data) => {
+    const queryClient = useQueryClient()
+    const addMutation = useMutation({
+        mutationFn: (data) => addItem(data),
+        onMutate: async (props) => {
+            console.log("on mutate")
+            console.log(props)
+        },
+        onSuccess: (props) => {
+            console.log('mutate success')
+            console.log(props)
+            return queryClient.invalidateQueries(['items'])
+        },
+        onError: (props) => {
+            console.log('mutate error')
+        }
+       })
+    return addMutation
+}
+
+
   export { useItemGroups, useDeleteItemGroup, useAddItemGroup, useEditItemGroupName, useEditItemGroupNote,
-useItems, useDeleteItem
+useItems, useDeleteItem, useAddItem
 }

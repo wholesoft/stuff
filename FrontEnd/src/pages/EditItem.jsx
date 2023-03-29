@@ -1,5 +1,5 @@
 import { useParams, useLocation } from "react-router-dom";
-import {AddEditStuffForm } from '../components/AddEditStuffForm'
+import {AddEditStuffForm } from '../test/AddEditStuffForm'
 
 const EditItem = () => {
 
