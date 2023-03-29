@@ -4,7 +4,8 @@ import { getNotes, getNote, createNote } from './test/database.js'
 import { create_user, confirm_email, login_user, getUsers, getUser, reset_password,  get_user_id_from_password_token,
   send_email_confirmation_request, update_email_address, update_password, delete_user,update_user_roles } from './user.js'
 import { addStuffGroup, getStuffGroups, addStuffItem, getStuff, getStuffItem,
-  editStuffGroup, deleteStuffGroup, editStuffItem, deleteStuffItem, editStuffGroupName, editStuffGroupNote } from './stuff.js'
+  editStuffGroup, deleteStuffGroup, editStuffItem, deleteStuffItem, editStuffGroupName, editStuffGroupNote,
+editItemName, editItemNote, editItemPurchasedLocation, editItemPurchasedDate, editItemCost } from './stuff.js'
 import { verifyJWT } from './middleware/verifyJWT.js';
 import cookieParser from 'cookie-parser' ;
 import refresh_route from './routes/refresh.js'
@@ -220,6 +221,47 @@ app.get('/delete_item/:item_id', async (req, res) => {
   const  item_id  = req.params.item_id
   console.log(JSON.stringify(req.body));
   const result = await deleteStuffItem({ 'user_id': req.jwt_user_id, 'item_id': item_id })
+  res.send(result);
+});
+
+app.post('/edit_item_cost', async (req, res) => {
+  console.log("POST: /edit_item_cost");
+  console.log(JSON.stringify(req.body));
+  const { item_id, amount_paid } = req.body;
+  const result = await editItemCost({ 'user_id': req.jwt_user_id, amount_paid, item_id });
+  res.send(result);
+});
+
+
+app.post('/edit_item_purchased_date', async (req, res) => {
+  console.log("POST: /edit_item_purchased_date");
+  console.log(JSON.stringify(req.body));
+  const { item_id, purchase_date } = req.body;
+  const result = await editItemPurchasedDate({ 'user_id': req.jwt_user_id, purchase_date, item_id });
+  res.send(result);
+});
+
+app.post('/edit_item_purchased_location', async (req, res) => {
+  console.log("POST: /edit_item_purchased_location");
+  console.log(JSON.stringify(req.body));
+  const { item_id, purchased_location } = req.body;
+  const result = await editItemPurchasedLocation({ 'user_id': req.jwt_user_id, purchased_location, item_id });
+  res.send(result);
+});
+
+app.post('/edit_item_note', async (req, res) => {
+  console.log("POST: /edit_item_note");
+  console.log(JSON.stringify(req.body));
+  const { item_id, note } = req.body;
+  const result = await editItemNote({ 'user_id': req.jwt_user_id, note, item_id });
+  res.send(result);
+});
+
+app.post('/edit_item_name', async (req, res) => {
+  console.log("POST: /edit_item_name");
+  console.log(JSON.stringify(req.body));
+  const { item_id, item_name } = req.body;
+  const result = await editItemName({ 'user_id': req.jwt_user_id, item_name, item_id });
   res.send(result);
 });
 

@@ -396,7 +396,7 @@ export async function editStuffGroupNote(props)
    const schema = joi.object({
        user_id: joi.number().integer().required(),
        group_id: joi.number().integer().required(),
-       note: joi.string().required(),
+       note: joi.string().allow('')
      });
 
    const { error, value } = schema.validate(props); 
@@ -422,8 +422,199 @@ export async function editStuffGroupNote(props)
    return { "success": success, "message": message };
 }
 
+export async function editItemName(props)
+{
+   // Returns { 'success': true/false , 'message': '' }
+   let success = false;
+   let message = "";
+   let validation_okay = true;
+
+   // VALIDATE INPUT
+   const schema = joi.object({
+       user_id: joi.number().integer().required(),
+       item_id: joi.number().integer().required(),
+       item_name: joi.string().required(),
+     });
+
+   const { error, value } = schema.validate(props); 
+
+   if (error) {
+     console.log(error);
+     console.log("Validation Error.");
+     message = "Vaidation Error (" + error.details[0].message + ")";
+     validation_okay = false;
+     return { 'success': false, 'message': message }
+   }
+
+   // UPDATE RECORD
+   if (validation_okay) {
+       const result = await pool.query(`
+       UPDATE Stuff SET item_name=?, updated=CURRENT_TIMESTAMP WHERE id=? AND user_id=?
+       `, [props.item_name, props.item_id, props.user_id]); 
+       console.log(result);
+       success = true;
+       message = `Item Updated (${props.item_name}).`;
+   }
+
+   return { "success": success, "message": message };
+}
+
+export async function editItemNote(props)
+{
+   // Returns { 'success': true/false , 'message': '' }
+   let success = false;
+   let message = "";
+   let validation_okay = true;
+
+   // VALIDATE INPUT
+   const schema = joi.object({
+       user_id: joi.number().integer().required(),
+       item_id: joi.number().integer().required(),
+       note: joi.string().allow('')
+     });
+
+   const { error, value } = schema.validate(props); 
+
+   if (error) {
+     console.log(error);
+     console.log("Validation Error.");
+     message = "Vaidation Error (" + error.details[0].message + ")";
+     validation_okay = false;
+     return { 'success': false, 'message': message }
+   }
+
+   // UPDATE RECORD
+   if (validation_okay) {
+       const result = await pool.query(`
+       UPDATE Stuff SET notes=?, updated=CURRENT_TIMESTAMP WHERE id=? AND user_id=?
+       `, [props.note, props.item_id, props.user_id]); 
+       console.log(result);
+       success = true;
+       message = `Note Updated (${props.item_name}).`;
+   }
+
+   return { "success": success, "message": message };
+}
+
+export async function editItemPurchasedLocation(props)
+{
+   // Returns { 'success': true/false , 'message': '' }
+   let success = false;
+   let message = "";
+   let validation_okay = true;
+
+   // VALIDATE INPUT
+   const schema = joi.object({
+       user_id: joi.number().integer().required(),
+       item_id: joi.number().integer().required(),
+       purchased_location: joi.string().allow('')
+     });
+
+   const { error, value } = schema.validate(props); 
+
+   if (error) {
+     console.log(error);
+     console.log("Validation Error.");
+     message = "Vaidation Error (" + error.details[0].message + ")";
+     validation_okay = false;
+     return { 'success': false, 'message': message }
+   }
+
+   // UPDATE RECORD
+   if (validation_okay) {
+       const result = await pool.query(`
+       UPDATE Stuff SET purchased_location=?, updated=CURRENT_TIMESTAMP WHERE id=? AND user_id=?
+       `, [props.purchased_location, props.item_id, props.user_id]); 
+       console.log(result);
+       success = true;
+       message = `Purchased Location Updated (${props.purchased_location}).`;
+   }
+
+   return { "success": success, "message": message };
+}
+
+export async function editItemPurchasedDate(props)
+{
+   // Returns { 'success': true/false , 'message': '' }
+   let success = false;
+   let message = "";
+   let validation_okay = true;
+
+   // VALIDATE INPUT
+   const schema = joi.object({
+       user_id: joi.number().integer().required(),
+       item_id: joi.number().integer().required(),
+       purchase_date: joi.date().allow(null).empty('').default(null),
+     });
+
+   const { error, value } = schema.validate(props); 
+
+   let purchase_date = props.purchase_date;
+   if (purchase_date != null) { purchase_date = purchase_date.substring(0, 10) }
+
+   if (error) {
+     console.log(error);
+     console.log("Validation Error.");
+     message = "Vaidation Error (" + error.details[0].message + ")";
+     validation_okay = false;
+     return { 'success': false, 'message': message }
+   }
+
+   // UPDATE RECORD
+   if (validation_okay) {
+       const result = await pool.query(`
+       UPDATE Stuff SET date_purchased=?, updated=CURRENT_TIMESTAMP WHERE id=? AND user_id=?
+       `, [purchase_date, props.item_id, props.user_id]); 
+       console.log(result);
+       success = true;
+       message = `Purchased Date Updated (${purchase_date}).`;
+   }
+
+   return { "success": success, "message": message };
+}
+
+export async function editItemCost(props)
+{
+   // Returns { 'success': true/false , 'message': '' }
+   let success = false;
+   let message = "";
+   let validation_okay = true;
+
+   // VALIDATE INPUT
+   const schema = joi.object({
+       user_id: joi.number().integer().required(),
+       item_id: joi.number().integer().required(),
+       amount_paid: joi.number().empty('').default(null)
+     });
+
+   const { error, value } = schema.validate(props); 
+
+   let amount_paid  = props.amount_paid;
+   if (amount_paid == "") { amount_paid = null }
+
+   if (error) {
+     console.log(error);
+     console.log("Validation Error.");
+     message = "Vaidation Error (" + error.details[0].message + ")";
+     validation_okay = false;
+     return { 'success': false, 'message': message }
+   }
+
+   // UPDATE RECORD
+   if (validation_okay) {
+       const result = await pool.query(`
+       UPDATE Stuff SET amount_paid=?, updated=CURRENT_TIMESTAMP WHERE id=? AND user_id=?
+       `, [amount_paid, props.item_id, props.user_id]); 
+       console.log(result);
+       success = true;
+       message = `Cost Updated (${props.amount_paid}).`;
+   }
+
+   return { "success": success, "message": message };
+}
 
 /*
+
 CREATE TABLE Stuff (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT,
