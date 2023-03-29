@@ -348,6 +348,81 @@ export async function getStuffItem(props) {
   return { 'success': true, 'message': 'OK', 'data': rows }
 }  
 
+export async function editStuffGroupName(props)
+{
+   // Returns { 'success': true/false , 'message': '' }
+   let success = false;
+   let message = "";
+   let validation_okay = true;
+
+   // VALIDATE INPUT
+   const schema = joi.object({
+       user_id: joi.number().integer().required(),
+       group_id: joi.number().integer().required(),
+       group_name: joi.string().required(),
+     });
+
+   const { error, value } = schema.validate(props); 
+
+   if (error) {
+     console.log(error);
+     console.log("Validation Error.");
+     message = "Vaidation Error (" + error.details[0].message + ")";
+     validation_okay = false;
+     return { 'success': false, 'message': message }
+   }
+
+   // UPDATE RECORD
+   if (validation_okay) {
+       const result = await pool.query(`
+       UPDATE Stuff_Groups SET group_name=?, updated=CURRENT_TIMESTAMP WHERE id=? AND user_id=?
+       `, [props.group_name, props.group_id, props.user_id]); 
+       console.log(result);
+       success = true;
+       message = `Group Updated (${props.group_name}).`;
+   }
+
+   return { "success": success, "message": message };
+}
+
+export async function editStuffGroupNote(props)
+{
+   // Returns { 'success': true/false , 'message': '' }
+   let success = false;
+   let message = "";
+   let validation_okay = true;
+
+   // VALIDATE INPUT
+   const schema = joi.object({
+       user_id: joi.number().integer().required(),
+       group_id: joi.number().integer().required(),
+       note: joi.string().required(),
+     });
+
+   const { error, value } = schema.validate(props); 
+
+   if (error) {
+     console.log(error);
+     console.log("Validation Error.");
+     message = "Vaidation Error (" + error.details[0].message + ")";
+     validation_okay = false;
+     return { 'success': false, 'message': message }
+   }
+
+   // UPDATE RECORD
+   if (validation_okay) {
+       const result = await pool.query(`
+       UPDATE Stuff_Groups SET notes=?, updated=CURRENT_TIMESTAMP WHERE id=? AND user_id=?
+       `, [props.note, props.group_id, props.user_id]); 
+       console.log(result);
+       success = true;
+       message = `Group Updated (${props.group_name}).`;
+   }
+
+   return { "success": success, "message": message };
+}
+
+
 /*
 CREATE TABLE Stuff (
     id INT AUTO_INCREMENT PRIMARY KEY,

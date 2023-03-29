@@ -52,7 +52,7 @@ const refreshAccessTokenFn = async () => {
 
     axiosAuth.interceptors.response.use(
     (response) => {
-        console.log("interceptor fired");
+        //console.log("interceptor fired");
       return response;
     },
     async (error) => {

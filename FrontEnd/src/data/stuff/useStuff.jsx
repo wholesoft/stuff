@@ -50,12 +50,12 @@ const useAddItemGroup = (data) => {
     return addGroupMutation
 }
 
-const useEditItemGroupName = (data) => {
+const useEditItemGroupName = () => {
     const queryClient = useQueryClient()
     const editMutation = useMutation({
         mutationFn: (data) => editGroupName(data),
         onMutate: async (props) => {
-            console.log("on mutate")
+            console.log("on mutate name")
             console.log(props)
         },
         onSuccess: (props) => {
@@ -70,12 +70,12 @@ const useEditItemGroupName = (data) => {
     return editMutation
 }
 
-const useEditItemGroupNote = (data) => {
+const useEditItemGroupNote = () => {
     const queryClient = useQueryClient()
     const editMutation = useMutation({
         mutationFn: (data) => editGroupNote(data),
         onMutate: async (props) => {
-            console.log("on mutate")
+            console.log("on mutate note")
             console.log(props)
         },
         onSuccess: (props) => {

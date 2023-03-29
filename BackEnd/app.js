@@ -4,7 +4,7 @@ import { getNotes, getNote, createNote } from './test/database.js'
 import { create_user, confirm_email, login_user, getUsers, getUser, reset_password,  get_user_id_from_password_token,
   send_email_confirmation_request, update_email_address, update_password, delete_user,update_user_roles } from './user.js'
 import { addStuffGroup, getStuffGroups, addStuffItem, getStuff, getStuffItem,
-  editStuffGroup, deleteStuffGroup, editStuffItem, deleteStuffItem } from './stuff.js'
+  editStuffGroup, deleteStuffGroup, editStuffItem, deleteStuffItem, editStuffGroupName, editStuffGroupNote } from './stuff.js'
 import { verifyJWT } from './middleware/verifyJWT.js';
 import cookieParser from 'cookie-parser' ;
 import refresh_route from './routes/refresh.js'
@@ -112,11 +112,7 @@ app.post('/update_password_with_token', async (req, res) => {
   res.send(result);
 });
 
-app.get('/users/:id', async (req, res) => {  
-  const id = req.params.id
-  const user = await getUser(id)
-  res.send(user);
-}); 
+ 
 
 app.use(verifyJWT);
 /*
@@ -125,6 +121,12 @@ app.use(verifyJWT);
    jwt_roles 
 */
 
+
+app.get('/users/:id', async (req, res) => {  
+  const id = req.params.id
+  const user = await getUser(id)
+  res.send(user);
+});
 
 // TODO: LIMIT PERMISSIONS ONLY TO THINGS THE USER HAS ACCESS TO
 // REGULAR USERS SHOULD ONLY BE ABLE TO ACCESS THEIR OWN INFO
@@ -167,6 +169,22 @@ app.post('/edit_stuff_group', async (req, res) => {
   console.log(JSON.stringify(req.body));
   const { group_id, group, notes } = req.body;
   const result = await editStuffGroup({ 'user_id': req.jwt_user_id, group, notes, group_id });
+  res.send(result);
+});
+
+app.post('/edit_stuff_group_name', async (req, res) => {
+  console.log("POST: /edit_stuff_group_name");
+  console.log(JSON.stringify(req.body));
+  const { group_id, group_name } = req.body;
+  const result = await editStuffGroupName({ 'user_id': req.jwt_user_id, group_name, group_id });
+  res.send(result);
+});
+
+app.post('/edit_stuff_group_note', async (req, res) => {
+  console.log("POST: /edit_stuff_group_note");
+  console.log(JSON.stringify(req.body));
+  const { group_id, note } = req.body;
+  const result = await editStuffGroupNote({ 'user_id': req.jwt_user_id, note, group_id });
   res.send(result);
 });
 

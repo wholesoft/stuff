@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react'
 import { Test } from './Test'
 import { Link } from 'react-router-dom';
-import { useItemGroups, useDeleteItemGroup } from '../data/stuff/useStuff'
+import { useItemGroups, useDeleteItemGroup, useEditItemGroupName, useEditItemGroupNote } from '../data/stuff/useStuff'
 
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
@@ -36,7 +36,9 @@ const StuffGroupsTable4 = () => {
 
     const groupQuery = useItemGroups();
     const deleteGroupMutation = useDeleteItemGroup();
-    
+    const editGroupNameMutation = useEditItemGroupName()
+    const editGroupNoteMutation = useEditItemGroupNote()
+
     const groupData = groupQuery.data;
 
     const rowData = groupData;
@@ -44,8 +46,6 @@ const StuffGroupsTable4 = () => {
         {field: 'id', key: 'id', header: "ID"},
         {field: 'group_name', key: 'id', header: "Group"},
         {field: 'notes', key: 'id', header: "Notes"},
-        {field: 'created', key: 'id', header: "Created"},
-        {field: 'updated', key: 'id', header: "Updated"},
     ]
 
     const actionTemplate = (rowData) => {
@@ -58,7 +58,7 @@ const StuffGroupsTable4 = () => {
                 title={"delete"}
                 aria-hidden="true"
                 onClick={(e) => {
-                    console.log(`DELETE ACTION ${rowData.id}`);
+                    //console.log(`DELETE ACTION ${rowData.id}`);
                     deleteGroupMutation.mutate(rowData.id)
                 }}
               />
@@ -80,15 +80,25 @@ const StuffGroupsTable4 = () => {
       };
       const onCellEditComplete = (e) => {
         let { rowData, newValue, field, originalEvent: event } = e;
-        let id = rowData['id'];
-        if (newValue.trim().length > 0) 
-          //rowData[field] = newValue;
-          console.log(`EDIT CELL (${field}) COMPLETE: ${newValue}, ID: ${id}`)
-         else 
-          event.preventDefault();
+        let group_id = rowData['id'];
+        console.log(`EDIT CELL (${field}) COMPLETE: ${newValue}, ID: ${group_id}`)
+        if (field == "group_name") {
+            editGroupNameMutation.mutate({'group_id': group_id, 'group_name': newValue})
+        }
+        if (field == "notes") {
+            editGroupNoteMutation.mutate({'group_id': group_id, 'note': newValue})
+        }
       };      
     
+      let displayUpdated = (rowData) => {  
+        let value = rowData.updated;
+        return formatDate(value);
+      }
 
+      let displayCreated = (rowData) => {
+        let value = rowData.created;
+        return formatDate(value);
+      }
 
     let size = "small"
     if (groupQuery.isLoading) return <h1>Loading...</h1>
@@ -111,8 +121,10 @@ const StuffGroupsTable4 = () => {
             editor={(options) => cellEditor(options)}
             onCellEditComplete={onCellEditComplete}
             />
-    ))}
-        <Column body={actionTemplate} exportable={false} style={{ minWidth: '12rem' }}></Column>
+    ))} 
+        <Column field='created' header='Created' sortable body={displayCreated} />
+        <Column field='updated' header='Updated' sortable body={displayUpdated} />
+        <Column body={actionTemplate} exportable={false}  />
 
 </DataTable>
 
