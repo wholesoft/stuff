@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react'
 import { Test } from './Test'
 import { Link } from 'react-router-dom';
-import { useItemGroups, useDeleteItemGroup, useEditItemGroupName, useEditItemGroupNote } from '../data/stuff/useStuff'
+import { useItems, useDeleteItem, useEditItemGroupName, useEditItemGroupNote } from '../data/stuff/useStuff'
 
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
@@ -28,27 +28,28 @@ function formatDate(date_string)
     return result;
 }
 
-const StuffGroupsTable4 = () => {
+const ItemsTable = (props) => {
+
+    const group_id = props.groupId;
 
     const [filters, setFilters] = useState({
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
     })
 
-    const groupQuery = useItemGroups();
-    const deleteGroupMutation = useDeleteItemGroup();
+    const itemsQuery = useItems(group_id);
+    const deleteItemMutation = useDeleteItem();
     const editGroupNameMutation = useEditItemGroupName()
     const editGroupNoteMutation = useEditItemGroupNote()
 
-    const groupData = groupQuery.data;
+    const rowData = itemsQuery.data;
 
-    const rowData = groupData;
     const colData = [
         {field: 'id', key: 'id', header: "ID"},
         {field: 'group_name', key: 'id', header: "Group"},
         {field: 'notes', key: 'id', header: "Notes"},
     ]
 
-    const actionTemplate = (rowData) => {
+    const deleteTemplate = (rowData) => {
         return (
           <div className="deleteAction">
             <span className="actionIcons delete-role">
@@ -59,7 +60,7 @@ const StuffGroupsTable4 = () => {
                 aria-hidden="true"
                 onClick={(e) => {
                     //console.log(`DELETE ACTION ${rowData.id}`);
-                    deleteGroupMutation.mutate(rowData.id)
+                    deleteItemMutation.mutate(rowData.id)
                 }}
               />
             </span>
@@ -100,10 +101,15 @@ const StuffGroupsTable4 = () => {
         return formatDate(value);
       }
 
+      let displayDatePurchased = (rowData) => {
+        let value = rowData.date_purchased;
+        return formatDate(value);
+      }
+
     let size = "small"
-    if (groupQuery.isLoading) return <h1>Loading...</h1>
-    if (groupQuery.isError) {
-        return <pre>{JSON.stringify(groupQuery.error)}</pre>
+    if (itemsQuery.isLoading) return <h1>Loading...</h1>
+    if (itemsQuery.isError) {
+        return <pre>{JSON.stringify(itemsQuery.error)}</pre>
     }
     return  <>
 
@@ -116,15 +122,18 @@ const StuffGroupsTable4 = () => {
 
 
 <DataTable value={rowData} showGridlines stripedRows size={size} filters={filters} tableStyle={{ minWidth: '50rem' }}>
-    {colData.map((col, i) => (
-            <Column key={col.field} field={col.field} header={col.header} sortable
-            editor={(options) => cellEditor(options)}
-            onCellEditComplete={onCellEditComplete}
-            />
-    ))} 
+        <Column key='id' field='id' header='ID' sortable/>
+        <Column field='item_name' header='Item' sortable/>
+        <Column field='notes' header='Note' sortable/>
+        <Column field='purchased_location' header='Purchase Location' sortable/>
+        <Column field='date_purchased' header='Purchase Date' sortable body={displayDatePurchased} />
+        <Column field='amount_paid' header='Cost' sortable/>
+        { /*
         <Column field='created' header='Created' sortable body={displayCreated} />
         <Column field='updated' header='Updated' sortable body={displayUpdated} />
-        <Column body={actionTemplate} exportable={false}  />
+        */ }
+        <Column body={deleteTemplate} />
+
 
 </DataTable>
 
@@ -134,5 +143,5 @@ const StuffGroupsTable4 = () => {
   }
 
 
-export {StuffGroupsTable4}
+export {ItemsTable}
 

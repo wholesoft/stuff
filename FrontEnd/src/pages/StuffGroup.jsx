@@ -1,5 +1,4 @@
-import {StuffGroups } from '../components/StuffGroups'
-import {StuffGroupTable } from '../components/StuffGroupTable'
+import { ItemsTable } from '../components/ItemsTable'
 import { AddEditStuffForm } from '../components/AddEditStuffForm'
 import { useParams } from 'react-router-dom'
 
@@ -11,7 +10,7 @@ const StuffGroup = (props) => {
     return (
       <div>
         <h1>Stuff { group_id }</h1>
-        <StuffGroupTable groupId={ group_id } />
+        <ItemsTable groupId={ group_id } />
 
         <AddEditStuffForm data={{}} groupId={ group_id } />
       </div>

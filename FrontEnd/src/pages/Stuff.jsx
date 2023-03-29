@@ -1,14 +1,11 @@
-import { AddStuffGroupForm } from '../components/AddStuffGroup'
 import {AddGroupForm } from '../components/AddGroupForm'
-import {StuffGroupsTable2 } from '../components/StuffGroupsTable2'
-import {StuffGroupsTable3 } from '../components/StuffGroupsTable3'
-import {StuffGroupsTable4 } from '../components/StuffGroupsTable4'
+import {ItemGroupsTable } from '../components/ItemGroupsTable'
 
 const Stuff = () => {
    
     return (
       <div>
-        <StuffGroupsTable4 />
+        <ItemGroupsTable />
         <AddGroupForm data={{}} />
       </div>
 

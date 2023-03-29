@@ -1,5 +1,7 @@
 import { axiosAuth } from '../axios'
 
+/* ITEM GROUPS */
+
 const getItemGroups = async () => { 
     const url = `/stuff_groups`;
     const response = await axiosAuth.get(url);
@@ -43,4 +45,23 @@ const editGroupNote = async ( props) => {
     return response
 }
 
-export { getItemGroups, deleteItemGroup, addItemGroup, editGroupName, editGroupNote }
+/* ITEMS */
+const getItems = async (group_id) => { 
+    console.log(group_id);
+    const url = `/stuff/${group_id}`;
+    console.log(url)
+    const response = await axiosAuth.get(url);
+    return response.data;
+}
+
+const deleteItem = async (item_id) => {
+    const url = `/delete_item/${item_id}`
+    const response = await axiosAuth.get(url);
+    console.log(response.data);
+    return response.data;
+}
+
+
+export { getItemGroups, deleteItemGroup, addItemGroup, editGroupName, editGroupNote,
+getItems, deleteItem
+}
