@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { getItemGroups, deleteItemGroup, addItemGroup, editGroupName, editGroupNote,
-getItems, deleteItem, addItem
+getItems, deleteItem, addItem, editItemName, editItemNote, editItemPurchasedLocation,
+editItemPurchasedDate, editItemCost
 } from './apiStuff'
 
 
@@ -145,7 +146,108 @@ const useAddItem = (data) => {
     return addMutation
 }
 
+const useEditItemName = () => {
+    const queryClient = useQueryClient()
+    const editMutation = useMutation({
+        mutationFn: (data) => editItemName(data),
+        onMutate: async (props) => {
+            console.log("on mutate name")
+            console.log(props)
+        },
+        onSuccess: (props) => {
+            console.log('mutate success')
+            console.log(props)
+            return queryClient.invalidateQueries(['items'])
+        },
+        onError: (props) => {
+            console.log('mutate error')
+        }
+       })
+    return editMutation
+}
+
+const useEditItemNote = () => {
+    const queryClient = useQueryClient()
+    const editMutation = useMutation({
+        mutationFn: (data) => editItemNote(data),
+        onMutate: async (props) => {
+            console.log("on mutate name")
+            console.log(props)
+        },
+        onSuccess: (props) => {
+            console.log('mutate success')
+            console.log(props)
+            return queryClient.invalidateQueries(['items'])
+        },
+        onError: (props) => {
+            console.log('mutate error')
+        }
+       })
+    return editMutation
+}
+
+const useEditItemPurchasedLocation = () => {
+    const queryClient = useQueryClient()
+    const editMutation = useMutation({
+        mutationFn: (data) => editItemPurchasedLocation(data),
+        onMutate: async (props) => {
+            console.log("on mutate name")
+            console.log(props)
+        },
+        onSuccess: (props) => {
+            console.log('mutate success')
+            console.log(props)
+            return queryClient.invalidateQueries(['items'])
+        },
+        onError: (props) => {
+            console.log('mutate error')
+        }
+       })
+    return editMutation
+}
+
+const useEditItemPurchasedDate = () => {
+    const queryClient = useQueryClient()
+    const editMutation = useMutation({
+        mutationFn: (data) => editItemPurchasedDate(data),
+        onMutate: async (props) => {
+            console.log("on mutate name")
+            console.log(props)
+        },
+        onSuccess: (props) => {
+            console.log('mutate success')
+            console.log(props)
+            return queryClient.invalidateQueries(['items'])
+        },
+        onError: (props) => {
+            console.log('mutate error')
+        }
+       })
+    return editMutation
+}
+
+const useEditItemCost = () => {
+    const queryClient = useQueryClient()
+    const editMutation = useMutation({
+        mutationFn: (data) => editItemCost(data),
+        onMutate: async (props) => {
+            console.log("on mutate name")
+            console.log(props)
+        },
+        onSuccess: (props) => {
+            console.log('mutate success')
+            console.log(props)
+            return queryClient.invalidateQueries(['items'])
+        },
+        onError: (props) => {
+            console.log('mutate error')
+        }
+       })
+    return editMutation
+}
+
 
   export { useItemGroups, useDeleteItemGroup, useAddItemGroup, useEditItemGroupName, useEditItemGroupNote,
-useItems, useDeleteItem, useAddItem
+useItems, useDeleteItem, useAddItem, useEditItemName, useEditItemNote, useEditItemPurchasedLocation,
+useEditItemPurchasedDate, useEditItemCost
 }

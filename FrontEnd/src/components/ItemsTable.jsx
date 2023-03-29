@@ -1,13 +1,17 @@
 import React, { useMemo, useState } from 'react'
 import { Test } from './Test'
 import { Link } from 'react-router-dom';
-import { useItems, useDeleteItem, useEditItemGroupName, useEditItemGroupNote } from '../data/stuff/useStuff'
+import { useItems, useDeleteItem, useEditItemGroupName, useEditItemGroupNote,
+    useEditItemName, useEditItemNote, useEditItemPurchasedLocation,
+    useEditItemPurchasedDate, useEditItemCost } from '../data/stuff/useStuff'
 
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { FilterMatchMode, PrimeIcons } from 'primereact/api';
 import { InputText } from 'primereact/inputtext';
-        
+import DatePicker from 'react-datepicker'
+import 'react-datepicker/dist/react-datepicker.css'
+import { parseISO, format } from 'date-fns';
 
 //theme
 import "primereact/resources/themes/lara-light-indigo/theme.css";     
@@ -38,9 +42,13 @@ const ItemsTable = (props) => {
 
     const itemsQuery = useItems(group_id);
     const deleteItemMutation = useDeleteItem();
-    const editGroupNameMutation = useEditItemGroupName()
-    const editGroupNoteMutation = useEditItemGroupNote()
-
+    //const editGroupNameMutation = useEditItemGroupName()
+    //const editGroupNoteMutation = useEditItemGroupNote()
+    const editItemNameMutation = useEditItemName()
+    const editItemNoteMutation = useEditItemNote()
+    const editItemPurchasedLocationMutation = useEditItemPurchasedLocation()
+    const editItemPurchasedDateMutation = useEditItemPurchasedDate()
+    const editItemCostMutation = useEditItemCost()
     const rowData = itemsQuery.data;
 
     const colData = [
@@ -71,6 +79,13 @@ const ItemsTable = (props) => {
       const onCellEditChange = (options) => (event) => {
         options.editorCallback(event.target.value);
       };
+
+      const onDateCellEditChange = (options) => (event) => {
+        console.log(event);
+        options.editorCallback(event);
+      };
+
+
       const cellEditor = (options) => {
         return (
           <InputText
@@ -79,15 +94,36 @@ const ItemsTable = (props) => {
           />
         );
       };
+      const dateCellEditor = (options) => {
+        console.log(`Edit: ${options.value}`)
+        const thisDate = parseISO(options.value); // formatDate(options.value)
+        console.log(thisDate)
+        return (
+            <DatePicker
+                selected={thisDate}
+                dateFormat="yyyy-MM-dd"
+                onChange={onDateCellEditChange(options)}
+            />
+        );
+      };
       const onCellEditComplete = (e) => {
         let { rowData, newValue, field, originalEvent: event } = e;
-        let group_id = rowData['id'];
-        console.log(`EDIT CELL (${field}) COMPLETE: ${newValue}, ID: ${group_id}`)
-        if (field == "group_name") {
-            editGroupNameMutation.mutate({'group_id': group_id, 'group_name': newValue})
+        let item_id = rowData['id'];
+        console.log(`EDIT CELL (${field}) COMPLETE: ${newValue}, ID: ${item_id}`)
+        if (field == "item_name") {
+            editItemNameMutation.mutate({'item_id': item_id, 'item_name': newValue})
         }
         if (field == "notes") {
-            editGroupNoteMutation.mutate({'group_id': group_id, 'note': newValue})
+            editItemNoteMutation.mutate({'item_id': item_id, 'note': newValue})
+        }
+        if (field == "purchased_location") {
+            editItemPurchasedLocationMutation.mutate({'item_id': item_id, 'purchased_location': newValue})
+        }
+        if (field == "date_purchased") {
+            editItemPurchasedDateMutation.mutate({'item_id': item_id, 'purchase_date': newValue})
+        }
+        if (field == "amount_paid") {
+            editItemCostMutation.mutate({'item_id': item_id, 'amount_paid': newValue})
         }
       };      
     
@@ -123,11 +159,22 @@ const ItemsTable = (props) => {
 
 <DataTable value={rowData} showGridlines stripedRows size={size} filters={filters} tableStyle={{ minWidth: '50rem' }}>
        {/* <Column key='id' field='id' header='ID' sortable/> */}
-        <Column field='item_name' header='Item' sortable/>
-        <Column field='notes' header='Note' sortable/>
-        <Column field='purchased_location' header='Purchase Location' sortable/>
-        <Column field='date_purchased' header='Purchase Date' sortable body={displayDatePurchased} />
-        <Column field='amount_paid' header='Cost' sortable/>
+        <Column field='item_name' header='Item' sortable 
+                    editor={(options) => cellEditor(options)}
+                    onCellEditComplete={onCellEditComplete}
+        />
+        <Column field='notes' header='Note' sortable 
+                    editor={(options) => cellEditor(options)}
+                    onCellEditComplete={onCellEditComplete} />
+        <Column field='purchased_location' header='Purchase Location' sortable 
+                    editor={(options) => cellEditor(options)}
+                    onCellEditComplete={onCellEditComplete} />
+        <Column field='date_purchased' header='Purchase Date' sortable body={displayDatePurchased} 
+                    editor={(options) => dateCellEditor(options)}
+                    onCellEditComplete={onCellEditComplete} />
+        <Column field='amount_paid' header='Cost' sortable 
+                    editor={(options) => cellEditor(options)}
+                    onCellEditComplete={onCellEditComplete} />
         { /*
         <Column field='created' header='Created' sortable body={displayCreated} />
         <Column field='updated' header='Updated' sortable body={displayUpdated} />
