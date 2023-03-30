@@ -1,6 +1,6 @@
 import { useLocation } from 'react-router-dom'
 import { AddStuffForm } from '../test/AddStuffForm'
-import { StuffGroupItems } from '../components/StuffGroupItems'
+import { StuffGroupItems } from '../test/StuffGroupItems'
 
 
 export function StuffItems()  {

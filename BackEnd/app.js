@@ -13,13 +13,21 @@ import logout_route from './routes/logout.js'
 import credentials from './middleware/credentials.js'
 import corsOptions from './config/corsOptions.js'
 
+const is_admin = (roles) => {
+  let result = false;
+  if (roles.includes(2001))
+  {
+      result = true;
+  }
+  return result
+}
+
+
 const app = express()
 
 app.use(credentials);
 
 app.use(cors(corsOptions));
-
-
 
 app.use(express.json()) 
 
@@ -275,18 +283,46 @@ app.get('/delete_user/:user_id', async (req, res) => {
   console.log("GET: /delete_user");
   const  user_id  = req.params.user_id
   console.log(JSON.stringify(req.body));
-  // MUST BE AN ADMIN (role=2001) TO DO THIS
-  const roles = req.jwt_roles;
-  console.log(roles);
-  let is_admin = false;
-  if (roles == 2001) {
-    is_admin = true;
-  }
 
-  //const result = await delete_user({ 'user_id': user_id, 'item_id': item_id })
-  res.send({"admin": is_admin});
+  // MUST BE AN ADMIN TO DO THIS
+  let result = {'success': false, 'message': 'Not allowed.'}
+  if (is_admin(req.jwt_roles)) {
+    console.log("deleting user")
+    result = await delete_user({ 'user_id': user_id})
+  }
+  res.send(result)
 });
 
+app.post('/edit_user_roles', async (req, res) => {
+  console.log("POST: /edit_user_roles");
+  console.log(JSON.stringify(req.body));
+  const { user_id, roles } = req.body;
+  // MUST BE AN ADMIN TO DO THIS
+  let result = {'success': false, 'message': 'Not allowed.'}
+  if (is_admin(req.jwt_roles)) {
+    result = await update_user_roles({ 'user_id': user_id, 'roles': roles });
+  }
+    
+  res.send(result);
+});
+
+/* 
+THIS IS FOR AN ADMIN CHANGING A USER'S EMAIL ADDRESS.  NOT NORMALLY RECOMMENDED. 
+*/
+app.post('/edit_user_email', async (req, res) => {
+  console.log("POST: /edit_user_email");
+  console.log(JSON.stringify(req.body));
+  const { user_id, email } = req.body;
+  // MUST BE AN ADMIN TO DO THIS
+  let result = {'success': false, 'message': 'Not allowed.'}
+  if (is_admin(req.jwt_roles)) {
+    result = await update_email_address({ 'user_id': user_id, 'email': email });
+  }
+    
+  res.send(result);
+});
+
+/* THIS IS FOR A USER CHANGING HIS OWN EMAIL ADDRESS */
 app.post('/update_email_address', async (req, res) => {
   console.log("POST: update_email_address");
   console.log(JSON.stringify(req.body));

@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom';
-import { useItemGroups, useDeleteItemGroup, useEditItemGroupName, useEditItemGroupNote } from '../data/stuff/useStuff'
+import { useUsers, useDeleteUser, useEditUserRoles, useEditUserEmail } from '../data/user/useUser'
 
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
@@ -27,26 +27,21 @@ function formatDate(date_string)
     return result;
 }
 
-const ItemGroupsTable = () => {
+
+const UsersTable2 = () => {
 
     const [filters, setFilters] = useState({
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
     })
 
-    const groupQuery = useItemGroups();
-    const deleteGroupMutation = useDeleteItemGroup();
-    const editGroupNameMutation = useEditItemGroupName()
-    const editGroupNoteMutation = useEditItemGroupNote()
+    const usersQuery = useUsers();
+    const deleteUserMutation = useDeleteUser();
+    const editUserEmailMutation = useEditUserEmail()
+    const editUserRolesMutation = useEditUserRoles()
 
-    const groupData = groupQuery.data;
+    const rowData = usersQuery.data;
 
-    const rowData = groupData;
-    const colData = [
-        {field: 'group_name', key: 'id', header: "Group"},
-        {field: 'notes', key: 'id', header: "Notes"},
-    ]
-
-    const actionTemplate = (rowData) => {
+    const deleteColumn = (rowData) => {
         return (
           <div className="deleteAction">
             <span className="actionIcons delete-role">
@@ -57,7 +52,7 @@ const ItemGroupsTable = () => {
                 aria-hidden="true"
                 onClick={(e) => {
                     //console.log(`DELETE ACTION ${rowData.id}`);
-                    deleteGroupMutation.mutate(rowData.id)
+                    deleteUserMutation.mutate(rowData.id)
                 }}
               />
             </span>
@@ -78,16 +73,26 @@ const ItemGroupsTable = () => {
       };
       const onCellEditComplete = (e) => {
         let { rowData, newValue, field, originalEvent: event } = e;
-        let group_id = rowData['id'];
-        console.log(`EDIT CELL (${field}) COMPLETE: ${newValue}, ID: ${group_id}`)
-        if (field == "group_name") {
-            editGroupNameMutation.mutate({'group_id': group_id, 'group_name': newValue})
+        let user_id = rowData['id'];
+        console.log(`EDIT CELL (${field}) COMPLETE: ${newValue}, ID: ${user_id}`)
+        if (field == "roles") {
+            editUserRolesMutation.mutate({'user_id': user_id, 'roles': newValue})
         }
-        if (field == "notes") {
-            editGroupNoteMutation.mutate({'group_id': group_id, 'note': newValue})
+        if (field == "email") {
+            editUserEmailMutation.mutate({'user_id': user_id, 'email': newValue})
         }
       };      
     
+      let displayLastLogin = (rowData) => {  
+        let value = rowData.last_login;
+        return formatDate(value);
+      }
+
+      let displayEmailConfirmed = (rowData) => {  
+        let value = rowData.email_confirmed;
+        return formatDate(value);
+      }
+
       let displayUpdated = (rowData) => {  
         let value = rowData.updated;
         return formatDate(value);
@@ -100,13 +105,13 @@ const ItemGroupsTable = () => {
 
       let displayDetails = (rowData) => {
         let id = rowData.id;
-        return <Link to={`/stuff/${id}`}>details</Link>
+        return <Link to={`/user/${id}`}>details</Link>
       }
 
     let size = "small"
-    if (groupQuery.isLoading) return <h1>Loading...</h1>
-    if (groupQuery.isError) {
-        return <pre>{JSON.stringify(groupQuery.error)}</pre>
+    if (usersQuery.isLoading) return <h1>Loading...</h1>
+    if (usersQuery.isError) {
+        return <pre>{JSON.stringify(usersQuery.error)}</pre>
     }
     return  <>
 
@@ -119,15 +124,22 @@ const ItemGroupsTable = () => {
 
 
 <DataTable value={rowData} showGridlines stripedRows size={size} filters={filters} tableStyle={{ minWidth: '50rem' }}>
-    {colData.map((col, i) => (
-            <Column key={col.field} field={col.field} header={col.header} sortable
-            editor={(options) => cellEditor(options)}
-            onCellEditComplete={onCellEditComplete}
-            />
-    ))} 
+
+        <Column field='id' header='ID' sortable />
+        <Column field='email' header='Email' sortable 
+                editor={(options) => cellEditor(options)}
+                onCellEditComplete={onCellEditComplete} />     
+
+        <Column field='roles' header='Roles' sortable
+        editor={(options) => cellEditor(options)}
+        onCellEditComplete={onCellEditComplete} />
+        <Column field='last_login' header='Last Login' sortable body={displayLastLogin} />
+        <Column field='n_logins' header='Total Logins' sortable />
+        <Column field='email_confimed' header='Email Confirmed' sortable body={displayEmailConfirmed} />   
+
         <Column field='created' header='Created' sortable body={displayCreated} />
-        <Column field='updated' header='Updated' sortable body={displayUpdated} />
-        <Column body={actionTemplate} />
+
+        <Column body={deleteColumn} />
         <Column body={displayDetails} />
 
 </DataTable>
@@ -138,5 +150,5 @@ const ItemGroupsTable = () => {
   }
 
 
-export {ItemGroupsTable}
+export {UsersTable2}
 

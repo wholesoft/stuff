@@ -420,7 +420,7 @@ export async function get_user_id_from_password_token(password_token) {
     return user_id; 
 }
 
-    export async function delete_user(user_id) {
+    export async function delete_user(props) {
         // This deletes the user from the User Database
         // and doesn't check for orphaned records elsewhere.
         let success = false;
@@ -459,7 +459,7 @@ export async function get_user_id_from_password_token(password_token) {
        // VALIDATE INPUT
        const schema = joi.object({
            user_id: joi.number().integer().required(),
-           roles:  joi.string().email().required()
+           roles:  joi.string().required()
          });
    
        const { error, value } = schema.validate(props); 
@@ -469,10 +469,7 @@ export async function get_user_id_from_password_token(password_token) {
          message = "Vaidation Error (" + error.details[0].message + ")";
          validation_okay = false;
        }
-   
-       const salt = await bcrypt.genSalt(12);
-       const hashed_password = await bcrypt.hash(props.password, salt);
-   
+    
        // UPDATE THE USER'S ROLES
        if (validation_okay) {
            const result = await pool.query(`

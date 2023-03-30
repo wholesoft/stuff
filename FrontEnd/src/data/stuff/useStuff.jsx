@@ -108,7 +108,7 @@ const useItems = (group_id) => {
 
 const useDeleteItem = () => {
     const queryClient = useQueryClient()
-    const deleteGroupMutation = useMutation({
+    const deleteMutation = useMutation({
         mutationFn: (item_id) => deleteItem(item_id),
         onMutate: async (props) => {
             console.log("on mutate")
@@ -123,7 +123,7 @@ const useDeleteItem = () => {
             console.log('mutate error')
         }
        })
-    return deleteGroupMutation
+    return deleteMutation
 }
 
 const useAddItem = (data) => {

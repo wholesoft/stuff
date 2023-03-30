@@ -1,4 +1,4 @@
-import { Link, NavLink } from "react-router-dom";
+import  { UsersTable2 } from '../components/UsersTable2';
 import  { UsersTable } from '../components/UsersTable';
 
 const Admin = () => {
@@ -6,7 +6,7 @@ const Admin = () => {
         <section>
             <h1>Admin Page</h1>
             <br />
-            <UsersTable />
+            <UsersTable2 />
         </section>
     )
 }
