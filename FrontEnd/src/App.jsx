@@ -6,6 +6,7 @@ import { Login } from './pages/Login'
 import { ForgotPassword } from './pages/ForgotPassword'
 import { ResetPassword } from './pages/ResetPassword'
 import { PleaseConfirmEmail } from './pages/PleaseConfirmEmail'
+import { ConfirmEmail } from './pages/ConfirmEmail'
 import { RegistrationConfirmed } from './pages/RegistrationConfirmed'
 import { Account } from './pages/Account'
 import { UsersTable } from './components/UsersTable'
@@ -51,6 +52,7 @@ function App() {
         <Route path="/unconfirmed" element={<PleaseConfirmEmail />} />
         <Route path="/linkpage" element={<LinkPage />} />
         <Route path="/unauthorized" element={<Unauthorized />} />
+        <Route path="/confirm/:token" element={<ConfirmEmail />} />
 
         {/* we want to protect these routes */}
         <Route element={<PersistLogin />}> 

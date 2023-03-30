@@ -1,5 +1,5 @@
 import { Link, NavLink } from "react-router-dom";
-import  { UserInfo } from '../components/UserInfo';
+import  { UserInfo } from '../test/UserInfo';
 
 const ShowUser = () => {
     return (

@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { getUsers, deleteUser, editUserRoles, editUserEmail } from './apiUser'
+import { getUsers, deleteUser, editUserRoles, editUserEmail, confirmEmail } from './apiUser'
 
 const useUsers = () => {
     const getQuery = useQuery({
@@ -69,7 +69,28 @@ const useEditUserRoles = () => {
     return editMutation
 }
 
+const useConfirmEmail = (setMessage) => {
+    const queryClient = useQueryClient()
+    const editMutation = useMutation({
+        mutationFn: (token) => confirmEmail(token),
+        onMutate: async (props) => {
+            console.log("on mutate confirm email")
+            console.log(props)
+        },
+        onSuccess: (props) => {
+            console.log('mutate success')
+            console.log(props)
+            setMessage(JSON.stringify(props))
+            queryClient.invalidateQueries(['users'])            
+            return props
+        },
+        onError: (props) => {
+            console.log('mutate error')
+        }
+       })
+    return editMutation
+}
 
 
 
-export { useUsers, useDeleteUser, useEditUserEmail, useEditUserRoles }
+export { useUsers, useDeleteUser, useEditUserEmail, useEditUserRoles, useConfirmEmail }

@@ -266,9 +266,9 @@ export async function send_email_confirmation_request(email)
 
     // just let them use the salt as the id, should probably change this to some other random text
     let email_html = `Please click the link below to confirm your email.<br />
-    <br /><a href='${process.env.FRONT_END_FULL_DOMAIN}/confirm/?id=${encodedToken}'>confirm email</a>`;
+    <br /><a href='${process.env.FRONT_END_FULL_DOMAIN}/confirm/${encodedToken}'>confirm email</a>`;
     let email_plain = `Please click the link below to confirm your email./n
-    /n<${process.env.FRONT_END_FULL_DOMAIN}/confirm/?id=${encodedToken}`;
+    /n<${process.env.FRONT_END_FULL_DOMAIN}/confirm/${encodedToken}`;
 
     var mailOptions = {
         from: process.env.EMAIL_FROM,
@@ -317,18 +317,19 @@ export async function send_email_confirmation_request(email)
   }
 
   export async function confirm_email(key){
-
+    let success = false;
+    let message = "Error." 
     await pool.query(`UPDATE Users 
     SET email_confirmed=CURRENT_TIMESTAMP WHERE email_confirm_token=? AND email_confirmed IS NULL`, [key]);
 
     const rows = await pool.query("SELECT id FROM Users WHERE email_confirm_token=?", [key]);
 
-    let result = "Error";
     if (rows[0].length > 0)
     {
-        result = "Email confirmed.  Thank you!";
+        message = "Email confirmed.  Thank you!";
+        success = true
     }
-    return result
+    return { "success": success, "message": message };
   }
 
  export async function login_user(props){ 

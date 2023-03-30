@@ -87,8 +87,8 @@ app.post("/register", async (req, res) => {
   res.send(response)
 });
 
-app.get('/confirm', async (req, res) => {
-  const key = req.query.id
+app.get('/confirm/:key', async (req, res) => {
+  const key = req.params.key
   const result = await confirm_email(key)
   res.send(result);
 });
@@ -123,6 +123,8 @@ app.post('/update_password_with_token', async (req, res) => {
 
  
 
+
+
 app.use(verifyJWT);
 /*
    Middleware verifies/decodes auth token and inserts values into the request handler:
@@ -131,11 +133,7 @@ app.use(verifyJWT);
 */
 
 
-app.get('/users/:id', async (req, res) => {  
-  const id = req.params.id
-  const user = await getUser(id)
-  res.send(user);
-});
+
 
 // TODO: LIMIT PERMISSIONS ONLY TO THINGS THE USER HAS ACCESS TO
 // REGULAR USERS SHOULD ONLY BE ABLE TO ACCESS THEIR OWN INFO
@@ -285,6 +283,16 @@ app.get('/delete_user/:user_id', async (req, res) => {
   console.log(JSON.stringify(req.body));
 
   // MUST BE AN ADMIN TO DO THIS
+
+  app.get('/users/:id', async (req, res) => {  
+    const id = req.params.id
+    let result = {'success': false, 'message': 'Not allowed.'}
+    if (is_admin(req.jwt_roles)) {
+      result = await getUser(id)
+    }
+    res.send(result)
+  });
+
   let result = {'success': false, 'message': 'Not allowed.'}
   if (is_admin(req.jwt_roles)) {
     console.log("deleting user")

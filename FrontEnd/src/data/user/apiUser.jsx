@@ -34,6 +34,13 @@ const editUserEmail = async (props) => {
     return response
 }
 
+const confirmEmail = async (token) => {
+    const url = `/confirm/${token}`
+    console.log(url)
+    const response = await axiosAuth.get(url);
+    console.log(response.data);
+    return response.data;
+}
 
 
-export { getUsers, deleteUser, editUserRoles, editUserEmail }
+export { getUsers, deleteUser, editUserRoles, editUserEmail, confirmEmail }

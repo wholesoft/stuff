@@ -8,14 +8,8 @@ import { FilterMatchMode, PrimeIcons } from 'primereact/api';
 import { InputText } from 'primereact/inputtext';
         
 
-//theme
-import "primereact/resources/themes/lara-light-indigo/theme.css";     
-    
-//core
-import "primereact/resources/primereact.min.css";
 
-//icons
-import "primeicons/primeicons.css"; 
+
 
 function formatDate(date_string)
 {
@@ -140,7 +134,7 @@ const UsersTable2 = () => {
         <Column field='created' header='Created' sortable body={displayCreated} />
 
         <Column body={deleteColumn} />
-        <Column body={displayDetails} />
+        {/* <Column body={displayDetails} /> */}
 
 </DataTable>
 

@@ -1,22 +1,36 @@
+import { useState } from 'react'
 import { Outlet } from "react-router-dom"
 import useAuth from '../hooks/useAuth'
+import { Sidebar } from 'primereact/sidebar';
+import { Button } from 'primereact/button';
+import { Menu } from 'primereact/menu'
 
 const Layout = () => {
+
+    const [ activeSidebar, setActiveSidebar ] = useState(false)
+    const items = [
+        {label: 'New', icon: 'pi pi-fw pi-plus'},
+        {label: 'Delete', icon: 'pi pi-fw pi-trash'}
+    ]
     const { auth } = useAuth();
 
+
     return (
-        <div className='wrapper'>
-        <div className='logo'><a href='/'>Stuff</a></div>
-        <div className='login'>{ auth?.email 
-        ? <a href='/account'>{auth.email}</a>
-        : <a href='/login/'>login</a>
-        }</div>
-        <article className='content'>
+        <div className='App'>
+            <div className='topbar shadow-2 px-2 py-1'>
+                <Button icon="pi pi-bars" className="p-button-rounded" onClick={() => setActiveSidebar(true) } />                
+            </div>
+        
+        <article className='content p-3'>
             <Outlet />
         </article>
-        <aside className='side'>SIDE 1</aside>
-        <aside className='side2'>SIDE 2</aside>
+
         <footer className='main-footer'><a href='/'>Stuff</a></footer>
+
+        <Sidebar visible={activeSidebar} onHide={() => setActiveSidebar(false)}>
+        <Menu model={items} />
+        </Sidebar>
+
         </div>
     )
 }
