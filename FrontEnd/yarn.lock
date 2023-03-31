@@ -643,6 +643,11 @@
     "picocolors" "^1.0.0"
     "source-map-js" "^1.0.2"
 
+"prettier@2.8.7":
+  "integrity" "sha512-yPngTo3aXUUmyuTjeTUT75txrf+aMh9FiD7q9ZE/i6r0bPb22g4FsE6Y338PQX1bmfy08i9QQCB7/rcUAVntfw=="
+  "resolved" "https://registry.npmjs.org/prettier/-/prettier-2.8.7.tgz"
+  "version" "2.8.7"
+
 "primeflex@^3.3.0":
   "integrity" "sha512-4hvyIO7lERN5bnyURn67Qpozghins8Jq/GSXO6tymc3oa2ADHWuiYBti8ZptPwHu+uD/HTEisS26NEmeIGfPZQ=="
   "resolved" "https://registry.npmjs.org/primeflex/-/primeflex-3.3.0.tgz"
