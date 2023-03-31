@@ -142,7 +142,7 @@ const useDeleteItem = () => {
   return deleteMutation
 }
 
-const useAddItem = (data) => {
+const useAddItem = (toastRef) => {
   const queryClient = useQueryClient()
   const addMutation = useMutation({
     mutationFn: (data) => addItem(data),
@@ -153,6 +153,11 @@ const useAddItem = (data) => {
     onSuccess: (props) => {
       console.log("mutate success")
       console.log(props)
+      toastRef.current.show({
+        severity: "info",
+        summary: "Saved",
+        detail: "Item Saved.",
+      })
       return queryClient.invalidateQueries(["items"])
     },
     onError: (props) => {

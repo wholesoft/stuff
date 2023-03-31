@@ -18,6 +18,13 @@ const NavigationMenu = () => {
         navigate("/account")
       },
     },
+    ,
+    {
+      label: "Admin",
+      command: () => {
+        navigate("/admin")
+      },
+    },
   ]
 
   return (
