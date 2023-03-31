@@ -73,8 +73,8 @@ const UpdatePassword = (props) => {
 
   return (
     <>
-      <form onSubmit={handleSubmit}>
-        <Card title="Update Password" className="col-12 md:col-6">
+      <Card title="Update Password" className="mr-4 mb-4 col-12 md:col-5">
+        <form onSubmit={handleSubmit}>
           <div className="p-fluid">
             <span className="p-float-label mt-1">
               <Password
@@ -102,11 +102,11 @@ const UpdatePassword = (props) => {
               <label htmlFor="confirm_password">Confirm Password</label>
             </span>
           </div>
-          <Button label="Update" />
-        </Card>
-      </form>
-      <Toast ref={toastRef} />
-      <p>{responseMessage}</p>
+          <Button label="Update" icon="pi pi-check" className="mt-2" />
+        </form>
+        <Toast ref={toastRef} />
+        <p>{responseMessage}</p>
+      </Card>
     </>
   )
 }

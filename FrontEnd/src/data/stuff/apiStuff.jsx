@@ -1,126 +1,136 @@
-import { axiosAuth } from '../axios'
+import { axiosAuth } from "../axios"
 
 /* ITEM GROUPS */
 
-const getItemGroups = async () => { 
-    const url = `/stuff_groups`;
-    const response = await axiosAuth.get(url);
-    return response.data;
+const getItemGroups = async () => {
+  const url = `/stuff_groups`
+  const response = await axiosAuth.get(url)
+  return response.data
 }
 
 const deleteItemGroup = async (group_id) => {
-    const url = `/delete_group/${group_id}`
-    const response = await axiosAuth.get(url);
-    console.log(response.data);
-    return response.data;
+  const url = `/delete_group/${group_id}`
+  const response = await axiosAuth.get(url)
+  console.log(response.data)
+  return response.data
 }
 
 const addItemGroup = async (props) => {
-    const { group, notes } = props
-    const url = '/add_stuff_group'
-    const data = JSON.stringify({group, notes })
-    const response = await axiosAuth.post(url, data)
-    console.log(response)
-    return response
+  const { group, notes } = props
+  const url = "/add_stuff_group"
+  const data = JSON.stringify({ group, notes })
+  const response = await axiosAuth.post(url, data)
+  console.log(response)
+  return response
 }
 
-const editGroupName = async ( props) => {
-    console.log("editGroupName")
-    console.log(props)
-    const { id, group_name } = props
-    const url = '/edit_stuff_group_name'
-    const data = JSON.stringify({id, group_name })
-    const response = await axiosAuth.post(url, props)
-    console.log(response)
-    return response
+const editGroupName = async (props) => {
+  console.log("editGroupName")
+  console.log(props)
+  const { id, group_name } = props
+  const url = "/edit_stuff_group_name"
+  const data = JSON.stringify({ id, group_name })
+  const response = await axiosAuth.post(url, props)
+  console.log(response)
+  return response
 }
 
-const editGroupNote = async ( props) => {
-    console.log("editGroupNote")
-    const { id, note } = props
-    const url = '/edit_stuff_group_note'
-    const data = JSON.stringify({id, note })
-    const response = await axiosAuth.post(url, props)
-    console.log(response)
-    return response
+const editGroupNote = async (props) => {
+  console.log("editGroupNote")
+  const { id, note } = props
+  const url = "/edit_stuff_group_note"
+  const data = JSON.stringify({ id, note })
+  const response = await axiosAuth.post(url, props)
+  console.log(response)
+  return response
 }
 
 /* ITEMS */
-const getItems = async (group_id) => { 
-    console.log(group_id);
-    const url = `/stuff/${group_id}`;
-    console.log(url)
-    const response = await axiosAuth.get(url);
-    return response.data;
+const getItems = async (group_id) => {
+  console.log(group_id)
+  const url = `/stuff/${group_id}`
+  console.log(url)
+  const response = await axiosAuth.get(url)
+  return response.data
 }
 
 const deleteItem = async (item_id) => {
-    const url = `/delete_item/${item_id}`
-    const response = await axiosAuth.get(url);
-    console.log(response.data);
-    return response.data;
+  const url = `/delete_item/${item_id}`
+  const response = await axiosAuth.get(url)
+  console.log(response.data)
+  return response.data
 }
 
 const addItem = async (props) => {
-    const { group, notes } = props
-    const url = '/add_stuff_item'
-    //const data = JSON.stringify({group, notes })
-    const response = await axiosAuth.post(url, props)
-    console.log(response)
-    return response
+  const url = "/add_stuff_item"
+  console.log(props)
+  const response = await axiosAuth.post(url, props)
+  console.log(response)
+  return response
 }
 
-const editItemName = async ( props) => {
-    console.log("editItemName")
-    const { item_id, item_name } = props
-    const url = '/edit_item_name'
-    const data = JSON.stringify({item_id, item_name })
-    const response = await axiosAuth.post(url, props)
-    console.log(response)
-    return response
+const editItemName = async (props) => {
+  console.log("editItemName")
+  const { item_id, item_name } = props
+  const url = "/edit_item_name"
+  const data = JSON.stringify({ item_id, item_name })
+  const response = await axiosAuth.post(url, props)
+  console.log(response)
+  return response
 }
 
-const editItemNote = async ( props) => {
-    console.log("editItemNote")
-    const { item_id, note } = props
-    const url = '/edit_item_note'
-    const data = JSON.stringify({item_id, note })
-    const response = await axiosAuth.post(url, props)
-    console.log(response)
-    return response
+const editItemNote = async (props) => {
+  console.log("editItemNote")
+  const { item_id, note } = props
+  const url = "/edit_item_note"
+  const data = JSON.stringify({ item_id, note })
+  const response = await axiosAuth.post(url, props)
+  console.log(response)
+  return response
 }
 
-const editItemPurchasedLocation = async ( props) => {
-    console.log("editItemPurchasedLocation")
-    const { item_id, purchased_location } = props
-    const url = '/edit_item_purchased_location'
-    const data = JSON.stringify({item_id, purchased_location })
-    const response = await axiosAuth.post(url, props)
-    console.log(response)
-    return response
+const editItemPurchasedLocation = async (props) => {
+  console.log("editItemPurchasedLocation")
+  const { item_id, purchased_location } = props
+  const url = "/edit_item_purchased_location"
+  const data = JSON.stringify({ item_id, purchased_location })
+  const response = await axiosAuth.post(url, props)
+  console.log(response)
+  return response
 }
 
-const editItemPurchasedDate = async ( props) => {
-    console.log("editItemPurchasedDate")
-    const { item_id, purchase_date } = props
-    const url = '/edit_item_purchased_date'
-    const data = JSON.stringify({item_id, purchase_date })
-    const response = await axiosAuth.post(url, props)
-    console.log(response)
-    return response
+const editItemPurchasedDate = async (props) => {
+  console.log("editItemPurchasedDate")
+  const { item_id, purchase_date } = props
+  const url = "/edit_item_purchased_date"
+  const data = JSON.stringify({ item_id, purchase_date })
+  const response = await axiosAuth.post(url, props)
+  console.log(response)
+  return response
 }
 
-const editItemCost = async ( props) => {
-    console.log("editItemCost")
-    const { item_id, amount_paid } = props
-    const url = '/edit_item_cost'
-    const data = JSON.stringify({item_id, amount_paid })
-    const response = await axiosAuth.post(url, props)
-    console.log(response)
-    return response
+const editItemCost = async (props) => {
+  console.log("editItemCost")
+  const { item_id, amount_paid } = props
+  const url = "/edit_item_cost"
+  const data = JSON.stringify({ item_id, amount_paid })
+  const response = await axiosAuth.post(url, props)
+  console.log(response)
+  return response
 }
 
-export { getItemGroups, deleteItemGroup, addItemGroup, editGroupName, editGroupNote,
-getItems, deleteItem, addItem, editItemName, editItemNote, editItemPurchasedLocation,
-editItemPurchasedDate, editItemCost
+export {
+  getItemGroups,
+  deleteItemGroup,
+  addItemGroup,
+  editGroupName,
+  editGroupNote,
+  getItems,
+  deleteItem,
+  addItem,
+  editItemName,
+  editItemNote,
+  editItemPurchasedLocation,
+  editItemPurchasedDate,
+  editItemCost,
 }
