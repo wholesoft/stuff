@@ -1,14 +1,43 @@
 body {
-    margin: 0;
-    padding: 0;
-    font-family: 'Open Sans', sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    background-color: var(--surface-0);
-    color: var(--text-color);
+  margin: 0;
+  padding: 0;
+  font-family: "Open Sans", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--surface-0);
+  color: var(--text-color);
 }
 
+/* CSS GRID */
+/* CSS GRID START */
+
 .topbar {
-    height: 60px;
-    background-color: var(--blue-200);
+  grid-area: header;
+  height: 60px;
+  background-color: var(--blue-200);
 }
+
+.content {
+  grid-area: content;
+}
+.footer {
+  grid-area: footer;
+  background-color: var(--blue-200);
+  text-align: center;
+  height: 60px;
+}
+
+.footer a {
+  color: var(--blue-800);
+}
+
+.wrapper {
+  display: grid;
+  gap: 0px;
+  grid-template-areas:
+    "header"
+    "content"
+    "footer";
+}
+
+/* END CSS GRID */
