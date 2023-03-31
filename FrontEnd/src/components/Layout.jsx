@@ -3,14 +3,11 @@ import { Outlet } from "react-router-dom"
 import useAuth from "../hooks/useAuth"
 import { Sidebar } from "primereact/sidebar"
 import { Button } from "primereact/button"
-import { Menu } from "primereact/menu"
+import { NavigationMenu } from "./NavigationMenu"
 
 const Layout = () => {
   const [activeSidebar, setActiveSidebar] = useState(false)
-  const items = [
-    { label: "New", icon: "pi pi-fw pi-plus" },
-    { label: "Delete", icon: "pi pi-fw pi-trash" },
-  ]
+
   const { auth } = useAuth()
 
   return (
@@ -32,7 +29,7 @@ const Layout = () => {
       </footer>
 
       <Sidebar visible={activeSidebar} onHide={() => setActiveSidebar(false)}>
-        <Menu model={items} />
+        <NavigationMenu />
       </Sidebar>
     </div>
   )

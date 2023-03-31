@@ -4,6 +4,7 @@ import { InputText } from "primereact/inputtext"
 import { InputTextarea } from "primereact/inputtextarea"
 import { Button } from "primereact/button"
 import { Toast } from "primereact/toast"
+import { Card } from "primereact/card"
 
 const AddGroupForm = (props) => {
   const { data } = props
@@ -37,33 +38,34 @@ const AddGroupForm = (props) => {
   }
   return (
     <>
-      <form onSubmit={handleSubmit}>
-        <div className="p-fluid mt-5">
-          <span className="p-float-label">
-            <InputText
-              id="group"
-              type="text"
-              value={form.group}
-              onChange={handleChange}
-              autocomplete="off"
-            />
-            <label htmlFor="group">Group Name</label>
-          </span>
+      <Card title="Add Group" className="col-12 md:col-6">
+        <form onSubmit={handleSubmit}>
+          <div className="p-fluid">
+            <span className="p-float-label">
+              <InputText
+                id="group"
+                type="text"
+                value={form.group}
+                onChange={handleChange}
+                autocomplete="off"
+              />
+              <label htmlFor="group">Group Name</label>
+            </span>
 
-          <span className="p-float-label mt-4">
-            <InputTextarea
-              id="notes"
-              value={form.notes}
-              onChange={handleChange}
-              rows={5}
-              cols={30}
-            />
-            <label htmlFor="notes">Notes</label>
-          </span>
-        </div>
-        <Button label="Save" />
-      </form>
-      <p>{responseMessage}</p>
+            <span className="p-float-label mt-4">
+              <InputTextarea
+                id="notes"
+                value={form.notes}
+                onChange={handleChange}
+                rows={5}
+                cols={30}
+              />
+              <label htmlFor="notes">Notes</label>
+            </span>
+          </div>
+          <Button label="Save" />
+        </form>
+      </Card>
       <Toast ref={toastRef} />
     </>
   )
