@@ -10,6 +10,10 @@ const Layout = () => {
 
   const { auth } = useAuth()
 
+  const hideSidebar = () => {
+    setActiveSidebar(false)
+  }
+
   return (
     <div className="App">
       <div className="topbar shadow-2 px-2 py-1">
@@ -29,7 +33,7 @@ const Layout = () => {
       </footer>
 
       <Sidebar visible={activeSidebar} onHide={() => setActiveSidebar(false)}>
-        <NavigationMenu />
+        <NavigationMenu hideSidebar={hideSidebar} />
       </Sidebar>
     </div>
   )
