@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import { useState, useRef, useEffect } from "react"
 import useAuth from "../hooks/useAuth"
 import { Link, useNavigate, useLocation } from "react-router-dom"
 import axios from "../api/axios"
@@ -6,12 +6,14 @@ import { Password } from "primereact/password"
 import { InputText } from "primereact/inputtext"
 import { Checkbox } from "primereact/checkbox"
 import { Button } from "primereact/button"
+import { Card } from "primereact/card"
+import { Toast } from "primereact/toast"
 
 const LOGIN_URL = "/auth"
 
 const Login = () => {
   const { setAuth, persist, setPersist } = useAuth()
-
+  const toastRef = useRef()
   const navigate = useNavigate()
   const location = useLocation()
   const from = location.state?.from?.pathname || "/"
@@ -50,20 +52,25 @@ const Login = () => {
         navigate(from, { replace: true })
       }
     } catch (err) {
+      let error_message = ""
       console.log("ERROR FOUND")
       if (!err?.response) {
-        setErrMsg("No Server Response")
-        console.log("NO RESPONSE")
+        error_message = "No Server Response"
       } else if (err.response?.status === 400) {
-        setErrMsg("Missing Email or Password")
-        console.log("MISSING EMAIL OR PASSWORD")
+        error_message = "Missing Email or Password"
       } else if (err.response?.staus === 401) {
-        setErrMsg("Unauthorized")
-        console.log("UNAUTHORIZED")
+        error_message = "Unauthorized"
       } else {
-        setErrMsg("Login Failed")
-        console.log("LOGIN FAILED")
+        error_message = "Login Failed"
       }
+      setErrMsg(error_message)
+      toastRef.current.show({
+        severity: "info",
+        summary: "Login Failed",
+        detail: error_message,
+      })
+      setEmail("")
+      setPassword("")
     }
   }
 
@@ -71,62 +78,63 @@ const Login = () => {
     setPersist((prev) => !prev)
   }
 
-  React.useEffect(() => {
+  useEffect(() => {
     localStorage.setItem("persist", persist)
   }, [persist])
 
   return (
-    <section>
-      <h1>Sign In</h1>
-      <form onSubmit={handleSubmit}>
-        <br />
-        <span className="p-float-label">
-          <InputText
-            id="username"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            type="email"
-            required
-            autoComplete="off"
-          />
-          <label htmlFor="enauk">Email</label>
-        </span>
+    <>
+      <Card title="Sign In" className="col-12 md:col-6">
+        <form onSubmit={handleSubmit}>
+          <div className="p-fluid">
+            <span className="p-float-label">
+              <InputText
+                id="username"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                type="email"
+                required
+                autoComplete="off"
+              />
+              <label htmlFor="enauk">Email</label>
+            </span>
 
-        <br />
-        <span className="p-float-label">
-          <Password
-            id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            feedback={false}
-            toggleMask
-            required
-          />
-          <label htmlFor="password">Password</label>
-        </span>
-        <br />
-        <Button label="Sign In" />
-        <br />
-        <div className="flex align-items-center mt-2">
-          <Checkbox
-            id="persist"
-            onChange={togglePersist}
-            checked={persist}
-          ></Checkbox>
+            <span className="p-float-label mt-4">
+              <Password
+                id="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                feedback={false}
+                toggleMask
+                required
+                data-lpignore="true"
+              />
+              <label htmlFor="password">Password</label>
+            </span>
 
-          <label htmlFor="persist">Trust this device</label>
-        </div>
-        <div></div>
-        <p>
-          <Link to="/forgot">Forgot Password?</Link>
-          <br />
-        </p>
-        <p>
-          <Link to="/register">Need an Account?</Link>
-          <br />
-        </p>
-      </form>
-    </section>
+            <div className="flex align-items-center mt-3 pl-1">
+              <Checkbox
+                inputId="persist"
+                onChange={togglePersist}
+                checked={persist}
+              ></Checkbox>
+              <label htmlFor="persist">&nbsp;Trust this device</label>
+            </div>
+          </div>
+          <Button label="Sign In" icon="pi pi-check" className="mt-3" />
+
+          <div className="flex flex-wrap text-sm">
+            <p>
+              <Link to="/forgot">Forgot Password?</Link>
+            </p>
+            <p className="pl-3">
+              <Link to="/register">Register</Link>
+            </p>
+          </div>
+        </form>
+      </Card>
+      <Toast ref={toastRef} />
+    </>
   )
 }
 
