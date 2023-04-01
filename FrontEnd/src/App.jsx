@@ -27,7 +27,7 @@ const ROLES = {
 
 function App() {
   return (
-    <div className="appx">
+    <>
       <Routes>
         <Route path="/" element={<Layout />}>
           {/* public routes */}
@@ -64,7 +64,7 @@ function App() {
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>
-    </div>
+    </>
   )
 }
 

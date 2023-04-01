@@ -47,6 +47,7 @@ const AddItemForm = (props) => {
   const [form, setForm] = useState(init_state)
 
   const handleChange = (event) => {
+    event.preventDefault()
     setForm({
       ...form,
       [event.target.id]: event.target.value,

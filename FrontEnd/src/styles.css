@@ -1,11 +1,21 @@
+:root {
+  --header-height: 60px;
+  --footer-height: 60px;
+}
+
 body {
   margin: 0;
   padding: 0;
+  height: 100%;
   font-family: "Open Sans", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: var(--surface-0);
   color: var(--text-color);
+}
+
+#root {
+  height: 100%;
 }
 
 /* CSS GRID */
@@ -18,6 +28,7 @@ body {
 }
 
 .content {
+  min-height: calc(100vh - (var(--footer-height) + var(--header-height)));
   grid-area: content;
 }
 .footer {
@@ -31,7 +42,7 @@ body {
   color: var(--blue-800);
 }
 
-.wrapper {
+#root {
   display: grid;
   gap: 0px;
   grid-template-areas:

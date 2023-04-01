@@ -22,6 +22,7 @@ const AddGroupForm = (props) => {
   })
 
   const handleChange = (event) => {
+    console.log(event)
     setForm({
       ...form,
       [event.target.id]: event.target.value,
@@ -46,7 +47,7 @@ const AddGroupForm = (props) => {
                 id="group"
                 type="text"
                 value={form.group}
-                onChange={handleChange}
+                onChange={(e) => handleChange(e)}
                 autocomplete="off"
               />
               <label htmlFor="group">Group Name</label>
@@ -56,14 +57,14 @@ const AddGroupForm = (props) => {
               <InputTextarea
                 id="notes"
                 value={form.notes}
-                onChange={handleChange}
+                onChange={(e) => handleChange(e)}
                 rows={5}
                 cols={30}
               />
               <label htmlFor="notes">Notes</label>
             </span>
           </div>
-          <Button label="Save" />
+          <Button icon="pi pi-check" label="Save" />
         </form>
       </Card>
       <Toast ref={toastRef} />

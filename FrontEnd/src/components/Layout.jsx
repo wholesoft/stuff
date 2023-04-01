@@ -15,7 +15,7 @@ const Layout = () => {
   }
 
   return (
-    <div className="App">
+    <>
       <div className="topbar shadow-2 px-2 py-1">
         <Button
           icon="pi pi-bars"
@@ -35,7 +35,7 @@ const Layout = () => {
       <Sidebar visible={activeSidebar} onHide={() => setActiveSidebar(false)}>
         <NavigationMenu hideSidebar={hideSidebar} />
       </Sidebar>
-    </div>
+    </>
   )
 }
 

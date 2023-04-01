@@ -1,92 +1,116 @@
-import * as React from 'react';
-import FormInput from "../components/FormInput001";
-import { NavLink, useNavigate } from 'react-router-dom';
+import { useState, useRef } from "react"
+import { useAxiosPrivate } from "../hooks/useAxiosPrivate"
+import { NavLink, useNavigate } from "react-router-dom"
+import { InputText } from "primereact/inputtext"
+import { Button } from "primereact/button"
+import { Toast } from "primereact/toast"
+import { Card } from "primereact/card"
+import { Password } from "primereact/password"
 
 const RegisterForm = () => {
+  const navigate = useNavigate()
+  const [errorMessage, setErrorMessage] = useState("")
+  const toastRef = useRef()
+  const axiosPrivate = useAxiosPrivate()
+  const [email, setEmail] = useState()
+  const [password, setPassword] = useState()
+  const [confirmPassword, setConfirmPassword] = useState()
 
-    const navigate = useNavigate();
-    const [values, setValues] = React.useState({
-        email: "",
-        password: "",
-        confirm_password: "",
-      });
-      const [errorMessage, setErrorMessage] = React.useState("");
-    
-      const inputs = [
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    try {
+      const response = await axiosPrivate.post(
+        "/register",
+        JSON.stringify({ email, password, confirm_password: confirmPassword }),
         {
-          id: 1,
-          name: "email",
-          type: "email",
-          placeholder: "Email",
-          errorMessage: "invalid email address",
-          label: "Email",
-          required: true,
-        },
-        {
-          id: 2,
-          name: "password",
-          type: "password",
-          placeholder: "Password",
-          errorMessage:
-            "password should be 8-20 characters and include at least 1 letter, 1 number and 1 special character",
-          label: "Password",
-          pattern: `^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,20}$`,
-          required: true,
-        },
-        {
-          id: 3,
-          name: "confirm_password",
-          type: "password",
-          placeholder: "Confirm Password",
-          errorMessage: "passwords don't match",
-          label: "Confirm Password",
-          pattern: values.password,
-          required: true,
-        },
-      ];
-    
-      const handleSubmit = (e) => {
-        e.preventDefault();
-        //console.log(values);
-
-        fetch("http://127.0.0.1:3000/register", {
-          method: 'POST',
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(values)
-      }).then(response => response.json())
-      .then(json => {
-        console.log('parsed json', json) // access json.body here
-        json?.error ? setErrorMessage(json.error)
-        : json?.user_id ? navigate('/registration_confirmed')
-          : setErrorMessage("Error.  Something went wrong.");
+          withCredentials: true,
+        }
+      )
+      console.log(JSON.stringify(response?.data))
+      const message = response?.data?.message
+      const success = response?.data?.success
+      toastRef.current.show({
+        severity: "info",
+        summary: success,
+        detail: message,
       })
+      if (success) {
+        navigate("/registration_confirmed")
+      }
+    } catch (err) {
+      console.log("ERROR FOUND")
+      console.log(err.message)
+      if (!err?.response) {
+        toastRef.current.show({
+          severity: "info",
+          summary: "Error",
+          detail: "No Server Response.",
+        })
+        console.log("NO RESPONSE")
+      } else if (err.response?.status === 400) {
+        toastRef.current.show({
+          severity: "info",
+          summary: "Error",
+          detail: "Missing Email.",
+        })
+        console.log("MISSING EMAIL")
+      } else {
+        toastRef.current.show({
+          severity: "info",
+          summary: "Error",
+          detail: "Unauthorized.",
+        })
+        console.log("UNAUTHORIZED")
+      }
     }
+  }
 
-
-    
-      const onChange = (e) => {
-        setValues({ ...values, [e.target.name]: e.target.value });
-      };
-    
-      return (
-        <>
-        <p>{errorMessage}</p>
-          <form onSubmit={handleSubmit}>
-            <h1>Register</h1>
-            {inputs.map((input) => (
-              <FormInput
-                key={input.id}
-                {...input}
-                value={values[input.name]}
-                onChange={onChange}
+  return (
+    <>
+      <Card title="Register" className="mr-4 mb-4 col-12 md:col-6">
+        <form onSubmit={handleSubmit}>
+          <div className="p-fluid">
+            <span className="p-float-label mt-2">
+              <InputText
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                id="email"
               />
-            ))}
-            <button>Submit</button>
-          </form>
-          </>
-      );
+              <label htmlFor="email">Email</label>
+            </span>
 
+            <span className="p-float-label mt-5">
+              <Password
+                name="password"
+                id="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                feedback={false}
+                toggleMask
+                required
+              />
+              <label htmlFor="password">Password</label>
+            </span>
 
+            <span className="p-float-label mt-5">
+              <Password
+                id="confirm_password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                feedback={false}
+                toggleMask
+                required
+              />
+              <label htmlFor="confirm_password">Confirm Password</label>
+            </span>
+          </div>
+          <Button label="Submit" icon="pi pi-check" className="mt-2" />
+        </form>
+      </Card>
+      <Toast ref={toastRef} />
+    </>
+  )
 }
 
-export { RegisterForm };
+export { RegisterForm }
