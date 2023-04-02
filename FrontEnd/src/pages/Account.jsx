@@ -3,7 +3,7 @@ import { UpdateEmailForm } from "../components/UpdateEmailForm"
 
 const Account = () => {
   return (
-    <div class="flex flex-wrap">
+    <div className="flex flex-wrap">
       <UpdateEmailForm />
       <UpdatePassword />
     </div>

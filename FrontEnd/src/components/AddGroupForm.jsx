@@ -48,7 +48,7 @@ const AddGroupForm = (props) => {
                 type="text"
                 value={form.group}
                 onChange={(e) => handleChange(e)}
-                autocomplete="off"
+                autoComplete="off"
               />
               <label htmlFor="group">Group Name</label>
             </span>
