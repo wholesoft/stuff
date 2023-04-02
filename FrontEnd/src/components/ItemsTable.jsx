@@ -80,9 +80,10 @@ const ItemsTable = (props) => {
     options.editorCallback(event.target.value)
   }
 
-  const onDateCellEditChange = (options) => (event) => {
-    console.log(event)
-    options.editorCallback(event)
+  const onDateCellEditChange = (options) => (newDate) => {
+    //console.log("DATE CHANGED")
+    //console.log(newDate) // Tue Feb 28 2023 00:00:00 GMT-0700 (Mountain Standard Time)
+    options.editorCallback(newDate) // opens edit box rather than just saving.
   }
 
   const cellEditor = (options) => {
@@ -90,10 +91,22 @@ const ItemsTable = (props) => {
       <InputText value={options.value} onChange={onCellEditChange(options)} />
     )
   }
+
+  function isIsoDate(str) {
+    // Really just looking for this format: "2023-03-30T07:00:00.000Z"
+    if (!/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z/.test(str)) return false
+    const d = new Date(str)
+    return d instanceof Date && !isNaN(d) && d.toISOString() === str // valid date
+  }
+
   const dateCellEditor = (options) => {
-    console.log(`Edit: ${options.value}`)
-    const thisDate = parseISO(options.value) // formatDate(options.value)
-    console.log(thisDate)
+    //console.log(options)
+    //console.log(`Edit: ${options.value}`)
+    let thisDate = options.value
+    if (isIsoDate(thisDate)) {
+      thisDate = parseISO(thisDate) // works when receives something like "2023-03-30T07:00:00.000Z"
+    }
+    //console.log(`parseISO: ${thisDate}`) // "Invalid Date"
     return (
       <DatePicker
         selected={thisDate}

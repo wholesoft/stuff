@@ -9,40 +9,20 @@ import { Card } from "primereact/card"
 import { Calendar } from "primereact/calendar"
 
 const AddItemForm = (props) => {
-  const { data } = props
   const toastRef = useRef()
   const addMutation = useAddItem(toastRef)
 
-  let {
-    id,
-    item_name,
-    group_id,
-    purchased_location,
-    date_purchased,
-    notes,
-    amount_paid,
-  } = data
-  let item_id = id
-
-  if (group_id == undefined) {
-    group_id = props.groupId
-  }
-  //console.log(group_id);
-
-  if (amount_paid == null) {
-    amount_paid = ""
-  }
+  const group_id = props.groupId
 
   let init_state = {
-    item_id: item_id,
     group_id: group_id,
-    item_name: item_name,
-    purchase_location: purchased_location,
-    amount_paid: amount_paid,
-    notes: notes,
+    item_name: "",
+    purchase_location: "",
+    amount_paid: "",
+    notes: "",
   }
 
-  const [purchaseDate, setPurchaseDate] = useState(new Date())
+  const [purchaseDate, setPurchaseDate] = useState("") // useState(new Date())
   const [responseMessage, setResponseMessage] = useState("")
   const [form, setForm] = useState(init_state)
 
@@ -64,7 +44,6 @@ const AddItemForm = (props) => {
     let response = ""
     const { item_name, purchase_location, amount_paid, notes, group_id } = form
     addMutation.mutate({
-      item_id,
       group_id,
       item_name,
       purchase_location,

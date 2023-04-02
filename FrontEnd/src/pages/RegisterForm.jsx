@@ -12,9 +12,9 @@ const RegisterForm = () => {
   const [errorMessage, setErrorMessage] = useState("")
   const toastRef = useRef()
   const axiosPrivate = useAxiosPrivate()
-  const [email, setEmail] = useState()
-  const [password, setPassword] = useState()
-  const [confirmPassword, setConfirmPassword] = useState()
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [confirmPassword, setConfirmPassword] = useState("")
 
   const handleSubmit = async (e) => {
     e.preventDefault()

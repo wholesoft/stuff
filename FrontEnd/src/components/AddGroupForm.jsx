@@ -6,23 +6,16 @@ import { Button } from "primereact/button"
 import { Toast } from "primereact/toast"
 import { Card } from "primereact/card"
 
-const AddGroupForm = (props) => {
-  const { data } = props
+const AddGroupForm = () => {
   const toastRef = useRef()
   const addGroupMutation = useAddItemGroup(toastRef)
 
-  let { id, group_name, notes } = data
-  //const group_id = id
-
-  const [responseMessage, setResponseMessage] = useState("")
   const [form, setForm] = useState({
-    id: id,
-    group: group_name,
-    notes: notes,
+    group: "",
+    notes: "",
   })
 
   const handleChange = (event) => {
-    console.log(event)
     setForm({
       ...form,
       [event.target.id]: event.target.value,
@@ -31,7 +24,6 @@ const AddGroupForm = (props) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    setResponseMessage("")
     let response = ""
     const { group, notes } = form
     addGroupMutation.mutate({ group, notes })
