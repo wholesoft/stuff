@@ -13,9 +13,18 @@ import {
   editItemPurchasedLocation,
   editItemPurchasedDate,
   editItemCost,
+  getItemGroup,
 } from "./apiStuff"
 
 /* ITEM GROUPS */
+
+const useGroup = (group_id) => {
+  const groupQuery = useQuery({
+    queryKey: ["itemGroup"],
+    queryFn: () => getItemGroup(group_id),
+  })
+  return groupQuery
+}
 
 const useItemGroups = () => {
   const groupQuery = useQuery({
@@ -269,6 +278,7 @@ const useEditItemCost = () => {
 
 export {
   useItemGroups,
+  useGroup,
   useDeleteItemGroup,
   useAddItemGroup,
   useEditItemGroupName,

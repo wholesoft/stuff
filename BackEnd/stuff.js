@@ -168,6 +168,36 @@ export async function getStuffGroups(props) {
   return { success: true, message: "OK", data: rows }
 }
 
+export async function getStuffGroup(props) {
+  // Returns { 'success': true/false , 'message': '', 'data': [] }
+  let success = false
+  let message = ""
+  let validation_okay = true
+
+  // VALIDATE INPUT
+  const schema = joi.object({
+    user_id: joi.number().integer().required(),
+    group_id: joi.number().integer().required(),
+  })
+
+  const { error, value } = schema.validate(props)
+  if (error) {
+    console.log(error)
+    console.log("Validation Error.")
+    message = "Vaidation Error (" + error.details[0].message + ")"
+    validation_okay = false
+    return { success: false, message: message, data: [] }
+  }
+  const [rows] = await pool.query(
+    `
+    SELECT id, group_name, notes, created, updated FROM Stuff_Groups WHERE user_id=? AND id=?
+    `,
+    [props.user_id, props.group_id]
+  )
+
+  return { success: true, message: "OK", data: rows }
+}
+
 export async function addStuffItem(props) {
   // Returns { 'success': true/false , 'message': '' }
   let success = false
@@ -713,7 +743,7 @@ export async function editItemImage(props) {
     message = `Image Updated (${props.image}).`
   }
 
-  return { success: success, message: message }
+  return { success: success, message: message, image: props.image }
 }
 
 /*

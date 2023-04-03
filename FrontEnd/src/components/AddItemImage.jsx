@@ -33,6 +33,7 @@ const AddItemImage = (props) => {
     const success = result.data.success
     console.log(result.data)
     if (success) {
+      setImageName(result.data.image)
       toastRef.current.show({
         severity: "info",
         summary: "Success",
@@ -44,10 +45,19 @@ const AddItemImage = (props) => {
         summary: "Error",
         detail: message,
       })
+      setImageName("")
     }
   }
 
-  return (
+  return imageName ? (
+    <>
+      <img
+        style={{ maxWidth: "200px", maxHeight: "200px" }}
+        src={`http://localhost:3000/images/${imageName}`}
+        alt=""
+      />
+    </>
+  ) : (
     <>
       <input
         filename={file}

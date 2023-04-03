@@ -142,6 +142,16 @@ const ItemsTable = (props) => {
     }
   }
 
+  let totalSpent = (rowsData) => {
+    let total = 0
+    let a = rowsData.map((row) => {
+      if (row.amount_paid != "" && row.amount_paid != null) {
+        total += parseFloat(row.amount_paid)
+      }
+    })
+    return total
+  }
+
   let displayUpdated = (rowData) => {
     let value = rowData.updated
     return formatDate(value)
@@ -180,7 +190,11 @@ const ItemsTable = (props) => {
   }
   return (
     <>
+      <p>
+        <b>Total Spent</b> ${totalSpent(rowData)}
+      </p>
       <InputText
+        placeholder="Search"
         onInput={(e) =>
           setFilters({
             global: {
@@ -190,7 +204,6 @@ const ItemsTable = (props) => {
           })
         }
       />
-
       <DataTable
         value={rowData}
         showGridlines

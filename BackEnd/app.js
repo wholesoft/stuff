@@ -21,6 +21,7 @@ import {
 import {
   addStuffGroup,
   getStuffGroups,
+  getStuffGroup,
   addStuffItem,
   getStuff,
   getStuffItem,
@@ -195,9 +196,16 @@ app.get("/item/:item_id", async (req, res) => {
   res.send(item.data)
 })
 
-app.get("/stuff_groups", async (req, res) => {
+app.get("/groups", async (req, res) => {
   console.log("GET: /stuff_groups")
   const groups = await getStuffGroups({ user_id: req.jwt_user_id })
+  res.send(groups.data)
+})
+
+app.get("/group/:group_id", async (req, res) => {
+  console.log("GET: /group/:group_id")
+  const group_id = req.params.group_id
+  const groups = await getStuffGroup({ user_id: req.jwt_user_id, group_id })
   res.send(groups.data)
 })
 
