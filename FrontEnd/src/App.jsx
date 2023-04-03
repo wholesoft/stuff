@@ -19,6 +19,7 @@ import { NotFound } from "./pages/NotFound"
 import { Admin } from "./pages/Admin"
 import { Layout } from "./components/Layout"
 import { Unauthorized } from "./pages/Unauthorized"
+import { AddItemImage } from "./components/AddItemImage"
 
 const ROLES = {
   User: 1001,
@@ -43,6 +44,7 @@ function App() {
           <Route path="/linkpage" element={<LinkPage />} />
           <Route path="/unauthorized" element={<Unauthorized />} />
           <Route path="/confirm/:token" element={<ConfirmEmail />} />
+          <Route path="/upload" element={<AddItemImage />} />
 
           {/* we want to protect these routes */}
           <Route element={<PersistLogin />}>

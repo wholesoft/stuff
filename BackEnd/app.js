@@ -1,5 +1,8 @@
 import express from "express"
 import cors from "cors"
+import multer from "multer"
+import fs from "fs"
+
 import { getNotes, getNote, createNote } from "./test/database.js"
 import {
   create_user,
@@ -32,6 +35,7 @@ import {
   editItemPurchasedLocation,
   editItemPurchasedDate,
   editItemCost,
+  editItemImage,
 } from "./stuff.js"
 import { verifyJWT } from "./middleware/verifyJWT.js"
 import cookieParser from "cookie-parser"
@@ -47,6 +51,8 @@ const is_admin = (roles) => {
   }
   return result
 }
+
+const upload = multer({ dest: "images/" })
 
 const app = express()
 
@@ -144,6 +150,17 @@ app.post("/update_password_with_token", async (req, res) => {
     result = res.send({ success: false, message: "invalid token" })
   }
   res.send(result)
+})
+
+app.get("/images/:imageName", (req, res) => {
+  console.log("GET: /images:imageName")
+  const imageName = req.params.imageName
+  if (imageName != null) {
+    const readStream = fs.createReadStream(`images/${imageName}`)
+    readStream.pipe(res)
+  } else {
+    res.send("Invalid Image.")
+  }
 })
 
 app.use(verifyJWT)
@@ -353,6 +370,34 @@ app.post("/edit_item_name", async (req, res) => {
   res.send(result)
 })
 
+app.post("/edit_item_image", upload.single("image"), async (req, res) => {
+  console.log("POST: /edit_item_image")
+  console.log(req)
+
+  // webp files don't work.
+  const image = req.file?.filename
+  const item_id = req.body.item_id
+
+  const result = await editItemImage({
+    user_id: req.jwt_user_id,
+    image,
+    item_id,
+  })
+
+  res.send(result)
+})
+
+/*
+JWT BLCOKING IMAGE REQUESTS?
+app.get("/images/:imageName", (req, res) => {
+  console.log("GET: /images:imageName")
+
+  const imageName = req.params.imageName
+  const readStream = fs.createReadStream(`images/${imageName}`)
+  readStream.pipe(res)
+})
+*/
+
 app.get("/users", async (req, res) => {
   console.log(`Verified ${req.jwt_user_id} : ${req.jwt_roles}`)
   const users = await getUsers()
@@ -434,28 +479,8 @@ app.post("/update_password", async (req, res) => {
   res.send(result)
 })
 
-app.get("/notes", async (req, res) => {
-  const notes = await getNotes()
-  res.send(notes)
-})
-
-app.get("/notes/:id", async (req, res) => {
-  const id = req.params.id
-  const note = await getNote(id)
-  res.send(note)
-})
-
-app.post("/notes", async (req, res) => {
-  const { title, contents } = req.body
-  const id = await createNote(title, contents)
-  res.send(id)
-})
-
 app.get("/", (req, res) => {
-  res.send("Hello World!")
-  //res.render('index.ejs', {
-  //  numberOfIterations: 50
-  //});
+  res.send("...")
 })
 
 app.use(express.static("public"))

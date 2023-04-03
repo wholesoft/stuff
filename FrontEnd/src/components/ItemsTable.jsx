@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from "react"
-import { Test } from "./Test"
+import { AddItemImage } from "./AddItemImage.jsx"
 import { Link } from "react-router-dom"
 import {
   useItems,
@@ -157,6 +157,22 @@ const ItemsTable = (props) => {
     return formatDate(value)
   }
 
+  let displayImage = (rowData) => {
+    let value = rowData.image
+    let item_id = rowData.id
+    let result = <AddItemImage item_id={item_id} />
+    if (value != "" && value != null) {
+      result = (
+        <img
+          style={{ maxWidth: "200px", maxHeight: "200px" }}
+          src={`http://localhost:3000/images/${value}`}
+          alt=""
+        />
+      )
+    }
+    return result
+  }
+
   let size = "small"
   if (itemsQuery.isLoading) return <h1>Loading...</h1>
   if (itemsQuery.isError) {
@@ -183,7 +199,7 @@ const ItemsTable = (props) => {
         filters={filters}
         tableStyle={{ minWidth: "50rem" }}
       >
-        {/* <Column key='id' field='id' header='ID' sortable/> */}
+        <Column key="id" field="id" header="ID" sortable />
         <Column
           field="item_name"
           header="Item"
@@ -220,6 +236,7 @@ const ItemsTable = (props) => {
           editor={(options) => cellEditor(options)}
           onCellEditComplete={onCellEditComplete}
         />
+        <Column field="image" header="Image" body={displayImage} />
         {/*
         <Column field='created' header='Created' sortable body={displayCreated} />
         <Column field='updated' header='Updated' sortable body={displayUpdated} />
