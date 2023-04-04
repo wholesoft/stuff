@@ -1,6 +1,6 @@
 import { RequireAuth } from "./components/RequireAuth"
 import { PersistLogin } from "./components/PersistLogin"
-import { Route, Routes, Link, NavLink } from "react-router-dom"
+import { Route, Routes } from "react-router-dom"
 import { RegisterForm } from "./pages/RegisterForm"
 import { Login } from "./pages/Login"
 import { ForgotPassword } from "./pages/ForgotPassword"
