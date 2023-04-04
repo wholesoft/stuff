@@ -72,6 +72,10 @@ app.use((err, req, res, next) => {
 
 //app.set("view engine", "ejs");
 
+app.get("/", (req, res) => {
+  res.send(process.env.APP_SHORT_DOMAIN)
+})
+
 app.get("/auth", async (req, res) => {
   //const { email, password } = req.body;
   //console.log(req.body)
@@ -484,10 +488,6 @@ app.post("/update_password", async (req, res) => {
   const user_id = req.jwt_user_id
   const result = await update_password({ user_id, password, confirm_password })
   res.send(result)
-})
-
-app.get("/", (req, res) => {
-  res.send("...")
 })
 
 app.use(express.static("public"))
