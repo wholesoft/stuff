@@ -28,9 +28,9 @@ export const refreshAccessTokenFn = async () => {
   const response = await authApi.get("/refresh", { withCredentials: true })
   console.log("REFRESH AUTH TOKEN: " + JSON.stringify(response.data))
   /*
-    {"access_token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozMCwicm9sZXMiOlsxMDAxLDIwMDFdLCJpYXQiOjE2Nzk3NzQyMjQsImV4cCI6MTY3OTc3NDIzOX0.Z_DNbERLbC-YVbbIyhKH0x9WNL3hW8WwpMY_z-H3tBM",
-    "email":"erikthompson@yandex.com",
-    "roles":[1001,2001]}
+    {"access_token":"...",
+    "email":"...",
+    "roles":[]}
     */
   // response.data.access_token
 

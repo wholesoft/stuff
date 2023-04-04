@@ -3,7 +3,6 @@ import cors from "cors"
 import multer from "multer"
 import fs from "fs"
 
-import { getNotes, getNote, createNote } from "./test/database.js"
 import {
   create_user,
   confirm_email,
