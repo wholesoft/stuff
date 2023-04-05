@@ -1,10 +1,10 @@
 import axios from "axios"
-import AuthContext from "../context/AuthProvider"
-import { useContext } from "react"
-import useAuth from "../hooks/useAuth"
 
-const BASE_URL = "http://localhost:3000"
+let BASE_URL = "https://stuff-api.wholesoft.net"
 
+if (process.env.NODE_ENV == "development") {
+  BASE_URL = "http://localhost:3000"
+}
 //const { auth } = useContext(AuthContext);
 
 export default axios.create({
