@@ -193,11 +193,26 @@ export async function reset_password(email) {
     message = `Error.  No user with this email found. (${email}).`
   } else {
     // SEND PASSWORD RESET EMAIL
+    // GMAIL TRANSPORTER */
+    /*
     var transporter = nodemailer.createTransport({
       service: process.env.EMAIL_SERVICE,
       auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASSWORD,
+      },
+    })
+    */
+    let transporter = nodemailer.createTransport({
+      host: process.env.EMAIL_HOST,
+      port: process.env.EMAIL_PORT,
+      secure: false, // true for 465, false for other ports
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASSWORD,
+      },
+      tls: {
+        rejectUnauthorized: false,
       },
     })
 
