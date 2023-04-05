@@ -2,9 +2,9 @@ import mysql from "mysql2"
 import dotenv from "dotenv"
 import bcrypt from "bcrypt"
 import joi from "joi"
-import nodemailer from "nodemailer"
 import jwt from "jsonwebtoken"
 import cryptoRandomString from "crypto-random-string"
+import sendEmail from "./mail.js"
 
 dotenv.config()
 
@@ -169,7 +169,8 @@ export async function reset_password(email) {
   // LIMIT THE NUMBER OF TIMES IT CAN BE SENT.
 
   let success = false
-  let message = ""
+  let message = "Error."
+  let result = { success: success, message: message }
 
   // CREATE A RESET TOKEN
   let password_reset_token = cryptoRandomString({
@@ -192,63 +193,21 @@ export async function reset_password(email) {
     success = false
     message = `Error.  No user with this email found. (${email}).`
   } else {
-    // SEND PASSWORD RESET EMAIL
-    // GMAIL TRANSPORTER */
-    /*
-    var transporter = nodemailer.createTransport({
-      service: process.env.EMAIL_SERVICE,
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASSWORD,
-      },
-    })
-    */
-    let transporter = nodemailer.createTransport({
-      host: process.env.EMAIL_HOST,
-      port: process.env.EMAIL_PORT,
-      secure: false, // true for 465, false for other ports
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASSWORD,
-      },
-      tls: {
-        rejectUnauthorized: false,
-      },
-    })
-
     const encodedToken = encodeURIComponent(password_reset_token) // not really needed
 
-    // just let them use the salt as the id, should probably change this to some other random text
-    let email_html = `Please click the link below to reset your password.<br />
+    let htmlBody = `Please click the link below to reset your password.<br />
         <br /><a href='${process.env.FRONT_END_FULL_DOMAIN}/reset/?id=${encodedToken}'>reset password</a>
         `
-    let email_plain = `Please click the link below to confirm your email./n
+    let textBody = `Please click the link below to confirm your email./n
         /n<${process.env.FRONT_END_FULL_DOMAIN}/reset/?id=${encodedToken}`
 
-    var mailOptions = {
-      from: process.env.EMAIL_FROM,
-      to: email,
-      subject: "Reset Password Request",
-      text: email_plain,
-      html: email_html,
-    }
+    let mailTo = email
+    let subject = "Password Reset"
 
-    console.log("Attempt to send email.")
-    try {
-      let mail_response = await transporter.sendMail(mailOptions)
-      console.log(mail_response.messageId)
-      if (mail_response.messageId != undefined) {
-        console.log("Email sent: " + mail_response.response)
-        success = true
-        message = "Reset password email sent."
-      } else {
-        message = "Error.  Problem sending email."
-      }
-    } catch (error) {
-      message = "Error.  Problem sending email."
-    }
+    result = await sendEmail(mailTo, subject, textBody, htmlBody)
   }
-  return { success: success, message: message }
+  console.log(result)
+  return result
 }
 
 export async function send_email_confirmation_request(email) {
@@ -260,7 +219,8 @@ export async function send_email_confirmation_request(email) {
   // LIMIT THE NUMBER OF TIMES IT CAN BE SENT.
 
   let success = false
-  let message = ""
+  let message = "Error."
+  let result = { success: success, message: message }
 
   // GET THE SALT WHICH WE'LL USE AS A TOKEN
   const [rows] = await pool.query(
@@ -288,47 +248,19 @@ export async function send_email_confirmation_request(email) {
     return { success: success, message: message }
   }
 
-  // SEND CONFIRMATION EMAIL
-  var transporter = nodemailer.createTransport({
-    service: process.env.EMAIL_SERVICE,
-    auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASSWORD,
-    },
-  })
-
   const encodedToken = encodeURIComponent(email_confirm_token) // not really needed
 
-  // just let them use the salt as the id, should probably change this to some other random text
-  let email_html = `Please click the link below to confirm your email.<br />
+  let htmlBody = `Please click the link below to confirm your email.<br />
     <br /><a href='${process.env.FRONT_END_FULL_DOMAIN}/confirm/${encodedToken}'>confirm email</a>`
-  let email_plain = `Please click the link below to confirm your email./n
+  let textBody = `Please click the link below to confirm your email./n
     /n<${process.env.FRONT_END_FULL_DOMAIN}/confirm/${encodedToken}`
 
-  var mailOptions = {
-    from: process.env.EMAIL_FROM,
-    to: email,
-    subject: "Registration: Confirm Email",
-    text: email_plain,
-    html: email_html,
-  }
+  let mailTo = email
+  let subject = "Confirm Email"
 
-  console.log("Attempt to send email.")
-  try {
-    let mail_response = await transporter.sendMail(mailOptions)
-    console.log(mail_response.messageId)
-    if (mail_response.messageId != undefined) {
-      console.log("Email sent: " + mail_response.response)
-      success = true
-      message = "Request confirmation email sent."
-    } else {
-      message = "Error.  Problem sending email."
-    }
-  } catch (error) {
-    message = "Error.  Problem sending email."
-  }
+  result = await sendEmail(mailTo, subject, textBody, htmlBody)
 
-  return { success: success, message: message }
+  return result
 }
 
 export async function email_exists(email) {
@@ -547,31 +479,3 @@ async function test() {
 }
 
 //test();
-
-/*
-TABLE SCHEMA
-
-MySQL
-Roles is either '1001' or '1001,2001' // 1001=User, 2001=Admin
-I'm not going to bother with creating another table for this.
-
-IF NOT EXISTS Users (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    email VARCHAR(255) NOT NULL,
-    password VARCHAR(255) NOT NULL,
-    salt VARCHAR(255) NOT NULL,
-    refresh_token VARCHAR(255),
-    email_confirmed DATETIME,
-    last_login DATETIME,
-    n_logins INT,
-    created DATETIME DEFAULT CURRENT_TIMESTAMP,
-    roles VARCHAR(30),
-    password_reset_token VARCHAR(30),
-    password_token_created DATETIME,
-    email_token_created DATETIME,
-    email_confirm_token VARCHAR(30)
-)  
-
-
-
-*/

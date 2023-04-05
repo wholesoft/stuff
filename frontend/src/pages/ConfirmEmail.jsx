@@ -20,12 +20,7 @@ const ConfirmEmail = () => {
 
   return (
     <>
-      <pre>{JSON.stringify(confirmEmailMutation.isSuccess)}</pre>
-      <pre>{message}</pre>
-      <p>
-        Thank you for confirming your email address. Please{" "}
-        <Link to="/login">Login</Link>
-      </p>
+      <p>{message}</p>
     </>
   )
 }

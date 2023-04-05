@@ -1,0 +1,42 @@
+CREATE TABLE `Stuff` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `user_id` int DEFAULT NULL,
+  `group_id` int DEFAULT NULL,
+  `item_name` varchar(255) NOT NULL,
+  `purchased_location` varchar(255) DEFAULT NULL,
+  `image` varchar(255) DEFAULT NULL,
+  `date_purchased` datetime DEFAULT NULL,
+  `amount_paid` decimal(10,2) DEFAULT NULL,
+  `created` datetime DEFAULT CURRENT_TIMESTAMP,
+  `updated` datetime DEFAULT CURRENT_TIMESTAMP,
+  `notes` text,
+  PRIMARY KEY (`id`)
+)
+
+CREATE TABLE `Stuff_Groups` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `user_id` int DEFAULT NULL,
+  `group_name` varchar(255) NOT NULL,
+  `notes` text,
+  `created` datetime DEFAULT CURRENT_TIMESTAMP,
+  `updated` datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+)
+
+CREATE TABLE `Users` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `email` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `salt` varchar(50) NOT NULL,
+  `email_confirmed` datetime DEFAULT NULL,
+  `last_login` datetime DEFAULT NULL,
+  `n_logins` int DEFAULT NULL,
+  `created` datetime DEFAULT CURRENT_TIMESTAMP,
+  `roles` varchar(30) DEFAULT NULL,
+  `password_reset_token` varchar(30) DEFAULT NULL,
+  `password_token_created` datetime DEFAULT NULL,
+  `email_token_created` datetime DEFAULT NULL,
+  `email_confirm_token` varchar(30) DEFAULT NULL,
+  `refresh_token` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+)
