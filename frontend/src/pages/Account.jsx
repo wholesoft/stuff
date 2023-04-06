@@ -1,12 +1,16 @@
 import { UpdatePassword } from "../components/UpdatePassword"
 import { UpdateEmailForm } from "../components/UpdateEmailForm"
+import { tabTitle } from "../utils/helperFunctions"
 
 const Account = () => {
   return (
-    <div className="flex flex-wrap">
-      <UpdateEmailForm />
-      <UpdatePassword />
-    </div>
+    <>
+      {tabTitle("Account - Wholesoft Stuff")}
+      <div className="flex flex-wrap">
+        <UpdateEmailForm />
+        <UpdatePassword />
+      </div>
+    </>
   )
 }
 

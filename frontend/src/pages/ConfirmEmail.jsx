@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react"
 import { Link, useParams } from "react-router-dom"
 import { useConfirmEmail } from "../data/user/useUser"
+import { tabTitle } from "../utils/helperFunctions"
 
 const ConfirmEmail = () => {
   const { token } = useParams()
@@ -20,6 +21,7 @@ const ConfirmEmail = () => {
 
   return (
     <>
+      {tabTitle("Confirm Email - Wholesoft Stuff")}
       <p>{message}</p>
     </>
   )

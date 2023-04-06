@@ -6,6 +6,7 @@ import { Button } from "primereact/button"
 import { Toast } from "primereact/toast"
 import { Card } from "primereact/card"
 import { Password } from "primereact/password"
+import { tabTitle } from "../utils/helperFunctions"
 
 const RegisterForm = () => {
   const navigate = useNavigate()
@@ -68,6 +69,7 @@ const RegisterForm = () => {
 
   return (
     <>
+      {tabTitle("Register - Wholesoft Stuff")}
       <Card title="Register" className="mr-4 mb-4 col-12 md:col-6">
         <form onSubmit={handleSubmit}>
           <div className="p-fluid">

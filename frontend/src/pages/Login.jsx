@@ -8,6 +8,7 @@ import { Checkbox } from "primereact/checkbox"
 import { Button } from "primereact/button"
 import { Card } from "primereact/card"
 import { Toast } from "primereact/toast"
+import { tabTitle } from "../utils/helperFunctions"
 
 const LOGIN_URL = "/auth"
 
@@ -84,6 +85,7 @@ const Login = () => {
 
   return (
     <>
+      {tabTitle("Login - Wholesoft Stuff")}
       <Card title="Sign In" className="col-12 md:col-6">
         <form onSubmit={handleSubmit}>
           <div className="p-fluid">

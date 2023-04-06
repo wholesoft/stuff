@@ -1,5 +1,6 @@
 import { useState } from "react"
 import { useAxiosPrivate } from "../hooks/useAxiosPrivate"
+import { tabTitle } from "../utils/helperFunctions"
 
 const UploadImage = () => {
   const [file, setFile] = useState()
@@ -22,6 +23,7 @@ const UploadImage = () => {
 
   return (
     <>
+      {tabTitle("Upload Image - Wholesoft Stuff")}
       <p>{imageName}</p>
       <p>{description}</p>
       <form onSubmit={submit}>

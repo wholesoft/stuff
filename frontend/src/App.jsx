@@ -11,8 +11,6 @@ import { RegistrationConfirmed } from "./pages/RegistrationConfirmed"
 import { Account } from "./pages/Account"
 import { UsersTable } from "./components/UsersTable"
 import { ShowUser } from "./pages/ShowUser"
-import { Home } from "./pages/Home"
-import { LinkPage } from "./pages/LinkPage"
 import { Stuff } from "./pages/Stuff"
 import { StuffGroup } from "./pages/StuffGroup"
 import { NotFound } from "./pages/NotFound"
@@ -41,7 +39,6 @@ function App() {
           <Route path="/forgot" element={<ForgotPassword />} />
           <Route path="/reset" element={<ResetPassword />} />
           <Route path="/unconfirmed" element={<PleaseConfirmEmail />} />
-          <Route path="/linkpage" element={<LinkPage />} />
           <Route path="/unauthorized" element={<Unauthorized />} />
           <Route path="/confirm/:token" element={<ConfirmEmail />} />
           <Route path="/upload" element={<AddItemImage />} />
@@ -50,7 +47,6 @@ function App() {
           <Route element={<PersistLogin />}>
             <Route element={<RequireAuth allowedRoles={[ROLES.User]} />}>
               <Route path="/" element={<Stuff />} />
-              <Route path="/links" element={<Home />} />
               <Route path="/account" element={<Account />} />
               <Route path="/stuff/:group_id" element={<StuffGroup />} />
             </Route>

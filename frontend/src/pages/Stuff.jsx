@@ -1,13 +1,15 @@
 import { AddGroupForm } from "../components/AddGroupForm"
 import { ItemGroupsTable } from "../components/ItemGroupsTable"
+import { tabTitle } from "../utils/helperFunctions"
 
 const Stuff = () => {
   console.log(process.env.NODE_ENV)
   return (
-    <div>
+    <>
+      {tabTitle("My Stuff - Wholesoft Stuff")}
       <ItemGroupsTable />
       <AddGroupForm data={{}} />
-    </div>
+    </>
   )
 }
 

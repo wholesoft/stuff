@@ -4,6 +4,7 @@ import useAuth from "../hooks/useAuth"
 import { Sidebar } from "primereact/sidebar"
 import { Button } from "primereact/button"
 import { NavigationMenu } from "./NavigationMenu"
+import { Link } from "react-router-dom"
 
 const Layout = () => {
   const [activeSidebar, setActiveSidebar] = useState(false)
@@ -29,7 +30,7 @@ const Layout = () => {
       </article>
 
       <footer className="footer py-3">
-        <a href="/">Stuff</a>
+        <Link to="/">Stuff</Link>
       </footer>
 
       <Sidebar visible={activeSidebar} onHide={() => setActiveSidebar(false)}>
