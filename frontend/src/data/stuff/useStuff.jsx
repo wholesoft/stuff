@@ -20,21 +20,21 @@ import {
 
 const useGroup = (group_id) => {
   const groupQuery = useQuery({
-    queryKey: ["itemGroup"],
+    queryKey: ["groups", group_id],
     queryFn: () => getItemGroup(group_id),
   })
   return groupQuery
 }
 
-const useItemGroups = () => {
+const useGroups = () => {
   const groupQuery = useQuery({
-    queryKey: ["itemGroups"],
+    queryKey: ["groups"],
     queryFn: () => getItemGroups(),
   })
   return groupQuery
 }
 
-const useDeleteItemGroup = () => {
+const useDeleteGroup = (toastRef) => {
   const queryClient = useQueryClient()
   const deleteGroupMutation = useMutation({
     mutationFn: (group_id) => deleteItemGroup(group_id),
@@ -45,7 +45,15 @@ const useDeleteItemGroup = () => {
     onSuccess: (props) => {
       console.log("mutate success")
       console.log(props)
-      return queryClient.invalidateQueries(["itemGroups"])
+      const { success, message } = props
+      if (!success) {
+        toastRef.current.show({
+          severity: "error",
+          summary: "Error",
+          detail: message,
+        })
+      }
+      return queryClient.invalidateQueries(["groups"])
     },
     onError: (props) => {
       console.log("mutate error")
@@ -54,7 +62,7 @@ const useDeleteItemGroup = () => {
   return deleteGroupMutation
 }
 
-const useAddItemGroup = (toastRef) => {
+const useAddGroup = (toastRef) => {
   const queryClient = useQueryClient()
   const addGroupMutation = useMutation({
     mutationFn: (data) => addItemGroup(data),
@@ -71,7 +79,7 @@ const useAddItemGroup = (toastRef) => {
         detail: "Group Saved.",
       })
       //toastRef.current.show({severity: 'info', summary: "Error", detail: "Missing Email."})
-      return queryClient.invalidateQueries(["itemGroups"])
+      return queryClient.invalidateQueries(["groups"])
     },
     onError: (props) => {
       console.log("mutate error")
@@ -80,7 +88,7 @@ const useAddItemGroup = (toastRef) => {
   return addGroupMutation
 }
 
-const useEditItemGroupName = () => {
+const useEditGroupName = () => {
   const queryClient = useQueryClient()
   const editMutation = useMutation({
     mutationFn: (data) => editGroupName(data),
@@ -91,7 +99,7 @@ const useEditItemGroupName = () => {
     onSuccess: (props) => {
       console.log("mutate success")
       console.log(props)
-      return queryClient.invalidateQueries(["itemGroups"])
+      return queryClient.invalidateQueries(["groups"])
     },
     onError: (props) => {
       console.log("mutate error")
@@ -100,7 +108,7 @@ const useEditItemGroupName = () => {
   return editMutation
 }
 
-const useEditItemGroupNote = () => {
+const useEditGroupNote = () => {
   const queryClient = useQueryClient()
   const editMutation = useMutation({
     mutationFn: (data) => editGroupNote(data),
@@ -111,7 +119,7 @@ const useEditItemGroupNote = () => {
     onSuccess: (props) => {
       console.log("mutate success")
       console.log(props)
-      return queryClient.invalidateQueries(["itemGroups"])
+      return queryClient.invalidateQueries(["groups"])
     },
     onError: (props) => {
       console.log("mutate error")
@@ -125,7 +133,7 @@ const useEditItemGroupNote = () => {
 const useItems = (group_id) => {
   console.log(group_id)
   const getQuery = useQuery({
-    queryKey: ["items"],
+    queryKey: ["items", group_id],
     queryFn: () => getItems(group_id),
   })
   return getQuery
@@ -277,12 +285,12 @@ const useEditItemCost = () => {
 }
 
 export {
-  useItemGroups,
+  useGroups,
   useGroup,
-  useDeleteItemGroup,
-  useAddItemGroup,
-  useEditItemGroupName,
-  useEditItemGroupNote,
+  useDeleteGroup,
+  useAddGroup,
+  useEditGroupName,
+  useEditGroupNote,
   useItems,
   useDeleteItem,
   useAddItem,

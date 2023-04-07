@@ -1,11 +1,9 @@
-import React, { useMemo, useState } from "react"
+import React, { useState } from "react"
 import { AddItemImage } from "./AddItemImage.jsx"
-import { Link } from "react-router-dom"
+
 import {
   useItems,
   useDeleteItem,
-  useEditItemGroupName,
-  useEditItemGroupNote,
   useEditItemName,
   useEditItemNote,
   useEditItemPurchasedLocation,
@@ -20,15 +18,6 @@ import { InputText } from "primereact/inputtext"
 import DatePicker from "react-datepicker"
 import "react-datepicker/dist/react-datepicker.css"
 import { parseISO, format } from "date-fns"
-
-//theme
-import "primereact/resources/themes/lara-light-indigo/theme.css"
-
-//core
-import "primereact/resources/primereact.min.css"
-
-//icons
-import "primeicons/primeicons.css"
 
 function formatDate(date_string) {
   let result = ""
@@ -47,8 +36,6 @@ const ItemsTable = (props) => {
 
   const itemsQuery = useItems(group_id)
   const deleteItemMutation = useDeleteItem()
-  //const editGroupNameMutation = useEditItemGroupName()
-  //const editGroupNoteMutation = useEditItemGroupNote()
   const editItemNameMutation = useEditItemName()
   const editItemNoteMutation = useEditItemNote()
   const editItemPurchasedLocationMutation = useEditItemPurchasedLocation()

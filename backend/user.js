@@ -347,6 +347,7 @@ export async function login_user(props) {
     refresh_token: refresh_token,
     roles: user_roles,
     email_confirmed: email_confirmed,
+    user_id: user_id,
   }
   //console.log(JSON.stringify(result));
   return result

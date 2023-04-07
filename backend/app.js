@@ -94,8 +94,14 @@ app.use("/logout", logout_route)
 app.post("/auth", async (req, res) => {
   const { email, password } = req.body
   console.log(req.body)
-  const { refresh_token, access_token, success, roles, email_confirmed } =
-    await login_user(req.body)
+  const {
+    refresh_token,
+    access_token,
+    success,
+    roles,
+    email_confirmed,
+    user_id,
+  } = await login_user(req.body)
   console.log("Roles: " + roles)
   //let response = { success: success }
   if (success == true) {
@@ -110,6 +116,8 @@ app.post("/auth", async (req, res) => {
       access_token: access_token,
       roles: roles,
       email_confirmed: email_confirmed,
+      user_id,
+      user_id,
     })
   } else {
     console.log("Sending 401 Error")

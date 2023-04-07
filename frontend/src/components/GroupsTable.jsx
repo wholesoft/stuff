@@ -1,16 +1,17 @@
-import React, { useMemo, useState } from "react"
+import React, { useRef, useState } from "react"
 import { Link } from "react-router-dom"
 import {
-  useUsers,
-  useDeleteUser,
-  useEditUserRoles,
-  useEditUserEmail,
-} from "../data/user/useUser"
+  useGroups,
+  useDeleteGroup,
+  useEditGroupName,
+  useEditGroupNote,
+} from "../data/stuff/useStuff"
 
 import { DataTable } from "primereact/datatable"
 import { Column } from "primereact/column"
 import { FilterMatchMode, PrimeIcons } from "primereact/api"
 import { InputText } from "primereact/inputtext"
+import { Toast } from "primereact/toast"
 
 function formatDate(date_string) {
   let result = ""
@@ -20,19 +21,26 @@ function formatDate(date_string) {
   return result
 }
 
-const UsersTable2 = () => {
+const GroupsTable = () => {
+  const toastRef = useRef()
   const [filters, setFilters] = useState({
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
   })
 
-  const usersQuery = useUsers()
-  const deleteUserMutation = useDeleteUser()
-  const editUserEmailMutation = useEditUserEmail()
-  const editUserRolesMutation = useEditUserRoles()
+  const groupQuery = useGroups()
+  const deleteGroupMutation = useDeleteGroup(toastRef)
+  const editGroupNameMutation = useEditGroupName()
+  const editGroupNoteMutation = useEditGroupNote()
 
-  const rowData = usersQuery.data
+  const groupData = groupQuery.data
 
-  const deleteColumn = (rowData) => {
+  const rowData = groupData
+  const colData = [
+    { field: "group_name", key: "id", header: "Group" },
+    { field: "notes", key: "id", header: "Notes" },
+  ]
+
+  const actionTemplate = (rowData) => {
     return (
       <div className="deleteAction">
         <span className="actionIcons delete-role">
@@ -43,7 +51,7 @@ const UsersTable2 = () => {
             aria-hidden="true"
             onClick={(e) => {
               //console.log(`DELETE ACTION ${rowData.id}`);
-              deleteUserMutation.mutate(rowData.id)
+              deleteGroupMutation.mutate(rowData.id)
             }}
           />
         </span>
@@ -61,24 +69,14 @@ const UsersTable2 = () => {
   }
   const onCellEditComplete = (e) => {
     let { rowData, newValue, field, originalEvent: event } = e
-    let user_id = rowData["id"]
-    console.log(`EDIT CELL (${field}) COMPLETE: ${newValue}, ID: ${user_id}`)
-    if (field == "roles") {
-      editUserRolesMutation.mutate({ user_id: user_id, roles: newValue })
+    let group_id = rowData["id"]
+    console.log(`EDIT CELL (${field}) COMPLETE: ${newValue}, ID: ${group_id}`)
+    if (field == "group_name") {
+      editGroupNameMutation.mutate({ group_id: group_id, group_name: newValue })
     }
-    if (field == "email") {
-      editUserEmailMutation.mutate({ user_id: user_id, email: newValue })
+    if (field == "notes") {
+      editGroupNoteMutation.mutate({ group_id: group_id, note: newValue })
     }
-  }
-
-  let displayLastLogin = (rowData) => {
-    let value = rowData.last_login
-    return formatDate(value)
-  }
-
-  let displayEmailConfirmed = (rowData) => {
-    let value = rowData.email_confirmed
-    return formatDate(value)
   }
 
   let displayUpdated = (rowData) => {
@@ -93,17 +91,19 @@ const UsersTable2 = () => {
 
   let displayDetails = (rowData) => {
     let id = rowData.id
-    return <Link to={`/user/${id}`}>details</Link>
+    return <Link to={`/stuff/${id}`}>details</Link>
   }
 
   let size = "small"
-  if (usersQuery.isLoading) return <h1>Loading...</h1>
-  if (usersQuery.isError) {
-    return <pre>{JSON.stringify(usersQuery.error)}</pre>
+  if (groupQuery.isLoading) return <h1>Loading...</h1>
+  if (groupQuery.isError) {
+    return <pre>{JSON.stringify(groupQuery.error)}</pre>
   }
   return (
     <>
       <InputText
+        className="mb-2"
+        placeholder="Search"
         onInput={(e) =>
           setFilters({
             global: {
@@ -122,48 +122,34 @@ const UsersTable2 = () => {
         filters={filters}
         tableStyle={{ minWidth: "50rem" }}
       >
-        <Column field="id" header="ID" sortable />
-        <Column
-          field="email"
-          header="Email"
-          sortable
-          editor={(options) => cellEditor(options)}
-          onCellEditComplete={onCellEditComplete}
-        />
-
-        <Column
-          field="roles"
-          header="Roles"
-          sortable
-          editor={(options) => cellEditor(options)}
-          onCellEditComplete={onCellEditComplete}
-        />
-        <Column
-          field="last_login"
-          header="Last Login"
-          sortable
-          body={displayLastLogin}
-        />
-        <Column field="n_logins" header="Total Logins" sortable />
-        <Column
-          field="email_confimed"
-          header="Email Confirmed"
-          sortable
-          body={displayEmailConfirmed}
-        />
-
+        {colData.map((col, i) => (
+          <Column
+            key={col.field}
+            field={col.field}
+            header={col.header}
+            sortable
+            editor={(options) => cellEditor(options)}
+            onCellEditComplete={onCellEditComplete}
+          />
+        ))}
         <Column
           field="created"
           header="Created"
           sortable
           body={displayCreated}
         />
-
-        <Column body={deleteColumn} />
-        {/* <Column body={displayDetails} /> */}
+        <Column
+          field="updated"
+          header="Updated"
+          sortable
+          body={displayUpdated}
+        />
+        <Column body={actionTemplate} />
+        <Column body={displayDetails} />
       </DataTable>
+      <Toast ref={toastRef} />
     </>
   )
 }
 
-export { UsersTable2 }
+export { GroupsTable }

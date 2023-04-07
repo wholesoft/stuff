@@ -6,6 +6,7 @@ import {
   editUserEmail,
   confirmEmail,
 } from "./apiUser"
+import useAuth from "../../hooks/useAuth"
 
 const useUsers = () => {
   const getQuery = useQuery({
@@ -18,7 +19,7 @@ const useUsers = () => {
 const useDeleteUser = () => {
   const queryClient = useQueryClient()
   const deleteMutation = useMutation({
-    mutationFn: (item_id) => deleteUser(item_id),
+    mutationFn: (user_id) => deleteUser(user_id),
     onMutate: async (props) => {
       console.log("on mutate")
       console.log(props)
@@ -35,17 +36,41 @@ const useDeleteUser = () => {
   return deleteMutation
 }
 
-const useEditUserEmail = () => {
+const useEditUserEmail = (toastRef) => {
+  const { auth } = useAuth()
+  let update_auth_email = false
+  let new_email = ""
   const queryClient = useQueryClient()
   const editMutation = useMutation({
     mutationFn: (data) => editUserEmail(data),
     onMutate: async (props) => {
-      console.log("on mutate name")
+      console.log("ON MUTATE")
       console.log(props)
+      update_auth_email = false
+      new_email = ""
+      if (props.user_id == auth.user_id) {
+        update_auth_email = true
+        new_email = props.email
+      } else {
+        console.log(
+          `Edit User ID: ${props.user_id}, Auth User ID: ${auth.user_id}`
+        )
+      }
     },
     onSuccess: (props) => {
       console.log("mutate success")
       console.log(props)
+      const { success, message } = props
+      if (!success) {
+        toastRef.current.show({
+          severity: "error",
+          summary: "Error",
+          detail: message,
+        })
+      } else if (update_auth_email) {
+        console.log("Updating Auth Email")
+        auth.email = new_email
+      }
       return queryClient.invalidateQueries(["users"])
     },
     onError: (props) => {

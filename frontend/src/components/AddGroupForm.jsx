@@ -1,5 +1,5 @@
 import { useState, useRef } from "react"
-import { useAddItemGroup } from "../data/stuff/useStuff"
+import { useAddGroup } from "../data/stuff/useStuff"
 import { InputText } from "primereact/inputtext"
 import { InputTextarea } from "primereact/inputtextarea"
 import { Button } from "primereact/button"
@@ -8,7 +8,7 @@ import { Card } from "primereact/card"
 
 const AddGroupForm = () => {
   const toastRef = useRef()
-  const addGroupMutation = useAddItemGroup(toastRef)
+  const addGroupMutation = useAddGroup(toastRef)
 
   const [form, setForm] = useState({
     group: "",

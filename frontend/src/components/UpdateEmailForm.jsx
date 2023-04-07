@@ -26,12 +26,14 @@ const UpdateEmailForm = () => {
       console.log(JSON.stringify(response?.data))
       const message = response?.data?.message
       const success = response?.data?.success
+      if (success) {
+        auth.email = email
+      }
       toastRef.current.show({
         severity: "info",
         summary: success,
         detail: message,
       })
-      //navigate(from, {replace: true });
     } catch (err) {
       console.log("ERROR FOUND")
       console.log(err.message)
@@ -72,9 +74,9 @@ const UpdateEmailForm = () => {
               />
               <label htmlFor="email">Email:</label>
             </span>
+            <Button label="Update" icon="pi pi-check" className="mt-2" />
           </form>
         </div>
-        <Button label="Update" icon="pi pi-check" className="mt-2" />
         <Toast ref={toastRef} />
       </Card>
     </>

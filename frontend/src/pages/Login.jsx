@@ -39,6 +39,7 @@ const Login = () => {
       const access_token = response?.data?.access_token
       const roles = response?.data?.roles
       const email_confirmed = response?.data?.email_confirmed
+      const user_id = response?.data?.user_id
       console.log("email_confirmed: " + email_confirmed)
       if (!email_confirmed) {
         setAuth({})
@@ -47,7 +48,7 @@ const Login = () => {
         setPassword("")
         navigate("/unconfirmed")
       } else {
-        setAuth({ email: email, roles, access_token })
+        setAuth({ user_id: user_id, email: email, roles, access_token })
         setEmail("")
         setPassword("")
         navigate(from, { replace: true })
