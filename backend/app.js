@@ -207,8 +207,11 @@ app.get("/groups", async (req, res) => {
 
 app.get("/group/:group_id", async (req, res) => {
   console.log("GET: /group/:group_id")
+  console.log("XXX")
   const group_id = req.params.group_id
+  console.log(group_id)
   const groups = await getStuffGroup({ user_id: req.jwt_user_id, group_id })
+  console.log(groups)
   res.send(groups.data)
 })
 

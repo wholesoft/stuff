@@ -8,41 +8,15 @@ const NavigationMenu = ({ hideSidebar }) => {
   const navigate = useNavigate()
   const logout = useLogout()
   const { auth } = useAuth()
+  console.log(auth)
 
   const signOut = async () => {
     await logout()
     navigate("/")
   }
 
-  const items = [
-    {
-      label: "Home",
-      command: () => {
-        navigate("/")
-        hideSidebar()
-      },
-    },
-    {
-      label: "Account",
-      command: () => {
-        navigate("/account")
-        hideSidebar()
-      },
-    },
-    {
-      label: "Admin",
-      command: () => {
-        navigate("/admin")
-        hideSidebar()
-      },
-    },
-    {
-      label: "Logout",
-      command: () => {
-        signOut()
-        hideSidebar()
-      },
-    },
+  // NOT LOGGED IN
+  let items = [
     {
       label: "Login",
       command: () => {
@@ -58,6 +32,44 @@ const NavigationMenu = ({ hideSidebar }) => {
       },
     },
   ]
+
+  // LOGGED IN USER
+  if (auth?.roles?.includes(1001)) {
+    items = [
+      {
+        label: "My Stuff",
+        command: () => {
+          navigate("/")
+          hideSidebar()
+        },
+      },
+      {
+        label: "My Account",
+        command: () => {
+          navigate("/account")
+          hideSidebar()
+        },
+      },
+      {
+        label: "Logout",
+        command: () => {
+          signOut()
+          hideSidebar()
+        },
+      },
+    ]
+  }
+
+  // ADMIN
+  if (auth?.roles?.includes(2001)) {
+    items.push({
+      label: "Admin",
+      command: () => {
+        navigate("/admin")
+        hideSidebar()
+      },
+    })
+  }
 
   return (
     <>

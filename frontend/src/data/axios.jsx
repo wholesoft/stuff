@@ -52,7 +52,8 @@ axiosAuth.interceptors.response.use(
     console.log("Response Auth Error.")
     const originalRequest = error?.config
 
-    console.log(error.message) // Request failed with status code 401
+    console.log(error.response)
+    console.log(error.message) // Request failed with status code 401, Network Error on 404 response.  Not helpful.
     console.log(error.response.status) // 401
 
     if (

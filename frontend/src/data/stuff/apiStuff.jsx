@@ -11,6 +11,7 @@ const getItemGroups = async () => {
 const getItemGroup = async (group_id) => {
   const url = `/group/${group_id}`
   const response = await axiosAuth.get(url)
+  console.log(response.data)
   return response.data
 }
 

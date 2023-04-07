@@ -185,6 +185,7 @@ export async function getStuffGroup(props) {
     console.log(error)
     console.log("Validation Error.")
     message = "Vaidation Error (" + error.details[0].message + ")"
+    //console.log(message)
     validation_okay = false
     return { success: false, message: message, data: [] }
   }
@@ -194,7 +195,10 @@ export async function getStuffGroup(props) {
     `,
     [props.user_id, props.group_id]
   )
-
+  if (rows.length == 0) {
+    //return { success: false, message: "Error, Group Not Found.", data: [] }
+    res.sendStatus(404) // Not Found.  The group may or may not exist, but not for this user.
+  }
   return { success: true, message: "OK", data: rows }
 }
 
