@@ -40,9 +40,9 @@ body {
   grid-area: header;
   background-color: var(--blue-200);
   display: flex;
-  justify-content: space-between;
+  /*justify-content: space-between; */
   align-items: center;
-  padding: 4px 5px 0 5px;
+  padding: 4px 5px 3px 5px;
 }
 
 .title {
@@ -51,14 +51,13 @@ body {
 }
 
 .navbar-links {
-  flex-grow: 1;
   padding-left: 30px;
 }
 
 .navbar-links ul {
+  display: flex;
   margin: 0;
   padding: 0;
-  display: flex;
 }
 
 .navbar-links li {
@@ -104,6 +103,7 @@ body {
   .navbar-links {
     display: none;
     width: 100%;
+    padding-left: 0px;
   }
 
   .navbar {
@@ -118,10 +118,6 @@ body {
 
   .navbar-links li {
     text-align: center;
-  }
-
-  .navbar-links li a {
-    padding: 0.5rem 0.5rem;
   }
 
   .navbar-links.active {
