@@ -8,7 +8,6 @@ const NavMenu = () => {
   const navigate = useNavigate()
   const logout = useLogout()
   const { auth } = useAuth()
-  console.log(auth)
 
   const signOut = async () => {
     await logout()
@@ -39,10 +38,9 @@ const NavMenu = () => {
     items.push({ id: 7, link: "/admin", label: "Admin" })
   }
 
-  console.log(items)
   return (
     <>
-      <ul className="menu">
+      <ul>
         {items.map((item) => {
           return (
             <li key={item.id}>

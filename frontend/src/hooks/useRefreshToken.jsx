@@ -10,7 +10,7 @@ const useRefreshToken = () => {
       withCredentials: true,
     })
     setAuth((prev) => {
-      console.log("SET AUTH WITH: " + JSON.stringify(response.data))
+      //console.log("SET AUTH WITH: " + JSON.stringify(response.data))
       return {
         ...prev,
         email: response.data.email,
