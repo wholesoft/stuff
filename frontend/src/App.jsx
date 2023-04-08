@@ -18,6 +18,7 @@ import { Admin } from "./pages/Admin"
 import { Layout } from "./components/Layout"
 import { Unauthorized } from "./pages/Unauthorized"
 import { AddItemImage } from "./components/AddItemImage"
+import { About } from "./pages/About"
 
 const ROLES = {
   User: 1001,
@@ -42,11 +43,12 @@ function App() {
           <Route path="/unauthorized" element={<Unauthorized />} />
           <Route path="/confirm/:token" element={<ConfirmEmail />} />
           <Route path="/upload" element={<AddItemImage />} />
+          <Route path="/" element={<About />} />
 
           {/* we want to protect these routes */}
           <Route element={<PersistLogin />}>
             <Route element={<RequireAuth allowedRoles={[ROLES.User]} />}>
-              <Route path="/" element={<Stuff />} />
+              <Route path="/mystuff" element={<Stuff />} />
               <Route path="/account" element={<Account />} />
               <Route path="/stuff/:group_id" element={<StuffGroup />} />
             </Route>

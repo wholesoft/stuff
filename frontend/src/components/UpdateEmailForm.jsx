@@ -7,7 +7,7 @@ import useAuth from "../hooks/useAuth"
 import { Card } from "primereact/card"
 
 const UpdateEmailForm = () => {
-  const { auth } = useAuth()
+  const { auth, setAuth } = useAuth()
   const [email, setEmail] = useState(auth.email)
   const toastRef = useRef()
   const axiosPrivate = useAxiosPrivate()
@@ -27,7 +27,12 @@ const UpdateEmailForm = () => {
       const message = response?.data?.message
       const success = response?.data?.success
       if (success) {
-        auth.email = email
+        setAuth((prev) => {
+          return {
+            ...prev,
+            email: email,
+          }
+        })
       }
       toastRef.current.show({
         severity: "info",

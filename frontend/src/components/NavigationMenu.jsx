@@ -18,6 +18,13 @@ const NavigationMenu = ({ hideSidebar }) => {
   // NOT LOGGED IN
   let items = [
     {
+      label: "Home",
+      command: () => {
+        navigate("/")
+        hideSidebar()
+      },
+    },
+    {
       label: "Login",
       command: () => {
         navigate("/login")
@@ -37,9 +44,16 @@ const NavigationMenu = ({ hideSidebar }) => {
   if (auth?.roles?.includes(1001)) {
     items = [
       {
-        label: "My Stuff",
+        label: "Home",
         command: () => {
           navigate("/")
+          hideSidebar()
+        },
+      },
+      {
+        label: "My Stuff",
+        command: () => {
+          navigate("/mystuff")
           hideSidebar()
         },
       },

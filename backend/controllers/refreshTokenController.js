@@ -47,6 +47,7 @@ const handleRefreshToken = async (req, res) => {
         access_token: access_token,
         email: rows[0].email,
         roles: decoded.roles,
+        user_id: decoded.user_id,
       })
     }
   )

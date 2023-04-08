@@ -1,3 +1,4 @@
+import React, { useState } from "react"
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import {
   getUsers,
@@ -37,20 +38,21 @@ const useDeleteUser = () => {
 }
 
 const useEditUserEmail = (toastRef) => {
-  const { auth } = useAuth()
-  let update_auth_email = false
-  let new_email = ""
+  const { auth, setAuth } = useAuth()
+  let [updateAuthEmail, setUpdateAuthEmail] = useState(false)
+  let [newEmail, setNewEmail] = useState("")
   const queryClient = useQueryClient()
   const editMutation = useMutation({
     mutationFn: (data) => editUserEmail(data),
     onMutate: async (props) => {
       console.log("ON MUTATE")
       console.log(props)
-      update_auth_email = false
-      new_email = ""
+      setUpdateAuthEmail(false)
+      setNewEmail("")
       if (props.user_id == auth.user_id) {
-        update_auth_email = true
-        new_email = props.email
+        setUpdateAuthEmail(true)
+        setNewEmail(props.email)
+        console.log("update_auth_email: " + updateAuthEmail)
       } else {
         console.log(
           `Edit User ID: ${props.user_id}, Auth User ID: ${auth.user_id}`
@@ -59,6 +61,7 @@ const useEditUserEmail = (toastRef) => {
     },
     onSuccess: (props) => {
       console.log("mutate success")
+      console.log("update_auth_email2: " + updateAuthEmail)
       console.log(props)
       const { success, message } = props
       if (!success) {
@@ -67,9 +70,16 @@ const useEditUserEmail = (toastRef) => {
           summary: "Error",
           detail: message,
         })
-      } else if (update_auth_email) {
+      } else if (updateAuthEmail) {
         console.log("Updating Auth Email")
-        auth.email = new_email
+        //auth.email = newEmail
+
+        setAuth((prev) => {
+          return {
+            ...prev,
+            email: newEmail,
+          }
+        })
       }
       return queryClient.invalidateQueries(["users"])
     },

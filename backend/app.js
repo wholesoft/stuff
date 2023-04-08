@@ -85,9 +85,6 @@ app.get("/auth", async (req, res) => {
 })
 
 app.use("/refresh", refresh_route)
-//app.get('/refresh', async (req, res) => {
-//
-//})
 
 app.use("/logout", logout_route)
 

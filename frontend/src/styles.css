@@ -18,6 +18,51 @@ body {
   height: 100%;
 }
 
+.logo {
+  height: 44px;
+  width: 44px;
+}
+.yellow1 {
+  background-color: var(--yellow-200);
+}
+
+.yellow2 {
+  background-color: var(--yellow-300);
+}
+
+.yellow3 {
+  background-color: var(--yellow-300);
+}
+
+.title {
+  color: var(--blue-800);
+  display: inline-block;
+}
+
+.menu {
+  display: flex;
+  gap: 0em;
+  list-style-type: none;
+  /* font-size: 18px;*/
+  padding: none;
+  margin: none;
+}
+
+.menu li:hover {
+  background-color: var(--blue-100);
+  border-radius: 5px;
+  transition: 0.3s ease;
+}
+
+.menu li {
+  padding: 5px 14px;
+}
+
+.menu li a {
+  text-decoration: none;
+  color: var(--blue-800);
+}
+
 /* CSS GRID */
 /* CSS GRID START */
 

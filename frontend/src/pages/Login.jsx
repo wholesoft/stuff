@@ -40,7 +40,8 @@ const Login = () => {
       const roles = response?.data?.roles
       const email_confirmed = response?.data?.email_confirmed
       const user_id = response?.data?.user_id
-      console.log("email_confirmed: " + email_confirmed)
+      console.log("LOGIN RESPONSE")
+      console.log(JSON.stringify(response?.data))
       if (!email_confirmed) {
         setAuth({})
         localStorage.setItem("unconfirmed_email", email)
