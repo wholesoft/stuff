@@ -42,7 +42,10 @@ const ItemsTable = (props) => {
   const editItemPurchasedDateMutation = useEditItemPurchasedDate()
   const editItemCostMutation = useEditItemCost()
   const rowData = itemsQuery.data
-  //console.log(rowData)
+  let BASE_URL = "https://stuff-api.wholesoft.net"
+  if (process.env.NODE_ENV == "development") {
+    BASE_URL = "http://localhost:3000"
+  }
 
   const deleteTemplate = (rowData) => {
     return (
@@ -162,7 +165,7 @@ const ItemsTable = (props) => {
       result = (
         <img
           style={{ maxWidth: "200px", maxHeight: "200px" }}
-          src={`http://localhost:3000/images/${value}`}
+          src={`${BASE_URL}/images/${value}`}
           alt=""
         />
       )

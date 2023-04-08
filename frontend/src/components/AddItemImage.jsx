@@ -14,6 +14,12 @@ const AddItemImage = (props) => {
   const [imageName, setImageName] = useState()
   const item_id = props.item_id
 
+  let BASE_URL = "https://stuff-api.wholesoft.net"
+
+  if (process.env.NODE_ENV == "development") {
+    BASE_URL = "http://localhost:3000"
+  }
+
   const handleFileChanged = (e) => {
     setFile(e.target.files[0])
     sendImage(e.target.files[0])
@@ -53,13 +59,18 @@ const AddItemImage = (props) => {
     <>
       <img
         style={{ maxWidth: "200px", maxHeight: "200px" }}
-        src={`http://localhost:3000/images/${imageName}`}
+        src={`${BASE_URL}/images/${imageName}`}
         alt=""
       />
     </>
   ) : (
     <>
+      <label for="getFile" class="btn">
+        Select Image
+      </label>
       <input
+        style={{ display: "none" }}
+        id="getFile"
         filename={file}
         onChange={handleFileChanged}
         type="file"

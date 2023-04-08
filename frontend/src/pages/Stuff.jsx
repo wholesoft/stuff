@@ -1,12 +1,12 @@
 import { AddGroupForm } from "../components/AddGroupForm"
-import { GroupsTable } from "../components/GroupsTable"
+import { DisplayGroups } from "../components/DisplayGroups"
 import { tabTitle } from "../utils/helperFunctions"
 
 const Stuff = () => {
   return (
     <>
       {tabTitle("My Stuff - Wholesoft Stuff")}
-      <GroupsTable />
+      <DisplayGroups />
       <AddGroupForm data={{}} />
     </>
   )

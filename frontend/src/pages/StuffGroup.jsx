@@ -1,4 +1,4 @@
-import { ItemsTable } from "../components/ItemsTable"
+import { DisplayItems } from "../components/DisplayItems"
 import { AddItemForm } from "../components/AddItemForm"
 import { useParams } from "react-router-dom"
 import { useGroup } from "../data/stuff/useStuff"
@@ -17,7 +17,7 @@ const StuffGroup = (props) => {
     <>
       {tabTitle("Items - Wholesoft Stuff")}
       <h1>{rowData[0].group_name}</h1>
-      <ItemsTable groupId={group_id} />
+      <DisplayItems groupId={group_id} />
 
       <AddItemForm data={{}} groupId={group_id} />
     </>

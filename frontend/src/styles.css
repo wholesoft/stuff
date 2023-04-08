@@ -14,6 +14,10 @@ body {
   color: var(--text-color);
 }
 
+.group-card {
+  box-shadow: none;
+}
+
 #root {
   height: 100%;
 }
