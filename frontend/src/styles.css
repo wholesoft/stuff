@@ -42,11 +42,17 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: 4px 5px 0 5px;
 }
 
 .title {
   color: var(--blue-800);
   display: inline-block;
+}
+
+.navbar-links {
+  flex-grow: 1;
+  padding-left: 30px;
 }
 
 .navbar-links ul {

@@ -17,15 +17,17 @@ const Layout = () => {
   return (
     <>
       <div className="navbar">
-        <div className="" style={{ width: "50px" }}>
-          <Link to="/">
-            <img className="logo" src="/logo.svg" />
-          </Link>
-        </div>
-        <div className="" style={{ width: "170px" }}>
-          <Link to="/">
-            <h1 className="title text-xl">Wholesoft Stuff</h1>
-          </Link>
+        <div style={{ display: "flex" }}>
+          <div className="" style={{ width: "50px" }}>
+            <Link to="/">
+              <img className="logo" src="/logo.svg" />
+            </Link>
+          </div>
+          <div className="" style={{ width: "170px" }}>
+            <Link to="/">
+              <h1 className="title text-xl">Wholesoft Stuff</h1>
+            </Link>
+          </div>
         </div>
         <a href="#" className="toggle-button" onClick={handleToggleButtonClick}>
           <span className="bar"></span>
