@@ -22,7 +22,7 @@ export async function addStuffGroup(props) {
   // VALIDATE INPUT
   const schema = joi.object({
     user_id: joi.number().integer().required(),
-    group: joi.string().required(),
+    group_name: joi.string().required(),
     notes: joi.string().allow(""),
   })
 
@@ -41,7 +41,7 @@ export async function addStuffGroup(props) {
       `
        INSERT INTO Stuff_Groups (user_id, group_name, notes, created, updated) VALUES (?,?,?,CURRENT_TIMESTAMP,CURRENT_TIMESTAMP)
        `,
-      [props.user_id, props.group, props.notes]
+      [props.user_id, props.group_name, props.notes]
     )
     console.log(result)
     success = true

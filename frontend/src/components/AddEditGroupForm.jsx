@@ -12,8 +12,17 @@ const AddEditGroupForm = (props) => {
   const addGroupMutation = useAddGroup(toastRef)
   const editGroupMutation = useEditGroup(toastRef)
   //console.log(props.data)
-  const { id, group_name, notes } = props.data
 
+  let id = 0
+  let group_name = ""
+  let notes = ""
+
+  //console.log(props.data)
+  if (props.data != undefined) {
+    id = props.data.id
+    group_name = props.data.group_name
+    notes = props.data.notes
+  }
   let cardTitle = "Add Group"
   if (id > 0) {
     cardTitle = "Edit Group"

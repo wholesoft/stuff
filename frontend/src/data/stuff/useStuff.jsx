@@ -85,6 +85,7 @@ const useAddGroup = (toastRef) => {
       return queryClient.invalidateQueries(["groups"])
     },
     onError: (props) => {
+      console.log(props)
       console.log("mutate error")
     },
   })

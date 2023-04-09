@@ -23,9 +23,9 @@ const deleteGroup = async (group_id) => {
 }
 
 const addGroup = async (props) => {
-  const { group, notes } = props
+  const { group_name, notes } = props
   const url = "/add_stuff_group"
-  const data = JSON.stringify({ group, notes })
+  const data = JSON.stringify({ group_name, notes })
   const response = await axiosAuth.post(url, data)
   console.log(response)
   return response

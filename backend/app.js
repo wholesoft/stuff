@@ -223,10 +223,10 @@ app.get("/group/:group_id", async (req, res) => {
 app.post("/add_stuff_group", async (req, res) => {
   console.log("POST: /add_stuff_group")
   console.log(JSON.stringify(req.body))
-  const { group, notes } = req.body
+  const { group_name, notes } = req.body
   const result = await addStuffGroup({
     user_id: req.jwt_user_id,
-    group: group,
+    group_name: group_name,
     notes: notes,
   })
   res.send(result)
