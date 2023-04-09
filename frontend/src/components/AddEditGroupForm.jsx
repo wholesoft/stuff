@@ -6,26 +6,22 @@ import { Button } from "primereact/button"
 import { Toast } from "primereact/toast"
 import { Card } from "primereact/card"
 import { useNavigate } from "react-router-dom"
-import { useGroup } from "../data/stuff/useStuff"
 
-const AddGroupForm = (props) => {
+const AddEditGroupForm = (props) => {
   const toastRef = useRef()
   const addGroupMutation = useAddGroup(toastRef)
   const editGroupMutation = useEditGroup(toastRef)
-  const group_id = props.groupId
-
-  const groupQuery = useGroup(group_id)
-
-  let rowData = { group_name: "", notes: "" }
+  //console.log(props.data)
+  const { id, group_name, notes } = props.data
 
   let cardTitle = "Add Group"
-  if (group_id > 0) {
+  if (id > 0) {
     cardTitle = "Edit Group"
   }
 
   const [form, setForm] = useState({
-    group: "",
-    notes: "",
+    group_name: group_name,
+    notes: notes,
   })
 
   const handleChange = (event) => {
@@ -38,36 +34,25 @@ const AddGroupForm = (props) => {
   const handleSubmit = async (e) => {
     e.preventDefault()
     let response = ""
-    const { group, notes } = form
-    if (group_id > 0) {
-      editGroupMutation.mutate({ group_id, group, notes })
+    const { group_name, notes } = form
+    if (id > 0) {
+      editGroupMutation.mutate({ group_id: id, group_name, notes })
     } else {
-      addGroupMutation.mutate({ group, notes })
+      addGroupMutation.mutate({ group_name, notes })
     }
-    setForm({ group: "", notes: "" })
+    //setForm({ group: "", notes: "" })
   }
-
-  if (groupQuery.isLoading) return <h1>Loading...</h1>
-  if (groupQuery.isError) {
-    return <pre>{JSON.stringify(groupQuery.error)}</pre>
-  }
-
-  if (group_id > 0) {
-    rowData = groupQuery.data[0]
-  }
-  // console.log(rowData)
 
   return (
     <>
-      {JSON.stringify(rowData)}
       <Card title={cardTitle} className="col-12 md:col-6">
         <form onSubmit={handleSubmit}>
           <div className="p-fluid">
             <span className="p-float-label">
               <InputText
-                id="group"
+                id="group_name"
                 type="text"
-                defaultValue={form.group}
+                value={form.group_name}
                 onChange={(e) => handleChange(e)}
                 autoComplete="off"
               />
@@ -77,7 +62,7 @@ const AddGroupForm = (props) => {
             <span className="p-float-label mt-4">
               <InputTextarea
                 id="notes"
-                defaultValue={form.notes}
+                value={form.notes}
                 onChange={(e) => handleChange(e)}
                 rows={5}
                 cols={30}
@@ -93,4 +78,4 @@ const AddGroupForm = (props) => {
   )
 }
 
-export { AddGroupForm }
+export { AddEditGroupForm }

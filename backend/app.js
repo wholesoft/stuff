@@ -235,10 +235,10 @@ app.post("/add_stuff_group", async (req, res) => {
 app.post("/edit_stuff_group", async (req, res) => {
   console.log("POST: /edit_stuff_group")
   console.log(JSON.stringify(req.body))
-  const { group_id, group, notes } = req.body
+  const { group_id, group_name, notes } = req.body
   const result = await editStuffGroup({
     user_id: req.jwt_user_id,
-    group,
+    group_name,
     notes,
     group_id,
   })

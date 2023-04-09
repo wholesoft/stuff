@@ -56,7 +56,8 @@ const DisplayGroups = () => {
           return (
             <div key={row.id} className="col-12 md:col-6 lg:col-3 xl: col-2">
               <Card title={row.group_name} subTitle={row.notes} className="">
-                <Link to={`/stuff/${row.id}`}>details</Link>
+                <Link to={`/stuff/${row.id}`}>details</Link> -&nbsp;
+                <Link to={`/edit_group/${row.id}`}>edit</Link>
               </Card>
             </div>
           )

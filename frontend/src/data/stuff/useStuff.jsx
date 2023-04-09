@@ -1,8 +1,10 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
+import { useNavigate } from "react-router-dom"
 import {
-  getItemGroups,
-  deleteItemGroup,
-  addItemGroup,
+  getGroups,
+  deleteGroup,
+  addGroup,
+  editGroup,
   editGroupName,
   editGroupNote,
   getItems,
@@ -13,7 +15,7 @@ import {
   editItemPurchasedLocation,
   editItemPurchasedDate,
   editItemCost,
-  getItemGroup,
+  getGroup,
 } from "./apiStuff"
 
 /* ITEM GROUPS */
@@ -21,7 +23,7 @@ import {
 const useGroup = (group_id) => {
   const groupQuery = useQuery({
     queryKey: ["groups", group_id],
-    queryFn: () => getItemGroup(group_id),
+    queryFn: () => getGroup(group_id),
   })
   return groupQuery
 }
@@ -29,7 +31,7 @@ const useGroup = (group_id) => {
 const useGroups = () => {
   const groupQuery = useQuery({
     queryKey: ["groups"],
-    queryFn: () => getItemGroups(),
+    queryFn: () => getGroups(),
   })
   return groupQuery
 }
@@ -37,7 +39,7 @@ const useGroups = () => {
 const useDeleteGroup = (toastRef) => {
   const queryClient = useQueryClient()
   const deleteGroupMutation = useMutation({
-    mutationFn: (group_id) => deleteItemGroup(group_id),
+    mutationFn: (group_id) => deleteGroup(group_id),
     onMutate: async (props) => {
       console.log("on mutate")
       console.log(props)
@@ -63,9 +65,10 @@ const useDeleteGroup = (toastRef) => {
 }
 
 const useAddGroup = (toastRef) => {
+  const navigate = useNavigate()
   const queryClient = useQueryClient()
   const addGroupMutation = useMutation({
-    mutationFn: (data) => addItemGroup(data),
+    mutationFn: (data) => addGroup(data),
     onMutate: async (props) => {
       console.log("on mutate")
       console.log(props)
@@ -78,7 +81,7 @@ const useAddGroup = (toastRef) => {
         summary: "Saved",
         detail: "Group Saved.",
       })
-      //toastRef.current.show({severity: 'info', summary: "Error", detail: "Missing Email."})
+      navigate("/mystuff") // TODO: display toast message after navigating
       return queryClient.invalidateQueries(["groups"])
     },
     onError: (props) => {
@@ -86,6 +89,36 @@ const useAddGroup = (toastRef) => {
     },
   })
   return addGroupMutation
+}
+
+const useEditGroup = (toastRef) => {
+  const navigate = useNavigate()
+  const queryClient = useQueryClient()
+  const editMutation = useMutation({
+    mutationFn: (data) => editGroup(data),
+    onMutate: async (props) => {
+      console.log("on mutate group")
+      console.log(props)
+      toastRef.current.show({
+        severity: "info",
+        summary: "Saved",
+        detail: "Group Saved.",
+      })
+      navigate("/mystuff") // TODO: display toast message after navigating
+      return queryClient.invalidateQueries(["groups", "group"])
+    },
+    onSuccess: (props) => {
+      console.log("mutate success")
+      //console.log(props.data)
+      //console.log(props.data.group_id)
+      //queryClient.invalidateQueries(["groups", props.data.group_id])
+      return queryClient.invalidateQueries(["groups"])
+    },
+    onError: (props) => {
+      console.log("mutate error")
+    },
+  })
+  return editMutation
 }
 
 const useEditGroupName = () => {
@@ -287,6 +320,7 @@ const useEditItemCost = () => {
 export {
   useGroups,
   useGroup,
+  useEditGroup,
   useDeleteGroup,
   useAddGroup,
   useEditGroupName,

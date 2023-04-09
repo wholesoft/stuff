@@ -12,6 +12,7 @@ import { Account } from "./pages/Account"
 import { UsersTable } from "./components/UsersTable"
 import { ShowUser } from "./pages/ShowUser"
 import { Stuff } from "./pages/Stuff"
+import { EditGroup } from "./pages/EditGroup"
 import { StuffGroup } from "./pages/StuffGroup"
 import { NotFound } from "./pages/NotFound"
 import { Admin } from "./pages/Admin"
@@ -51,6 +52,8 @@ function App() {
               <Route path="/mystuff" element={<Stuff />} />
               <Route path="/account" element={<Account />} />
               <Route path="/stuff/:group_id" element={<StuffGroup />} />
+              <Route path="/add_group" element={<EditGroup />} />
+              <Route path="/edit_group/:groupId" element={<EditGroup />} />
             </Route>
 
             <Route element={<RequireAuth allowedRoles={[ROLES.Admin]} />}>

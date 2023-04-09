@@ -61,7 +61,7 @@ export async function editStuffGroup(props) {
   const schema = joi.object({
     user_id: joi.number().integer().required(),
     group_id: joi.number().integer().required(),
-    group: joi.string().required(),
+    group_name: joi.string().required(),
     notes: joi.string().allow(""),
   })
 
@@ -81,14 +81,14 @@ export async function editStuffGroup(props) {
        UPDATE Stuff_Groups SET group_name=?, notes=?, updated=CURRENT_TIMESTAMP
        WHERE id=? AND user_id=?
        `,
-      [props.group, props.notes, props.group_id, props.user_id]
+      [props.group_name, props.notes, props.group_id, props.user_id]
     )
     console.log(result)
     success = true
-    message = `Group Updated (${props.group}).`
+    message = `Group Updated.`
   }
 
-  return { success: success, message: message }
+  return { success: success, message: message, group_id: props.group_id }
 }
 
 export async function deleteStuffGroup(props) {
@@ -196,8 +196,10 @@ export async function getStuffGroup(props) {
     [props.user_id, props.group_id]
   )
   if (rows.length == 0) {
-    //return { success: false, message: "Error, Group Not Found.", data: [] }
-    res.sendStatus(404) // Not Found.  The group may or may not exist, but not for this user.
+    return { success: false, message: "Error, Group Not Found.", data: [] }
+
+    // can't do this here: ReferenceError: res is not defined
+    //res.sendStatus(404) // Not Found.  The group may or may not exist, but not for this user.
   }
   return { success: true, message: "OK", data: rows }
 }

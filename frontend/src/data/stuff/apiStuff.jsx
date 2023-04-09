@@ -2,31 +2,42 @@ import { axiosAuth } from "../axios"
 
 /* ITEM GROUPS */
 
-const getItemGroups = async () => {
+const getGroups = async () => {
   const url = `/groups`
   const response = await axiosAuth.get(url)
   return response.data
 }
 
-const getItemGroup = async (group_id) => {
+const getGroup = async (group_id) => {
   const url = `/group/${group_id}`
   const response = await axiosAuth.get(url)
-  console.log(response.data)
+  //console.log(response.data)
   return response.data
 }
 
-const deleteItemGroup = async (group_id) => {
+const deleteGroup = async (group_id) => {
   const url = `/delete_group/${group_id}`
   const response = await axiosAuth.get(url)
   console.log(response.data)
   return response.data
 }
 
-const addItemGroup = async (props) => {
+const addGroup = async (props) => {
   const { group, notes } = props
   const url = "/add_stuff_group"
   const data = JSON.stringify({ group, notes })
   const response = await axiosAuth.post(url, data)
+  console.log(response)
+  return response
+}
+
+const editGroup = async (props) => {
+  console.log("editGroup")
+  console.log(props)
+  const { id, group_name, notes } = props
+  const url = "/edit_stuff_group"
+  const data = JSON.stringify({ id, group_name, notes })
+  const response = await axiosAuth.post(url, props)
   console.log(response)
   return response
 }
@@ -127,10 +138,11 @@ const editItemCost = async (props) => {
 }
 
 export {
-  getItemGroups,
-  getItemGroup,
-  deleteItemGroup,
-  addItemGroup,
+  getGroups,
+  getGroup,
+  deleteGroup,
+  addGroup,
+  editGroup,
   editGroupName,
   editGroupNote,
   getItems,
