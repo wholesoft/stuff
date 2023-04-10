@@ -12,8 +12,8 @@ const AddItemImage = (props) => {
   const [responseMessage, setResponseMessage] = useState("")
   const [file, setFile] = useState()
   const [imageName, setImageName] = useState()
-  const item_id = props.item_id
-
+  const [itemId, setItemId] = useState(props.item_id)
+  //console.log(itemId)
   let BASE_URL = "https://stuff-api.wholesoft.net"
 
   if (process.env.NODE_ENV == "development") {
@@ -30,8 +30,10 @@ const AddItemImage = (props) => {
     //setFile(e.files[0])
     const formData = new FormData()
     formData.append("image", f)
-    formData.append("item_id", item_id)
-    console.log("POSTING IMAGE")
+    formData.append("item_id", itemId)
+    //console.log("ADDING IMAGE TO ID:")
+    //console.log(itemId)
+    //console.log("POSTING IMAGE")
     const result = await axiosPrivate.post("/edit_item_image", formData, {
       headers: { "Content-Type": "multipart/form-data" },
     })
@@ -65,12 +67,12 @@ const AddItemImage = (props) => {
     </>
   ) : (
     <>
-      <label for="getFile" class="btn">
+      <label htmlFor={`getFile${itemId}`} className="select-image-button">
         Select Image
       </label>
       <input
         style={{ display: "none" }}
-        id="getFile"
+        id={`getFile${itemId}`}
         filename={file}
         onChange={handleFileChanged}
         type="file"

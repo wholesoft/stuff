@@ -276,8 +276,8 @@ app.get("/delete_group/:group_id", async (req, res) => {
   res.send(result)
 })
 
-app.post("/add_stuff_item", async (req, res) => {
-  console.log("POST: /add_stuff_item")
+app.post("/add_item", async (req, res) => {
+  console.log("POST: /add_item")
   const {
     group_id,
     item_name,
@@ -299,20 +299,23 @@ app.post("/add_stuff_item", async (req, res) => {
   res.send(result)
 })
 
-app.post("/edit_stuff_item", async (req, res) => {
-  console.log("POST: /edit_stuff_item")
+app.post("/edit_item", async (req, res) => {
+  console.log("POST: /edit_item")
   const {
     item_id,
+    group_id,
     item_name,
     purchase_location,
     purchase_date,
     amount_paid,
     notes,
   } = req.body
+  console.log("EDIT ITEM")
   console.log(JSON.stringify(req.body))
   const result = await editStuffItem({
     user_id: req.jwt_user_id,
     item_id: item_id,
+    group_id: group_id,
     item_name: item_name,
     purchase_location: purchase_location,
     purchase_date: purchase_date,
@@ -391,12 +394,12 @@ app.post("/edit_item_name", async (req, res) => {
 
 app.post("/edit_item_image", upload.single("image"), async (req, res) => {
   console.log("POST: /edit_item_image")
-  console.log(req)
+  //console.log(req)
 
   // webp files don't work.
   const image = req.file?.filename
   const item_id = req.body.item_id
-
+  console.log(req.body)
   const result = await editItemImage({
     user_id: req.jwt_user_id,
     image,

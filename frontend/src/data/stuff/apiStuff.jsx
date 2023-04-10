@@ -65,8 +65,16 @@ const editGroupNote = async (props) => {
 
 /* ITEMS */
 const getItems = async (group_id) => {
-  console.log(group_id)
+  //console.log(group_id)
   const url = `/stuff/${group_id}`
+  //console.log(url)
+  const response = await axiosAuth.get(url)
+  return response.data
+}
+
+const getItem = async (item_id) => {
+  //console.log(item_id)
+  const url = `/item/${item_id}`
   console.log(url)
   const response = await axiosAuth.get(url)
   return response.data
@@ -80,7 +88,17 @@ const deleteItem = async (item_id) => {
 }
 
 const addItem = async (props) => {
-  const url = "/add_stuff_item"
+  const url = "/add_item"
+  console.log(url)
+  console.log(props)
+  const response = await axiosAuth.post(url, props)
+  console.log(response)
+  return response
+}
+
+const editItem = async (props) => {
+  const url = "/edit_item"
+  console.log(url)
   console.log(props)
   const response = await axiosAuth.post(url, props)
   console.log(response)
@@ -146,8 +164,10 @@ export {
   editGroupName,
   editGroupNote,
   getItems,
+  getItem,
   deleteItem,
   addItem,
+  editItem,
   editItemName,
   editItemNote,
   editItemPurchasedLocation,

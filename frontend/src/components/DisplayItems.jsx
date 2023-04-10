@@ -69,16 +69,23 @@ const DisplayItems = (props) => {
   let displayImage = (row) => {
     let value = row.image
     let item_id = row.id
-    let result = <AddItemImage item_id={item_id} />
+    let result = (
+      <>
+        <AddItemImage item_id={item_id} />
+      </>
+    )
     if (value != "" && value != null) {
       result = (
-        <img
-          style={{ maxWidth: "200px", maxHeight: "200px" }}
-          src={`${BASE_URL}/images/${value}`}
-          alt=""
-        />
+        <>
+          <img
+            style={{ maxWidth: "200px", maxHeight: "200px" }}
+            src={`${BASE_URL}/images/${value}`}
+            alt=""
+          />
+        </>
       )
     }
+
     return result
   }
 
@@ -90,6 +97,7 @@ const DisplayItems = (props) => {
     <>
       <div className="grid">
         {data.map((row) => {
+          //console.log(row)
           return (
             <div key={row.id} className="col-12 md:col-6 lg:col-3 xl: col-2">
               <Card
@@ -100,6 +108,11 @@ const DisplayItems = (props) => {
                 <p>Purchase Location: {row.purchased_location}</p>
                 <p>Date: {formatDate(row.date_purchased)}</p>
                 <p>Cost: {row.amount_paid}</p>
+                <p className="text-sm">
+                  <Link to={`/edit_item/${row.group_id}/${row.id}`}>
+                    Edit Item
+                  </Link>
+                </p>
               </Card>
             </div>
           )

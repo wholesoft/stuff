@@ -209,6 +209,7 @@ export async function addStuffItem(props) {
   let success = false
   let message = ""
   let validation_okay = true
+  let item_id = 0
 
   // VALIDATE INPUT
   const schema = joi.object({
@@ -261,11 +262,18 @@ export async function addStuffItem(props) {
       ]
     )
     console.log(result)
+    item_id = result[0].insertId
+
     success = true
     message = `Item Added (${props.item_name}).`
   }
 
-  return { success: success, message: message }
+  return {
+    success: success,
+    message: message,
+    item_id: item_id,
+    group_id: props.group_id,
+  }
 }
 
 export async function editStuffItem(props) {
@@ -278,6 +286,7 @@ export async function editStuffItem(props) {
   const schema = joi.object({
     user_id: joi.number().integer().required(),
     item_id: joi.number().integer().required(),
+    group_id: joi.number().integer(),
     item_name: joi.string().required(),
     purchase_location: joi.string().allow(""),
     purchase_date: joi.date().allow(null).empty("").default(null),
@@ -325,8 +334,9 @@ export async function editStuffItem(props) {
     success = true
     message = `Item Updated (${props.item_name}).`
   }
-
-  return { success: success, message: message }
+  let item_id = props.item_id
+  let group_id = props.group_id
+  return { success, message, item_id, group_id }
 }
 
 export async function deleteStuffItem(props) {

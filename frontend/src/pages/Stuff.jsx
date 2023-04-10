@@ -7,7 +7,7 @@ const Stuff = () => {
   return (
     <>
       {tabTitle("My Stuff - Wholesoft Stuff")}
-      <span className="text-xs">
+      <span className="text-sm">
         <Link to="/add_group">Add Group</Link>
       </span>
       <DisplayGroups />

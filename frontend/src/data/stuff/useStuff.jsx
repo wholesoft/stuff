@@ -8,8 +8,10 @@ import {
   editGroupName,
   editGroupNote,
   getItems,
+  getItem,
   deleteItem,
   addItem,
+  editItem,
   editItemName,
   editItemNote,
   editItemPurchasedLocation,
@@ -18,7 +20,7 @@ import {
   getGroup,
 } from "./apiStuff"
 
-/* ITEM GROUPS */
+/* GROUPS */
 
 const useGroup = (group_id) => {
   const groupQuery = useQuery({
@@ -105,13 +107,12 @@ const useEditGroup = (toastRef) => {
         summary: "Saved",
         detail: "Group Saved.",
       })
+      // PRETTY SURE THIS NEEDS TO BE IN onSuccess
       navigate("/mystuff") // TODO: display toast message after navigating
       return queryClient.invalidateQueries(["groups", "group"])
     },
     onSuccess: (props) => {
       console.log("mutate success")
-      //console.log(props.data)
-      //console.log(props.data.group_id)
       //queryClient.invalidateQueries(["groups", props.data.group_id])
       return queryClient.invalidateQueries(["groups"])
     },
@@ -165,12 +166,20 @@ const useEditGroupNote = () => {
 /* ITEMS */
 
 const useItems = (group_id) => {
-  console.log(group_id)
+  //console.log(group_id)
   const getQuery = useQuery({
     queryKey: ["items", group_id],
     queryFn: () => getItems(group_id),
   })
   return getQuery
+}
+
+const useItem = (item_id) => {
+  const dataQuery = useQuery({
+    queryKey: ["items", item_id],
+    queryFn: () => getItem(item_id),
+  })
+  return dataQuery
 }
 
 const useDeleteItem = () => {
@@ -194,6 +203,7 @@ const useDeleteItem = () => {
 }
 
 const useAddItem = (toastRef) => {
+  const navigate = useNavigate()
   const queryClient = useQueryClient()
   const addMutation = useMutation({
     mutationFn: (data) => addItem(data),
@@ -209,13 +219,44 @@ const useAddItem = (toastRef) => {
         summary: "Saved",
         detail: "Item Saved.",
       })
-      return queryClient.invalidateQueries(["items"])
+      let itemId = props.data.item_id
+      let groupId = props.data.group_id
+      console.log("New Item ID Is: " + itemId)
+      console.log("Group ID Is: " + groupId)
+      queryClient.invalidateQueries(["items"])
+      navigate(`/stuff/${groupId}`) // TODO: display toast message after navigating
     },
     onError: (props) => {
       console.log("mutate error")
     },
   })
   return addMutation
+}
+
+const useEditItem = (toastRef) => {
+  const navigate = useNavigate()
+  let itemId = 0
+  const queryClient = useQueryClient()
+  const editMutation = useMutation({
+    mutationFn: (data) => editItem(data),
+    onMutate: async (props) => {
+      console.log("on mutate item")
+      console.log(props)
+    },
+    onSuccess: (props) => {
+      //console.log("mutate success")
+      let itemId = props.data.item_id
+      let groupId = props.data.group_id
+      //console.log("New Item ID Is: " + itemId)
+      //console.log("Group ID Is: " + groupId)
+      queryClient.invalidateQueries(["items"])
+      navigate(`/stuff/${groupId}`) // TODO: display toast message after navigating
+    },
+    onError: (props) => {
+      console.log("mutate error")
+    },
+  })
+  return editMutation
 }
 
 const useEditItemName = () => {
@@ -327,8 +368,10 @@ export {
   useEditGroupName,
   useEditGroupNote,
   useItems,
+  useItem,
   useDeleteItem,
   useAddItem,
+  useEditItem,
   useEditItemName,
   useEditItemNote,
   useEditItemPurchasedLocation,
