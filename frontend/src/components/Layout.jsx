@@ -1,10 +1,21 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Outlet } from "react-router-dom"
-import { Link } from "react-router-dom"
+import { Link, useLocation } from "react-router-dom"
 import { NavMenu } from "./NavMenu"
 
 const Layout = () => {
+  const location = useLocation()
   const [activeNav, setActiveNav] = useState(false)
+  const [prevLoc, setPrevLoc] = useState(location.pathname)
+
+  useEffect(() => {
+    // Close Nav Menu after route change
+    console.log(location.pathname + " : " + prevLoc)
+    if (activeNav && location.pathname != prevLoc) {
+      setActiveNav(false)
+    }
+    setPrevLoc(location.pathname)
+  }, [location])
 
   const handleToggleButtonClick = () => {
     if (activeNav) {

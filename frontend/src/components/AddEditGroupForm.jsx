@@ -1,17 +1,23 @@
 import { useState, useRef, useEffect } from "react"
-import { useAddGroup, useEditGroup } from "../data/stuff/useStuff"
+import {
+  useAddGroup,
+  useEditGroup,
+  useDeleteGroup,
+} from "../data/stuff/useStuff"
 import { InputText } from "primereact/inputtext"
 import { InputTextarea } from "primereact/inputtextarea"
 import { Button } from "primereact/button"
 import { Toast } from "primereact/toast"
 import { Card } from "primereact/card"
-import { useNavigate } from "react-router-dom"
+import { Checkbox } from "primereact/checkbox"
 
 const AddEditGroupForm = (props) => {
   const toastRef = useRef()
   const addGroupMutation = useAddGroup(toastRef)
   const editGroupMutation = useEditGroup(toastRef)
-  //console.log(props.data)
+  const deleteGroupMutation = useDeleteGroup(toastRef)
+
+  const [deleteCheck, setDeleteCheck] = useState(false)
 
   let id = 0
   let group_name = ""
@@ -21,7 +27,9 @@ const AddEditGroupForm = (props) => {
   if (props.data != undefined) {
     id = props.data.id
     group_name = props.data.group_name
-    notes = props.data.notes
+    if (props.data.notes != null) {
+      notes = props.data.notes
+    }
   }
   let cardTitle = "Add Group"
   if (id > 0) {
@@ -45,7 +53,11 @@ const AddEditGroupForm = (props) => {
     let response = ""
     const { group_name, notes } = form
     if (id > 0) {
-      editGroupMutation.mutate({ group_id: id, group_name, notes })
+      if (deleteCheck) {
+        deleteGroupMutation.mutate(id)
+      } else {
+        editGroupMutation.mutate({ group_id: id, group_name, notes })
+      }
     } else {
       addGroupMutation.mutate({ group_name, notes })
     }
@@ -78,8 +90,18 @@ const AddEditGroupForm = (props) => {
               />
               <label htmlFor="notes">Notes</label>
             </span>
+            <div className="mt-2">
+              <Checkbox
+                inputId="deleteGroup"
+                onChange={(e) => setDeleteCheck(e.checked)}
+                checked={deleteCheck}
+              ></Checkbox>
+              <label htmlFor="deleteGroup" className="ml-2">
+                Delete Item
+              </label>
+            </div>
           </div>
-          <Button icon="pi pi-check" label="Save" />
+          <Button className="mt-3" icon="pi pi-check" label="Save" />
         </form>
       </Card>
       <Toast ref={toastRef} />

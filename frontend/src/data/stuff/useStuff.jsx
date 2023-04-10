@@ -39,6 +39,7 @@ const useGroups = () => {
 }
 
 const useDeleteGroup = (toastRef) => {
+  const navigate = useNavigate()
   const queryClient = useQueryClient()
   const deleteGroupMutation = useMutation({
     mutationFn: (group_id) => deleteGroup(group_id),
@@ -50,6 +51,10 @@ const useDeleteGroup = (toastRef) => {
       console.log("mutate success")
       console.log(props)
       const { success, message } = props
+      if (success) {
+        queryClient.invalidateQueries(["groups"])
+        navigate("/mystuff")
+      }
       if (!success) {
         toastRef.current.show({
           severity: "error",
@@ -57,7 +62,6 @@ const useDeleteGroup = (toastRef) => {
           detail: message,
         })
       }
-      return queryClient.invalidateQueries(["groups"])
     },
     onError: (props) => {
       console.log("mutate error")
@@ -83,8 +87,8 @@ const useAddGroup = (toastRef) => {
         summary: "Saved",
         detail: "Group Saved.",
       })
+      queryClient.invalidateQueries(["groups"])
       navigate("/mystuff") // TODO: display toast message after navigating
-      return queryClient.invalidateQueries(["groups"])
     },
     onError: (props) => {
       console.log(props)
@@ -182,7 +186,8 @@ const useItem = (item_id) => {
   return dataQuery
 }
 
-const useDeleteItem = () => {
+const useDeleteItem = (toastRef, group_id) => {
+  const navigate = useNavigate()
   const queryClient = useQueryClient()
   const deleteMutation = useMutation({
     mutationFn: (item_id) => deleteItem(item_id),
@@ -193,7 +198,20 @@ const useDeleteItem = () => {
     onSuccess: (props) => {
       console.log("mutate success")
       console.log(props)
-      return queryClient.invalidateQueries(["items"])
+      const { success, message } = props
+      if (success) {
+        queryClient.invalidateQueries(["items"])
+        navigate(`/stuff/${group_id}`)
+      }
+      if (!success) {
+        console.log("NOT SUCCESS")
+        toastRef.current.show({
+          severity: "error",
+          summary: "Error",
+          detail: message,
+        })
+      }
+      //navigate("/mystuff") // TODO: display toast message after navigating
     },
     onError: (props) => {
       console.log("mutate error")
