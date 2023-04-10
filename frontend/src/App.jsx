@@ -21,6 +21,7 @@ import { Layout } from "./components/Layout"
 import { Unauthorized } from "./pages/Unauthorized"
 import { AddItemImage } from "./components/AddItemImage"
 import { About } from "./pages/About"
+import { Logout } from "./pages/Logout"
 
 const ROLES = {
   User: 1001,
@@ -46,6 +47,7 @@ function App() {
           <Route path="/confirm/:token" element={<ConfirmEmail />} />
           <Route path="/upload" element={<AddItemImage />} />
           <Route path="/" element={<About />} />
+          <Route path="/logout" element={<Logout />} />
 
           {/* we want to protect these routes */}
           <Route element={<PersistLogin />}>
