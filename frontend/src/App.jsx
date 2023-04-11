@@ -46,9 +46,10 @@ function App() {
           <Route path="/unauthorized" element={<Unauthorized />} />
           <Route path="/confirm/:token" element={<ConfirmEmail />} />
           <Route path="/upload" element={<AddItemImage />} />
-          <Route path="/" element={<About />} />
           <Route path="/logout" element={<Logout />} />
-
+          <Route path="/about" element={<About />} />
+          {/* path="/" displays About page if user not logged in */}
+          <Route path="/" element={<Stuff />} />{" "}
           {/* we want to protect these routes */}
           <Route element={<PersistLogin />}>
             <Route element={<RequireAuth allowedRoles={[ROLES.User]} />}>
@@ -70,7 +71,6 @@ function App() {
               <Route path="/user/:id" element={<ShowUser />} />
             </Route>
           </Route>
-
           {/* catch all */}
           <Route path="*" element={<NotFound />} />
         </Route>
@@ -80,9 +80,3 @@ function App() {
 }
 
 export default App
-
-/*
-        <div className='app'>
-        <RegisterForm />
-      </div>
-*/

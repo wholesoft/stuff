@@ -78,7 +78,7 @@ const DisplayItems = (props) => {
       result = (
         <>
           <img
-            style={{ maxWidth: "200px", maxHeight: "200px" }}
+            style={{ maxWidth: "300px", margin: "0 auto" }}
             src={`${BASE_URL}/images/${value}`}
             alt=""
           />

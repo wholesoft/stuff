@@ -1,9 +1,20 @@
-import { AddGroupForm } from "../components/AddGroupForm"
 import { DisplayGroups } from "../components/DisplayGroups"
 import { tabTitle } from "../utils/helperFunctions"
 import { Link } from "react-router-dom"
+import useAuth from "../hooks/useAuth"
+import { About } from "./About"
 
 const Stuff = () => {
+  const { auth } = useAuth()
+
+  if (!auth?.roles?.includes(1001)) {
+    return (
+      <>
+        <About />
+      </>
+    )
+  }
+
   return (
     <>
       {tabTitle("My Stuff - Wholesoft Stuff")}
@@ -11,7 +22,6 @@ const Stuff = () => {
         <Link to="/add_group">Add Group</Link>
       </span>
       <DisplayGroups />
-      {/* <AddGroupForm data={{}} /> */}
     </>
   )
 }

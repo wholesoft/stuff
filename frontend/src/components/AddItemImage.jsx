@@ -1,15 +1,11 @@
 import { useState, useRef, useEffect } from "react"
 import { useAxiosPrivate } from "../hooks/useAxiosPrivate"
-import { InputText } from "primereact/inputtext"
-import { Button } from "primereact/button"
-import { Card } from "primereact/card"
 import { Toast } from "primereact/toast"
-import { FileUpload } from "primereact/fileupload"
 
 const AddItemImage = (props) => {
   const axiosPrivate = useAxiosPrivate()
   const toastRef = useRef()
-  const [responseMessage, setResponseMessage] = useState("")
+  const [errorMessage, setErrorMessage] = useState("")
   const [file, setFile] = useState()
   const [imageName, setImageName] = useState()
   const [itemId, setItemId] = useState(props.item_id)
@@ -48,6 +44,7 @@ const AddItemImage = (props) => {
         detail: message,
       })
     } else {
+      setErrorMessage(message)
       toastRef.current.show({
         severity: "error",
         summary: "Error",
@@ -60,14 +57,17 @@ const AddItemImage = (props) => {
   return imageName ? (
     <>
       <img
-        style={{ maxWidth: "200px", maxHeight: "200px" }}
+        style={{ maxHeight: "200px" }}
         src={`${BASE_URL}/images/${imageName}`}
         alt=""
       />
     </>
   ) : (
     <>
-      <label htmlFor={`getFile${itemId}`} className="select-image-button">
+      <label
+        htmlFor={`getFile${itemId}`}
+        className="p-button p-component select-image-button"
+      >
         Select Image
       </label>
       <input
@@ -79,6 +79,7 @@ const AddItemImage = (props) => {
         accept="image/*"
       ></input>
       <Toast ref={toastRef} />
+      {errorMessage}
     </>
   )
 }
