@@ -70,8 +70,8 @@ const UpdateEmailForm = () => {
   return (
     <>
       <Card title="Update Email Address" className="mr-4 mb-4 col-12 md:col-5">
-        <div className="p-fluid">
-          <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit}>
+          <div className="p-fluid">
             <span className="p-float-label mt-1">
               <InputText
                 value={email}
@@ -79,9 +79,10 @@ const UpdateEmailForm = () => {
               />
               <label htmlFor="email">Email:</label>
             </span>
-            <Button label="Update" icon="pi pi-check" className="mt-2" />
-          </form>
-        </div>
+          </div>
+          <Button label="Update" icon="pi pi-check" className="mt-2" />
+        </form>
+
         <Toast ref={toastRef} />
       </Card>
     </>

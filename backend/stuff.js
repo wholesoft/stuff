@@ -160,7 +160,12 @@ export async function getStuffGroups(props) {
   }
   const [rows] = await pool.query(
     `
-    SELECT id, group_name, notes, created, updated FROM Stuff_Groups WHERE user_id=? ORDER BY id DESC
+    SELECT a.id, a.group_name, a.notes, a.created, a.updated, count(b.id) as total_items
+    FROM Stuff_Groups a
+    LEFT JOIN Stuff b ON a.id=b.group_id
+    WHERE a.user_id=?
+    GROUP BY  a.id, a.group_name, a.notes, a.created, a.updated
+    ORDER BY a.id DESC
     `,
     [props.user_id]
   )

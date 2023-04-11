@@ -4,7 +4,7 @@ import { useParams, Link } from "react-router-dom"
 import { useGroup } from "../data/stuff/useStuff"
 import { tabTitle } from "../utils/helperFunctions"
 
-const StuffGroup = (props) => {
+const Items = (props) => {
   const { group_id } = useParams()
   const groupQuery = useGroup(group_id)
   const rowData = groupQuery.data
@@ -16,7 +16,8 @@ const StuffGroup = (props) => {
   return (
     <>
       {tabTitle("Items - Wholesoft Stuff")}
-      <h1>{rowData[0].group_name}</h1>
+      <h2>{rowData[0].group_name}</h2>
+      <p>{rowData[0].notes}</p>
       <p className="text-sm">
         <Link to={`/add_item/${group_id}`}>Add Item</Link>
       </p>
@@ -27,4 +28,4 @@ const StuffGroup = (props) => {
   )
 }
 
-export { StuffGroup }
+export { Items }

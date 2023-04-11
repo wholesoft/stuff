@@ -4,7 +4,7 @@ import { Link } from "react-router-dom"
 import useAuth from "../hooks/useAuth"
 import { About } from "./About"
 
-const Stuff = () => {
+const Groups = () => {
   const { auth } = useAuth()
 
   if (!auth?.roles?.includes(1001)) {
@@ -26,4 +26,4 @@ const Stuff = () => {
   )
 }
 
-export { Stuff }
+export { Groups }

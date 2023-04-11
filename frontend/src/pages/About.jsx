@@ -5,7 +5,7 @@ const About = () => {
     <>
       {tabTitle("Wholesoft Stuff")}
       <p>A simple and free app to keep track of your stuff.</p>
-      <p>You stuff can be organized into custom groups.</p>
+      <p>Your stuff can be organized into custom groups.</p>
       <p>
         Each item can have a photo along with data fields for the date
         purchased, location purchased, cost, and miscellaneous notes.

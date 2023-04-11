@@ -11,10 +11,10 @@ import { RegistrationConfirmed } from "./pages/RegistrationConfirmed"
 import { Account } from "./pages/Account"
 import { UsersTable } from "./components/UsersTable"
 import { ShowUser } from "./pages/ShowUser"
-import { Stuff } from "./pages/Stuff"
+import { Groups } from "./pages/Groups"
 import { EditGroup } from "./pages/EditGroup"
 import { EditItem } from "./pages/EditItem"
-import { StuffGroup } from "./pages/StuffGroup"
+import { Items } from "./pages/Items"
 import { NotFound } from "./pages/NotFound"
 import { Admin } from "./pages/Admin"
 import { Layout } from "./components/Layout"
@@ -49,13 +49,13 @@ function App() {
           <Route path="/logout" element={<Logout />} />
           <Route path="/about" element={<About />} />
           {/* path="/" displays About page if user not logged in */}
-          <Route path="/" element={<Stuff />} />{" "}
+          <Route path="/" element={<Groups />} />{" "}
           {/* we want to protect these routes */}
           <Route element={<PersistLogin />}>
             <Route element={<RequireAuth allowedRoles={[ROLES.User]} />}>
-              <Route path="/mystuff" element={<Stuff />} />
+              <Route path="/mystuff" element={<Groups />} />
               <Route path="/account" element={<Account />} />
-              <Route path="/stuff/:group_id" element={<StuffGroup />} />
+              <Route path="/stuff/:group_id" element={<Items />} />
               <Route path="/add_group" element={<EditGroup />} />
               <Route path="/edit_group/:groupId" element={<EditGroup />} />
               <Route path="/add_item/:groupId" element={<EditItem />} />

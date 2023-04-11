@@ -1,13 +1,16 @@
 import { tabTitle } from "../utils/helperFunctions"
 import { useNavigate } from "react-router-dom"
 import useLogout from "../hooks/useLogout"
+import { useEffect } from "react"
 
 const Logout = () => {
   const navigate = useNavigate()
   const logout = useLogout()
 
-  logout()
-  navigate("/")
+  useEffect(() => {
+    logout()
+    navigate("/")
+  }, [])
 
   return <>{tabTitle("Logout - Wholesoft Stuff")}</>
 }

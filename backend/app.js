@@ -72,10 +72,12 @@ app.use((err, req, res, next) => {
 })
 
 // trust proxy should mean req.ip returns the client ip address and not the proxy ip address
+// doesn't work: ::ffff:127.0.0.1
+// TODO, get the ipaddress another way
 app.set("trust proxy", true)
 
 const clientUserAgent = new UserAgent()
-let userAgentString = clientUserAgent.toString()
+let userAgentString = truncate(clientUserAgent.toString(), 250) // get user-agent.  truncate if too long.
 let clientDetails = JSON.stringify(clientUserAgent.data, null, 2)
 
 //app.set("view engine", "ejs");
@@ -518,3 +520,9 @@ app.listen(port, () => {
 })
 
 console.log("backend init")
+
+function truncate(str, length) {
+  if (str.length > length) {
+    return str.slice(0, length) + "..."
+  } else return str
+}

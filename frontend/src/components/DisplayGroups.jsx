@@ -7,8 +7,6 @@ import {
   useEditGroupNote,
 } from "../data/stuff/useStuff"
 
-import { PrimeIcons } from "primereact/api"
-import { InputText } from "primereact/inputtext"
 import { Toast } from "primereact/toast"
 import { Card } from "primereact/card"
 
@@ -24,9 +22,9 @@ const DisplayGroups = () => {
   const toastRef = useRef()
 
   const groupQuery = useGroups()
-  const deleteGroupMutation = useDeleteGroup(toastRef)
-  const editGroupNameMutation = useEditGroupName()
-  const editGroupNoteMutation = useEditGroupNote()
+  const deleteMutation = useDeleteGroup(toastRef)
+  //const editGroupNameMutation = useEditGroupName()
+  //const editGroupNoteMutation = useEditGroupNote()
 
   const data = groupQuery.data
 
@@ -55,9 +53,26 @@ const DisplayGroups = () => {
         {data.map((row) => {
           return (
             <div key={row.id} className="col-12 md:col-6 lg:col-3 xl: col-2">
-              <Card title={row.group_name} subTitle={row.notes} className="">
-                <Link to={`/stuff/${row.id}`}>details</Link> -&nbsp;
-                <Link to={`/edit_group/${row.id}`}>edit</Link>
+              <Card
+                title={row.group_name}
+                subTitle={row.notes}
+                className=""
+                style={{ position: "relative" }}
+              >
+                <Link to={`/stuff/${row.id}`}>{row.total_items} items</Link>
+                <div
+                  style={{ position: "absolute", top: "10px", right: "10px" }}
+                >
+                  <Link to={`/edit_group/${row.id}`}>
+                    <span className="pi pi-pencil"></span>
+                  </Link>
+                  <span
+                    className="pi pi-trash ml-2"
+                    onClick={(e) => {
+                      deleteMutation.mutate(row.id)
+                    }}
+                  ></span>
+                </div>
               </Card>
             </div>
           )

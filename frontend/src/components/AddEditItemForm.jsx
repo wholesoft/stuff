@@ -175,6 +175,7 @@ const AddEditItemForm = (props) => {
               />
               <label htmlFor="notes">Notes</label>
             </span>
+            {/*
             <div className="mt-2">
               <Checkbox
                 inputId="deleteGroup"
@@ -185,6 +186,7 @@ const AddEditItemForm = (props) => {
                 Delete Item
               </label>
             </div>
+  */}
           </div>
           <Button className="mt-3" icon="pi pi-check" label="Save" />
         </form>

@@ -31,7 +31,7 @@ const DisplayItems = (props) => {
   const group_id = props.groupId
   const toastRef = useRef()
   const itemsQuery = useItems(group_id)
-  const deleteItemMutation = useDeleteItem()
+  const deleteMutation = useDeleteItem(toastRef, group_id)
   const editItemNameMutation = useEditItemName()
   const editItemNoteMutation = useEditItemNote()
   const editItemPurchasedLocationMutation = useEditItemPurchasedLocation()
@@ -104,15 +104,25 @@ const DisplayItems = (props) => {
                 title={row.item_name}
                 subTitle={row.notes}
                 header={displayImage(row)}
+                style={{ position: "relative" }}
               >
                 <p>Purchase Location: {row.purchased_location}</p>
                 <p>Date: {formatDate(row.date_purchased)}</p>
                 <p>Cost: {row.amount_paid}</p>
-                <p className="text-sm">
+
+                <div
+                  style={{ position: "absolute", top: "10px", right: "10px" }}
+                >
                   <Link to={`/edit_item/${row.group_id}/${row.id}`}>
-                    Edit Item
+                    <span className="pi pi-pencil"></span>
                   </Link>
-                </p>
+                  <span
+                    className="pi pi-trash ml-2"
+                    onClick={(e) => {
+                      deleteMutation.mutate(row.id)
+                    }}
+                  ></span>
+                </div>
               </Card>
             </div>
           )
