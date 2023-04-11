@@ -22,14 +22,21 @@ const handleRefreshToken = async (req, res) => {
   }
   //console.log(cookies.jwt);
   const refresh_token = cookies.jwt
-  console.log(
-    `SELECT id, email, roles FROM Users WHERE refresh_token='${refresh_token}'`
-  )
+  //console.log(
+  //  `SELECT id, email, roles FROM Users WHERE refresh_token='${refresh_token}'`
+  //)
   const [rows] = await pool.query(
-    `SELECT id, email, roles FROM Users WHERE refresh_token=?`,
+    `SELECT a.id, a.email, a.roles 
+    FROM Users a
+    LEFT JOIN RefreshTokens b ON a.id=b.user_id
+    WHERE b.refresh_token=?`,
     [refresh_token]
   )
   console.log(rows[0])
+  if (rows[0] == undefined) {
+    return res.sendStatus(401)
+  }
+
   if (rows[0].length < 1) {
     return res.sendStatus(403)
   }

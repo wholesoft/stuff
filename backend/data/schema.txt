@@ -37,7 +37,6 @@ CREATE TABLE `Users` (
   `password_token_created` datetime DEFAULT NULL,
   `email_token_created` datetime DEFAULT NULL,
   `email_confirm_token` varchar(30) DEFAULT NULL,
-  `refresh_token` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
 )
 
@@ -50,6 +49,28 @@ CREATE TABLE `EmailLog` (
   `body` text,
   `notes` text,
   `service` varchar(255),
+  `created` datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+)
+
+CREATE TABLE `LoginLog` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `email` varchar(255),
+  `success` BOOLEAN,
+  `user_id` int,
+  `ip` varchar(255),
+  `user_agent` varchar(255),
+  `fingerprint` text,
+  `created` datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+)
+
+CREATE TABLE `RefreshTokens` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `user_id` int,
+  `refresh_token` varchar(255),
+  `ip` varchar(255),
+  `user_agent` varchar(255),
   `created` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 )

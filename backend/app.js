@@ -2,6 +2,7 @@ import express from "express"
 import cors from "cors"
 import multer from "multer"
 import fs from "fs"
+import UserAgent from "user-agents"
 
 import {
   create_user,
@@ -70,6 +71,13 @@ app.use((err, req, res, next) => {
   res.send("Something broke!")
 })
 
+// trust proxy should mean req.ip returns the client ip address and not the proxy ip address
+app.set("trust proxy", true)
+
+const clientUserAgent = new UserAgent()
+let userAgentString = clientUserAgent.toString()
+let clientDetails = JSON.stringify(clientUserAgent.data, null, 2)
+
 //app.set("view engine", "ejs");
 
 app.get("/", (req, res) => {
@@ -98,7 +106,7 @@ app.post("/auth", async (req, res) => {
     roles,
     email_confirmed,
     user_id,
-  } = await login_user(req.body)
+  } = await login_user(req.body, req.ip, userAgentString, clientDetails)
   console.log("Roles: " + roles)
   //let response = { success: success }
   if (success == true) {

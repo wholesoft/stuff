@@ -297,7 +297,7 @@ export async function confirm_email(key) {
   return { success: success, message: message }
 }
 
-export async function login_user(props) {
+export async function login_user(props, ip_address, user_agent, fingerprint) {
   const [rows] = await pool.query(
     `
     SELECT id, email, password, roles, email_confirmed, n_logins 
@@ -327,6 +327,14 @@ export async function login_user(props) {
       )
     }
   }
+
+  // Log this
+  pool.query(
+    `INSERT INTO LoginLog (email, user_id, success, ip, user_agent, fingerprint, created) 
+    VALUES (?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)`,
+    [props.email, user_id, success, ip_address, user_agent, fingerprint]
+  )
+
   let access_token = ""
   let refresh_token = ""
   let user_roles = undefined
@@ -337,7 +345,12 @@ export async function login_user(props) {
       user_roles = record.roles.split(",").map(Number) // convert roles string to integer array, e.g. '1001, 2001' -> [1001, 2001]
       // generate token
       access_token = generate_access_token(record.id, user_roles)
-      refresh_token = generate_refresh_token(record.id, user_roles)
+      refresh_token = generate_refresh_token(
+        record.id,
+        user_roles,
+        ip_address,
+        user_agent
+      )
     }
   }
 
@@ -361,17 +374,19 @@ function generate_access_token(user_id, roles) {
   )
 }
 
-function generate_refresh_token(user_id, roles) {
+function generate_refresh_token(user_id, roles, ip_address, user_agent) {
   const refresh_token = jwt.sign(
     { user_id: user_id, roles: roles },
     process.env.REFRESH_TOKEN_SECRET,
     { expiresIn: "1d" }
   )
-  //console.log(refresh_token);
-  pool.query(`UPDATE Users SET refresh_token=? WHERE id=?`, [
-    refresh_token,
-    user_id,
-  ])
+
+  pool.query(
+    `INSERT INTO RefreshTokens (user_id, refresh_token, ip, user_agent)
+  VALUES (?, ?, ?, ?)`,
+    [user_id, refresh_token, ip_address, user_agent]
+  )
+
   return refresh_token
 }
 

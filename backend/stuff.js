@@ -160,7 +160,7 @@ export async function getStuffGroups(props) {
   }
   const [rows] = await pool.query(
     `
-    SELECT id, group_name, notes, created, updated FROM Stuff_Groups WHERE user_id=?
+    SELECT id, group_name, notes, created, updated FROM Stuff_Groups WHERE user_id=? ORDER BY id DESC
     `,
     [props.user_id]
   )
@@ -400,7 +400,7 @@ export async function getStuff(props) {
   const [rows] = await pool.query(
     `
     SELECT id, user_id, group_id, item_name, notes, purchased_location, date_purchased, amount_paid, image, created, updated
-     FROM Stuff WHERE user_id=? AND group_id=?
+     FROM Stuff WHERE user_id=? AND group_id=? ORDER BY id DESC
     `,
     [props.user_id, props.group_id]
   )
