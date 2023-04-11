@@ -61,7 +61,7 @@ const Layout = () => {
       </article>
 
       <footer className="footer py-3">
-        <Link to="/">Stuff</Link>
+        <Link to="/">Wholesoft Stuff</Link>
       </footer>
     </>
   )

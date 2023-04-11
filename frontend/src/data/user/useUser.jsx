@@ -110,7 +110,7 @@ const useEditUserRoles = () => {
   return editMutation
 }
 
-const useConfirmEmail = (setMessage) => {
+const useConfirmEmail = (setMessage, setSuccess) => {
   const queryClient = useQueryClient()
   const editMutation = useMutation({
     mutationFn: (token) => confirmEmail(token),
@@ -121,7 +121,8 @@ const useConfirmEmail = (setMessage) => {
     onSuccess: (props) => {
       console.log("mutate success")
       console.log(props)
-      setMessage(JSON.stringify(props.message))
+      setMessage(props.message)
+      setSuccess(props.success)
       queryClient.invalidateQueries(["users"])
       return props
     },

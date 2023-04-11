@@ -6,8 +6,9 @@ import { tabTitle } from "../utils/helperFunctions"
 const ConfirmEmail = () => {
   const { token } = useParams()
   const [message, setMessage] = useState("")
+  const [success, setSuccess] = useState(false)
 
-  const confirmEmailMutation = useConfirmEmail(setMessage)
+  const confirmEmailMutation = useConfirmEmail(setMessage, setSuccess)
   //const { isLoading, isSuccess, error, mutate } = useConfirmEmail()
 
   useEffect(() => {
@@ -19,11 +20,16 @@ const ConfirmEmail = () => {
     return <pre>{JSON.stringify(confirmEmailMutation.error)}</pre>
   }
 
-  return (
+  return success ? (
     <>
       {tabTitle("Confirm Email - Wholesoft Stuff")}
-      <p>{message}</p>
+      <p>
+        Thank you for confirming your email address. Please{" "}
+        <Link to="/login">login</Link>.
+      </p>
     </>
+  ) : (
+    <p>An Error occured. ({message})</p>
   )
 }
 
