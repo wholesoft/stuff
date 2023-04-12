@@ -9,7 +9,7 @@ const Logout = () => {
 
   useEffect(() => {
     logout()
-    navigate("/")
+    navigate("/about")
   }, [])
 
   return <>{tabTitle("Logout - Wholesoft Stuff")}</>

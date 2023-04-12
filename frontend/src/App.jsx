@@ -48,11 +48,11 @@ function App() {
           <Route path="/upload" element={<AddItemImage />} />
           <Route path="/logout" element={<Logout />} />
           <Route path="/about" element={<About />} />
-          {/* path="/" displays About page if user not logged in */}
-          <Route path="/" element={<Groups />} />{" "}
+
           {/* we want to protect these routes */}
           <Route element={<PersistLogin />}>
             <Route element={<RequireAuth allowedRoles={[ROLES.User]} />}>
+              <Route path="/" element={<Groups />} />
               <Route path="/mystuff" element={<Groups />} />
               <Route path="/account" element={<Account />} />
               <Route path="/stuff/:group_id" element={<Items />} />

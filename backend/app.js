@@ -72,8 +72,8 @@ app.use((err, req, res, next) => {
 })
 
 // trust proxy should mean req.ip returns the client ip address and not the proxy ip address
-// doesn't work: ::ffff:127.0.0.1
-// TODO, get the ipaddress another way
+// nginx must be congigured for this to work
+// proxy_set_header X-Forwarded-For $remote_addr;
 app.set("trust proxy", true)
 
 const clientUserAgent = new UserAgent()
