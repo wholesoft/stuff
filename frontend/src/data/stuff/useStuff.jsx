@@ -26,6 +26,10 @@ const useGroup = (group_id) => {
   const groupQuery = useQuery({
     queryKey: ["groups", group_id],
     queryFn: () => getGroup(group_id),
+    refetchOnReconnect: false,
+    retry: false,
+    retryOnMount: false,
+    refetchOnWindowFocus: false,
   })
   return groupQuery
 }
@@ -182,6 +186,10 @@ const useItem = (item_id) => {
   const dataQuery = useQuery({
     queryKey: ["items", item_id],
     queryFn: () => getItem(item_id),
+    refetchOnReconnect: false,
+    retry: false,
+    retryOnMount: false,
+    refetchOnWindowFocus: false,
   })
   return dataQuery
 }
