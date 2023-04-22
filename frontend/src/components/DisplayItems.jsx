@@ -74,7 +74,11 @@ const DisplayItems = (props) => {
       result = (
         <>
           <img
-            style={{ maxWidth: "300px", margin: "0 auto" }}
+            style={{
+              height: "225px",
+              maxWidth: "100%",
+              objectFit: "cover",
+            }}
             src={`${BASE_URL}/images/${value}`}
             alt=""
           />
@@ -95,7 +99,7 @@ const DisplayItems = (props) => {
         {data.map((row) => {
           //console.log(row)
           return (
-            <div key={row.id} className="col-12 md:col-6 lg:col-3 xl: col-2">
+            <div key={row.id} className="col-12 md:col-6">
               <Card
                 title={row.item_name}
                 subTitle={row.notes}

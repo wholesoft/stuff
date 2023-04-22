@@ -65,7 +65,7 @@ const AddItemImage = ({ setItemId, item_id, group_id, image }) => {
   return imageName ? (
     <>
       <img
-        style={{ maxWidth: "300px", margin: "0 auto" }}
+        style={{ width: "300px", height: "225px", objectFit: "scale-down" }}
         src={`${BASE_URL}/images/${imageName}`}
         alt=""
       />
