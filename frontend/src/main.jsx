@@ -4,6 +4,8 @@ import App from "./App"
 import { BrowserRouter, Routes, Route } from "react-router-dom"
 import { AuthProvider } from "./context/AuthProvider"
 
+import PrimeToastProvider from "./context/ToastProvider"
+
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
 
@@ -18,14 +20,16 @@ const queryClient = new QueryClient()
 ReactDOM.createRoot(document.getElementById("root")).render(
   // <React.StrictMode>
   <QueryClientProvider client={queryClient}>
-    <BrowserRouter>
-      <AuthProvider>
-        <Routes>
-          <Route path="/*" element={<App />} />
-        </Routes>
-      </AuthProvider>
-    </BrowserRouter>
-    <ReactQueryDevtools />
+    <PrimeToastProvider>
+      <BrowserRouter>
+        <AuthProvider>
+          <Routes>
+            <Route path="/*" element={<App />} />
+          </Routes>
+        </AuthProvider>
+      </BrowserRouter>
+      <ReactQueryDevtools />
+    </PrimeToastProvider>
   </QueryClientProvider>
 
   //</React.StrictMode>,
