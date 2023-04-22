@@ -47,12 +47,12 @@ function App() {
           <Route path="/confirm/:token" element={<ConfirmEmail />} />
           <Route path="/upload" element={<AddItemImage />} />
           <Route path="/logout" element={<Logout />} />
+          <Route path="/" element={<About />} />
           <Route path="/about" element={<About />} />
 
           {/* we want to protect these routes */}
           <Route element={<PersistLogin />}>
             <Route element={<RequireAuth allowedRoles={[ROLES.User]} />}>
-              <Route path="/" element={<Groups />} />
               <Route path="/mystuff" element={<Groups />} />
               <Route path="/account" element={<Account />} />
               <Route path="/stuff/:group_id" element={<Items />} />

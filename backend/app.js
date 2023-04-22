@@ -44,6 +44,7 @@ import refresh_route from "./routes/refresh.js"
 import logout_route from "./routes/logout.js"
 import credentials from "./middleware/credentials.js"
 import corsOptions from "./config/corsOptions.js"
+import { rateLimit } from "express-rate-limit"
 
 const is_admin = (roles) => {
   let result = false
@@ -56,6 +57,14 @@ const is_admin = (roles) => {
 const upload = multer({ dest: "images/" })
 
 const app = express()
+
+// Rate limiting
+const limiter = rateLimit({
+  windowMs: 10 * 60 * 1000,
+  max: 1000,
+})
+app.use(limiter)
+//app.set("trust_proxy", 1)
 
 app.use(credentials)
 
@@ -211,6 +220,7 @@ app.get("/item/:item_id", async (req, res) => {
     user_id: req.jwt_user_id,
     item_id: item_id,
   })
+  console.log(item.data)
   res.send(item.data)
 })
 
@@ -409,11 +419,13 @@ app.post("/edit_item_image", upload.single("image"), async (req, res) => {
   // webp files don't work.
   const image = req.file?.filename
   const item_id = req.body.item_id
+  const group_id = req.body.group_id
   console.log(req.body)
   const result = await editItemImage({
     user_id: req.jwt_user_id,
     image,
     item_id,
+    group_id,
   })
 
   res.send(result)

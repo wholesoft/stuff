@@ -7,6 +7,7 @@ import { Toast } from "primereact/toast"
 import { Card } from "primereact/card"
 import { Calendar } from "primereact/calendar"
 import { Checkbox } from "primereact/checkbox"
+import { AddItemImage } from "./AddItemImage"
 
 function setDatePickerValue(date_string) {
   // PrimeReact Calendar control's value needs to be set with a Date Object.
@@ -27,8 +28,10 @@ const AddEditItemForm = (props) => {
   const [purchaseDate, setPurchaseDate] = useState(props.data?.date_purchased)
   const [responseMessage, setResponseMessage] = useState("")
   const [deleteCheck, setDeleteCheck] = useState(false)
+  const [itemId, setItemId] = useState(0)
 
   let data = props.data
+  console.log(data)
 
   let amount_paid = ""
   let notes = ""
@@ -71,15 +74,13 @@ const AddEditItemForm = (props) => {
   }
 
   //console.log(props.data)
-  let id = 0
-  if (props.data != undefined) {
-    id = props.data.id
-    //  group_name = props.data.group_name
-    //  notes = props.data.notes
+  //let id = 0
+  if (props.data != undefined && itemId == 0) {
+    setItemId(props.data.id)
   }
   let cardTitle = "Add Item"
 
-  if (id > 0) {
+  if (itemId > 0) {
     cardTitle = "Edit Item"
   }
 
@@ -88,12 +89,12 @@ const AddEditItemForm = (props) => {
     let response = ""
     console.log(form)
     const { group_id, item_name, purchase_location, amount_paid, notes } = form
-    if (id > 0) {
+    if (itemId > 0) {
       if (deleteCheck) {
-        deleteItemMutation.mutate(id)
+        deleteItemMutation.mutate(itemId)
       } else {
         editItemMutation.mutate({
-          item_id: id,
+          item_id: itemId,
           group_id,
           item_name,
           purchase_location,
@@ -117,7 +118,14 @@ const AddEditItemForm = (props) => {
   return (
     <>
       <Card title={cardTitle} className="col-12 md:col-6">
-        <form onSubmit={handleSubmit}>
+        <AddItemImage
+          item_id={itemId}
+          setItemId={setItemId}
+          group_id={Number(group_id)}
+          image={data.image}
+        />
+
+        <form onSubmit={handleSubmit} className="pt-5">
           <div className="p-fluid">
             <span className="p-float-label">
               <InputText
@@ -192,7 +200,6 @@ const AddEditItemForm = (props) => {
         </form>
         <p>{responseMessage}</p>
       </Card>
-
       <Toast ref={toastRef} />
     </>
   )

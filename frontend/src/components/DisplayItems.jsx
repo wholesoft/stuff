@@ -69,11 +69,7 @@ const DisplayItems = (props) => {
   let displayImage = (row) => {
     let value = row.image
     let item_id = row.id
-    let result = (
-      <>
-        <AddItemImage item_id={item_id} />
-      </>
-    )
+    let result = <></>
     if (value != "" && value != null) {
       result = (
         <>
@@ -111,7 +107,14 @@ const DisplayItems = (props) => {
                 <p>Cost: {row.amount_paid}</p>
 
                 <div
-                  style={{ position: "absolute", top: "10px", right: "10px" }}
+                  className="p-2 border-round-lg"
+                  style={{
+                    position: "absolute",
+                    top: "10px",
+                    right: "10px",
+                    background: "#ffffff",
+                    opacity: "0.8",
+                  }}
                 >
                   <Link to={`/edit_item/${row.group_id}/${row.id}`}>
                     <span className="pi pi-pencil"></span>

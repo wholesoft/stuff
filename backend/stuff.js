@@ -220,7 +220,7 @@ export async function addStuffItem(props) {
   const schema = joi.object({
     user_id: joi.number().integer().required(),
     group_id: joi.number().integer().required(),
-    item_name: joi.string().required(),
+    item_name: joi.string().allow(""),
     purchase_location: joi.string().allow(""),
     purchase_date: joi.date().allow(null).empty("").default(null),
     amount_paid: joi.number().empty("").default(null),
@@ -435,7 +435,7 @@ export async function getStuffItem(props) {
   }
   const [rows] = await pool.query(
     `
-  SELECT id, user_id, group_id, item_name, notes, purchased_location, date_purchased, amount_paid, created, updated
+  SELECT id, user_id, group_id, item_name, notes, purchased_location, image, date_purchased, amount_paid, created, updated
    FROM Stuff WHERE user_id=? AND id=?
   `,
     [props.user_id, props.item_id]
@@ -738,10 +738,12 @@ export async function editItemImage(props) {
   const schema = joi.object({
     user_id: joi.number().integer().required(),
     item_id: joi.number().integer().required(),
+    group_id: joi.number().integer().required(),
     image: joi.string().required(),
   })
 
   const { error, value } = schema.validate(props)
+  let { item_id, group_id } = props
 
   if (error) {
     console.log(error)
@@ -751,20 +753,42 @@ export async function editItemImage(props) {
     return { success: false, message: message }
   }
 
+  if (props.item_id == 0) {
+    const response = await addStuffItem({
+      user_id: props.user_id,
+      group_id: props.group_id,
+      item_name: "",
+      purchase_location: "",
+      purchase_date: null,
+      amount_paid: "",
+      notes: "",
+    })
+    console.log("Adding New Item from Image")
+    console.log(response)
+    item_id = response.item_id
+    group_id = response.group_id
+  }
+
   // UPDATE RECORD
   if (validation_okay) {
     const result = await pool.query(
       `
        UPDATE Stuff SET image=?, updated=CURRENT_TIMESTAMP WHERE id=? AND user_id=?
        `,
-      [props.image, props.item_id, props.user_id]
+      [props.image, item_id, props.user_id]
     )
     console.log(result)
     success = true
     message = `Image Updated (${props.image}).`
   }
 
-  return { success: success, message: message, image: props.image }
+  return {
+    success: success,
+    message: message,
+    image: props.image,
+    item_id,
+    group_id,
+  }
 }
 
 /*

@@ -26,7 +26,6 @@ const NavMenu = () => {
   if (auth?.roles?.includes(1001)) {
     items = [
       { id: 4, link: "/mystuff", label: "My Stuff" },
-      { id: 8, link: "/about", label: "About" },
       { id: 5, link: "/account", label: "My Account" },
       { id: 6, link: "/logout", label: "Logout" },
     ]

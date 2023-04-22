@@ -2,13 +2,18 @@ import { useState, useRef, useEffect } from "react"
 import { useAxiosPrivate } from "../hooks/useAxiosPrivate"
 import { Toast } from "primereact/toast"
 
-const AddItemImage = (props) => {
+const AddItemImage = ({ setItemId, item_id, group_id, image }) => {
   const axiosPrivate = useAxiosPrivate()
   const toastRef = useRef()
   const [errorMessage, setErrorMessage] = useState("")
   const [file, setFile] = useState()
-  const [imageName, setImageName] = useState()
-  const [itemId, setItemId] = useState(props.item_id)
+  const [imageName, setImageName] = useState(image)
+  //const [itemId, setItemId] = useState(props.item_id)
+  console.log("PROPS")
+  //console.log(props)
+  let itemId = item_id
+  //let setItemId = props.set_id
+  let groupId = group_id
   //console.log(itemId)
   let BASE_URL = "https://stuff-api.wholesoft.net"
 
@@ -27,14 +32,17 @@ const AddItemImage = (props) => {
     const formData = new FormData()
     formData.append("image", f)
     formData.append("item_id", itemId)
-    //console.log("ADDING IMAGE TO ID:")
-    //console.log(itemId)
+    formData.append("group_id", groupId)
+    console.log("ADDING IMAGE TO ID:")
+    console.log(itemId)
     //console.log("POSTING IMAGE")
+
     const result = await axiosPrivate.post("/edit_item_image", formData, {
       headers: { "Content-Type": "multipart/form-data" },
     })
     const message = result.data.message
     const success = result.data.success
+    setItemId(result.data.item_id)
     console.log(result.data)
     if (success) {
       setImageName(result.data.image)
@@ -57,7 +65,7 @@ const AddItemImage = (props) => {
   return imageName ? (
     <>
       <img
-        style={{ maxHeight: "200px" }}
+        style={{ maxWidth: "300px", margin: "0 auto" }}
         src={`${BASE_URL}/images/${imageName}`}
         alt=""
       />
