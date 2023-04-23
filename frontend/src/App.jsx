@@ -23,6 +23,7 @@ import { AddItemImage } from "./components/AddItemImage"
 import { About } from "./pages/About"
 import { Logout } from "./pages/Logout"
 import { ToastTest } from "./pages/ToastTest"
+import { ImageTest2 } from "./pages/ImageTest2"
 
 const ROLES = {
   User: 1001,
@@ -55,6 +56,7 @@ function App() {
           {/* we want to protect these routes */}
           <Route element={<PersistLogin />}>
             <Route element={<RequireAuth allowedRoles={[ROLES.User]} />}>
+              <Route path="/imagetest" element={<ImageTest2 />} />
               <Route path="/mystuff" element={<Groups />} />
               <Route path="/account" element={<Account />} />
               <Route path="/stuff/:group_id" element={<Items />} />

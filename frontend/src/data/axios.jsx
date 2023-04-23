@@ -28,12 +28,11 @@ axiosAuth.interceptors.request.use(
   (config) => {
     if (!config.headers["Authorization"]) {
       const atoken = localStorage.getItem("atoken")
-      /*
+
       console.log(
         "INTERCEPT REQUEST.  ATTACHING AUTHORIZATION ACCESS TOKEN: Bearer " +
           atoken
       )
-      */
 
       config.headers["Authorization"] = `Bearer ${atoken}`
     }

@@ -791,6 +791,38 @@ export async function editItemImage(props) {
   }
 }
 
+export async function isUsersImage(props) {
+  // Returns: true or false
+  let success = false
+  let validation_okay = true
+
+  // VALIDATE INPUT
+  const schema = joi.object({
+    user_id: joi.number().integer().required(),
+    image: joi.string().required(),
+  })
+
+  const { error, value } = schema.validate(props)
+  if (error) {
+    console.log(error)
+    console.log("Validation Error.")
+    message = "Vaidation Error (" + error.details[0].message + ")"
+    validation_okay = false
+    return { success: false, message: message, data: [] }
+  }
+  const [rows] = await pool.query(
+    `
+    SELECT id FROM Stuff WHERE image=? AND user_id=?
+    `,
+    [props.image, props.user_id]
+  )
+
+  if (rows.length > 0) {
+    success = true
+  }
+  return success
+}
+
 /*
 
 CREATE TABLE Stuff (

@@ -1,6 +1,7 @@
 import React, { useState, useRef } from "react"
 import { Link } from "react-router-dom"
 import { AddItemImage } from "./AddItemImage.jsx"
+import { Image } from "../components/Image"
 
 import {
   useItems,
@@ -67,6 +68,29 @@ const DisplayItems = (props) => {
   }
 
   let displayImage = (row) => {
+    let value = row.image
+    let item_id = row.id
+    let result = <></>
+    if (value != "" && value != null) {
+      result = (
+        <>
+          <Image
+            id={`image${row.id}`}
+            style={{
+              height: "225px",
+              maxWidth: "100%",
+              objectFit: "cover",
+            }}
+            src={`/images3/${value}`}
+            alt=""
+          />
+        </>
+      )
+    }
+    return result
+  }
+
+  let displayImage2 = (row) => {
     let value = row.image
     let item_id = row.id
     let result = <></>
