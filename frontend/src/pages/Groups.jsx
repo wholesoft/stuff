@@ -20,10 +20,10 @@ const Groups = () => {
       {tabTitle("My Stuff - Wholesoft Stuff")}
 
       <Link to="/add_group" style={{ textDecoration: "none" }}>
-        <div className="flex align-items-center text-blue-800">
+        <div className="flex align-items-center text-blue-600">
           <i
             className="pi pi-plus-circle p-2"
-            style={{ fontSize: "2.0rem" }}
+            style={{ fontSize: "3.0rem" }}
           ></i>
         </div>
       </Link>

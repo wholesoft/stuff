@@ -89,8 +89,8 @@ const AddNewItem = ({ groupId }) => {
       <div className="flex align-items-center">
         <label
           htmlFor={`getFile`}
-          className="pb-2 pi pi-plus-circle p-component select-image-button hover: cursor-pointer"
-          style={{ fontSize: "2.0rem", color: "blue" }}
+          className="pb-2 pi pi-plus-circle p-component text-blue-600 select-image-button hover: cursor-pointer"
+          style={{ fontSize: "3.0rem" }}
         ></label>
       </div>
       <input

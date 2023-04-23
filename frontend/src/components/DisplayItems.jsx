@@ -74,16 +74,18 @@ const DisplayItems = (props) => {
     if (value != "" && value != null) {
       result = (
         <>
-          <Image
-            id={`image${row.id}`}
-            style={{
-              height: "225px",
-              maxWidth: "100%",
-              objectFit: "cover",
-            }}
-            src={`/images3/${value}`}
-            alt=""
-          />
+          <Link to={`/edit_item/${row.group_id}/${row.id}`}>
+            <Image
+              id={`image${row.id}`}
+              style={{
+                height: "225px",
+                maxWidth: "100%",
+                objectFit: "cover",
+              }}
+              src={`/images/${value}`}
+              alt=""
+            />
+          </Link>
         </>
       )
     }
@@ -144,11 +146,11 @@ const DisplayItems = (props) => {
                     opacity: "0.8",
                   }}
                 >
-                  <Link to={`/edit_item/${row.group_id}/${row.id}`}>
+                  {/*                   <Link to={`/edit_item/${row.group_id}/${row.id}`}>
                     <span className="pi pi-pencil"></span>
-                  </Link>
+                  </Link> */}
                   <span
-                    className="pi pi-trash ml-2"
+                    className="pi pi-trash cursor-pointer"
                     onClick={(e) => {
                       deleteMutation.mutate(row.id)
                     }}

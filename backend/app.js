@@ -181,21 +181,9 @@ app.post("/update_password_with_token", async (req, res) => {
   res.send(result)
 })
 
-app.get("/images2/:imageName", (req, res) => {
-  console.log("GET: /images2:imageName")
-  //console.log(req)
-  const imageName = req.params.imageName
-  if (imageName != null) {
-    const readStream = fs.createReadStream(`images/${imageName}`)
-    readStream.pipe(res)
-  } else {
-    res.send("Invalid Image.")
-  }
-})
-
 app.use(verifyJWT)
 
-app.get("/images3/:imageName", (req, res) => {
+app.get("/images/:imageName", (req, res) => {
   console.log("GET: /images3:imageName")
   console.log(`User ID: ${req.jwt_user_id}`)
   const imageName = req.params.imageName
@@ -212,7 +200,7 @@ app.get("/images3/:imageName", (req, res) => {
   }
 })
 
-app.get("/images/:imageName", (req, res) => {
+app.get("/images2/:imageName", (req, res) => {
   console.log("GET: /images:imageName")
   //console.log(req)
   const imageName = req.params.imageName

@@ -8,6 +8,7 @@ import { Card } from "primereact/card"
 import { Calendar } from "primereact/calendar"
 import { Checkbox } from "primereact/checkbox"
 import { AddItemImage } from "./AddItemImage"
+import { Image } from "../components/Image"
 
 function setDatePickerValue(date_string) {
   // PrimeReact Calendar control's value needs to be set with a Date Object.
@@ -123,11 +124,10 @@ const AddEditItemForm = (props) => {
   return (
     <>
       <Card title={cardTitle} className="col-12 md:col-6">
-        <AddItemImage
-          item_id={itemId}
-          setItemId={setItemId}
-          group_id={Number(group_id)}
-          image={form.image}
+        <Image
+          id="edit_image"
+          style={{ width: "300px", height: "225px", objectFit: "scale-down" }}
+          src={`/images/${form.image}`}
         />
 
         <form onSubmit={handleSubmit} className="pt-5">
