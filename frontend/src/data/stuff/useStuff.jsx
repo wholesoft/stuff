@@ -162,7 +162,7 @@ const useEditGroupNote = () => {
     onSuccess: (props) => {
       console.log("mutate success")
       console.log(props)
-      return queryClient.invalidateQueries(["groups"])
+      return queryClient.invalidateQueries(["items"])
     },
     onError: (props) => {
       console.log("mutate error")

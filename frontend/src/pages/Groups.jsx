@@ -18,9 +18,16 @@ const Groups = () => {
   return (
     <>
       {tabTitle("My Stuff - Wholesoft Stuff")}
-      <span className="text-sm">
-        <Link to="/add_group">Add Group</Link>
-      </span>
+
+      <Link to="/add_group" style={{ textDecoration: "none" }}>
+        <div className="flex align-items-center text-blue-800">
+          <i
+            className="pi pi-plus-circle p-2"
+            style={{ fontSize: "2.0rem" }}
+          ></i>
+        </div>
+      </Link>
+
       <DisplayGroups />
     </>
   )

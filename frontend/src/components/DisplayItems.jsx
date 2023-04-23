@@ -106,9 +106,9 @@ const DisplayItems = (props) => {
                 header={displayImage(row)}
                 style={{ position: "relative" }}
               >
-                <p>Purchase Location: {row.purchased_location}</p>
+                {/*                 <p>Purchase Location: {row.purchased_location}</p>
                 <p>Date: {formatDate(row.date_purchased)}</p>
-                <p>Cost: {row.amount_paid}</p>
+                <p>Cost: {row.amount_paid}</p> */}
 
                 <div
                   className="p-2 border-round-lg"

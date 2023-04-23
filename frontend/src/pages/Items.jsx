@@ -1,5 +1,5 @@
 import { DisplayItems } from "../components/DisplayItems"
-import { AddEditItemForm } from "../components/AddEditItemForm"
+import { AddNewItem } from "../components/AddNewItem"
 import { useParams, Link } from "react-router-dom"
 import { useGroup } from "../data/stuff/useStuff"
 import { tabTitle } from "../utils/helperFunctions"
@@ -16,11 +16,23 @@ const Items = (props) => {
   return (
     <>
       {tabTitle("Items - Wholesoft Stuff")}
-      <h2>{rowData[0].group_name}</h2>
-      <p>{rowData[0].notes}</p>
-      <p className="text-sm">
-        <Link to={`/add_item/${group_id}`}>Add Item</Link>
-      </p>
+      <div className="flex align-items-center">
+        <span>Group:</span>
+        <h2 className="pl-2 text-blue-700">{rowData[0].group_name}</h2>
+      </div>
+      {/* <p>{rowData[0].notes}</p> */}
+
+      {/*       <Link to={`/add_item/${group_id}`} style={{ textDecoration: "none" }}>
+        <div className="flex align-items-center">
+          <i
+            className="pi pi-plus-circle p-2"
+            style={{ fontSize: "2.0rem", color: "blue" }}
+          ></i>
+        </div>
+      </Link> */}
+
+      <AddNewItem groupId={group_id} />
+
       <DisplayItems groupId={group_id} />
 
       {/* <AddEditItemForm data={{}} /> */}
