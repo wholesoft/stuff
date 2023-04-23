@@ -37,6 +37,7 @@ const AddEditItemForm = (props) => {
   let notes = ""
   let item_name = ""
   let purchase_location = ""
+  let image = ""
 
   //console.log("amount paid")
   //console.log(props.data)
@@ -50,6 +51,9 @@ const AddEditItemForm = (props) => {
     if (props.data.item_name != null) {
       item_name = props.data.item_name
     }
+    if (props.data.image != null) {
+      image = props.data.image
+    }
     if (props.data.purchased_location != null) {
       purchase_location = props.data.purchased_location
     }
@@ -61,6 +65,7 @@ const AddEditItemForm = (props) => {
     purchase_location: purchase_location,
     amount_paid: amount_paid,
     notes: notes,
+    image: image,
   }
 
   const [form, setForm] = useState(init_state)
@@ -122,7 +127,7 @@ const AddEditItemForm = (props) => {
           item_id={itemId}
           setItemId={setItemId}
           group_id={Number(group_id)}
-          image={data.image}
+          image={form.image}
         />
 
         <form onSubmit={handleSubmit} className="pt-5">

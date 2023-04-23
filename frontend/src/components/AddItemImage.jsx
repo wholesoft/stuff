@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react"
 import { useAxiosPrivate } from "../hooks/useAxiosPrivate"
 import { Toast } from "primereact/toast"
+import { ProgressBar } from "primereact/progressbar"
 
 const AddItemImage = ({ setItemId, item_id, group_id, image }) => {
   const axiosPrivate = useAxiosPrivate()
@@ -8,6 +9,7 @@ const AddItemImage = ({ setItemId, item_id, group_id, image }) => {
   const [errorMessage, setErrorMessage] = useState("")
   const [file, setFile] = useState()
   const [imageName, setImageName] = useState(image)
+  const [progress, setProgress] = useState(50)
   //const [itemId, setItemId] = useState(props.item_id)
   console.log("PROPS")
   //console.log(props)
@@ -39,6 +41,9 @@ const AddItemImage = ({ setItemId, item_id, group_id, image }) => {
 
     const result = await axiosPrivate.post("/edit_item_image", formData, {
       headers: { "Content-Type": "multipart/form-data" },
+      onUploadProgress: (event) => {
+        setProgress(Math.round(100 * event.loaded) / event.total)
+      },
     })
     const message = result.data.message
     const success = result.data.success
@@ -64,6 +69,7 @@ const AddItemImage = ({ setItemId, item_id, group_id, image }) => {
 
   return imageName ? (
     <>
+      <ProgressBar value={progress}></ProgressBar>
       <img
         style={{ width: "300px", height: "225px", objectFit: "scale-down" }}
         src={`${BASE_URL}/images/${imageName}`}
