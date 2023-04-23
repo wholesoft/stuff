@@ -9,7 +9,7 @@ const AddItemImage = ({ setItemId, item_id, group_id, image }) => {
   const [errorMessage, setErrorMessage] = useState("")
   const [file, setFile] = useState()
   const [imageName, setImageName] = useState(image)
-  const [progress, setProgress] = useState(50)
+  const [progress, setProgress] = useState(0)
   //const [itemId, setItemId] = useState(props.item_id)
   console.log("PROPS")
   //console.log(props)
@@ -39,42 +39,50 @@ const AddItemImage = ({ setItemId, item_id, group_id, image }) => {
     console.log(itemId)
     //console.log("POSTING IMAGE")
 
-    const result = await axiosPrivate.post("/edit_item_image", formData, {
-      headers: { "Content-Type": "multipart/form-data" },
-      onUploadProgress: (event) => {
-        setProgress(Math.round(100 * event.loaded) / event.total)
-      },
-    })
-    const message = result.data.message
-    const success = result.data.success
-    setItemId(result.data.item_id)
-    console.log(result.data)
-    if (success) {
-      setImageName(result.data.image)
-      toastRef.current.show({
-        severity: "info",
-        summary: "Success",
-        detail: message,
+    axiosPrivate
+      .post("/edit_item_image", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+        onUploadProgress: (event) => {
+          setProgress(Math.round((100 * event.loaded) / event.total))
+        },
       })
-    } else {
-      setErrorMessage(message)
-      toastRef.current.show({
-        severity: "error",
-        summary: "Error",
-        detail: message,
+      .then((result) => {
+        const message = result.data.message
+        const success = result.data.success
+        setItemId(result.data.item_id)
+        console.log(result.data)
+        if (success) {
+          setImageName(result.data.image)
+          toastRef.current.show({
+            severity: "info",
+            summary: "Success",
+            detail: message,
+          })
+        } else {
+          setErrorMessage(message)
+          toastRef.current.show({
+            severity: "error",
+            summary: "Error",
+            detail: message,
+          })
+          setImageName("")
+        }
       })
-      setImageName("")
-    }
   }
+
+  console.log(progress)
 
   return imageName ? (
     <>
-      <ProgressBar value={progress}></ProgressBar>
       <img
         style={{ width: "300px", height: "225px", objectFit: "scale-down" }}
         src={`${BASE_URL}/images/${imageName}`}
         alt=""
       />
+    </>
+  ) : progress > 0 ? (
+    <>
+      <ProgressBar value={progress}></ProgressBar>
     </>
   ) : (
     <>
