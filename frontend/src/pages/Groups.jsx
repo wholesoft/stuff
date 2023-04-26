@@ -19,14 +19,21 @@ const Groups = () => {
     <>
       {tabTitle("My Stuff - Wholesoft Stuff")}
 
-      <Link to="/add_group" style={{ textDecoration: "none" }}>
-        <div className="flex align-items-center text-blue-600">
+      <div className="flex align-items-center text-blue-600">
+        <Link to="/add_group">
           <i
-            className="pi pi-plus-circle p-2"
-            style={{ fontSize: "3.0rem" }}
+            className="pi pi-plus-circle p-2 text-blue-600"
+            style={{ fontSize: "2.5rem" }}
           ></i>
-        </div>
-      </Link>
+        </Link>{" "}
+        <Link
+          to="/add_group"
+          className="text-blue-600"
+          style={{ textDecoration: "none" }}
+        >
+          <span>Add Group</span>
+        </Link>
+      </div>
 
       <DisplayGroups />
     </>

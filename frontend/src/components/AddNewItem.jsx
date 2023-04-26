@@ -86,13 +86,18 @@ const AddNewItem = ({ groupId }) => {
     </>
   ) : (
     <>
-      <div className="flex align-items-center">
-        <label
-          htmlFor={`getFile`}
-          className="pb-2 pi pi-plus-circle p-component text-blue-600 select-image-button hover: cursor-pointer"
-          style={{ fontSize: "3.0rem" }}
-        ></label>
+      <div className="flex align-items-center text-blue-600">
+        <label htmlFor={`getFile`} className="hover: cursor-pointer">
+          <i
+            className="pi pi-plus-circle p-2 text-blue-600"
+            style={{ fontSize: "2.5rem" }}
+          ></i>
+        </label>
+        <label htmlFor={`getFile`} className="hover: cursor-pointer">
+          <span>Add Item</span>
+        </label>
       </div>
+
       <input
         style={{ display: "none" }}
         id={`getFile`}

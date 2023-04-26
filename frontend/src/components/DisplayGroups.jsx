@@ -18,6 +18,14 @@ function formatDate(date_string) {
   return result
 }
 
+function itemsText(numberOfItems) {
+  let result = `${numberOfItems} items`
+  if (result == "1 items") {
+    result = "1 item"
+  }
+  return result
+}
+
 const DisplayGroups = () => {
   const toastRef = useRef()
 
@@ -59,7 +67,9 @@ const DisplayGroups = () => {
                 className=""
                 style={{ position: "relative" }}
               >
-                <Link to={`/stuff/${row.id}`}>{row.total_items} items</Link>
+                <Link style={{ color: "blue" }} to={`/stuff/${row.id}`}>
+                  {itemsText(row.total_items)}
+                </Link>
                 <div
                   style={{ position: "absolute", top: "10px", right: "10px" }}
                 >
